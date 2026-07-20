@@ -1,0 +1,80 @@
+Listado de rutas de carpetas para el volumen Windows-SSD
+El número de serie del volumen es 000002F8 60D3:CAD6
+C:\USERS\KONSI\DOCUMENTS\PERSONAL\LUPUS\DECK\AFTER THE VIRUS\CARTAS\FINALES
+¦   arbol.txt
+¦   
++---basicas
+¦       1_antidoto.png
+¦       1_apuntar.png
+¦       1_comida.png
+¦       1_corre_1.png
+¦       1_corre_2.png
+¦       1_corre_3.png
+¦       1_escopeta.png
+¦       1_habiliadades_caza.png
+¦       1_habilidad_armas.png
+¦       1_kit_medico.png
+¦       1_llave_inglesa.png
+¦       1_machete.png
+¦       1_motocicleta.png
+¦       1_superviviente_1.png
+¦       1_superviviente_2.png
+¦       1_superviviente_3.png
+¦       2_ametralladora.png
+¦       2_cargadores.png
+¦       2_chaleco_antibalas.png
+¦       2_comisaria.png
+¦       2_creamatorio.png
+¦       2_cura.png
+¦       2_explorador.png
+¦       2_fuego_cruzado.png
+¦       2_furgoneta.png
+¦       2_gasolina.png
+¦       2_granada_explosiva.png
+¦       2_gran_explosion.png
+¦       2_guia.png
+¦       2_hospital.png
+¦       2_motosierra.png
+¦       2_perro.png
+¦       2_pistola.png
+¦       2_refugio.png
+¦       2_rifle.png
+¦       2_saquear.png
+¦       2_trampa_perimetral.png
+¦       2_tunel.png
+¦       3_lanzallamas.png
+¦       3_vip.png
+¦       
++---personajes
+¦       adam.png
+¦       angela.png
+¦       bill.png
+¦       carrie.png
+¦       chen.png
+¦       jennie.png
+¦       mac.png
+¦       robert.png
+¦       ruth.png
+¦       
++---tablero_vida
+¦       tablero_vida.png
+¦       
++---trasera
+¦       Trasera.png
+¦       
++---zombies
+        1_zombie_1.png
+        1_zombie_2.png
+        1_zombie_3.png
+        1_zombie_4.png
+        1_zombie_5.png
+        2_zombies_1.png
+        2_zombies_2.png
+        2_zombies_3.png
+        2_zombies_4.png
+        3_zombies_1.png
+        3_zombies_2.png
+        3_zombies_3.png
+        4_zombies_1.png
+        4_zombies_2.png
+        

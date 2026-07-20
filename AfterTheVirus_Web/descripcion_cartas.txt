@@ -1,0 +1,182 @@
+Aquí tienes la recopilación de todos los textos extraídos, organizados y unificados en una lista limpia para que puedas copiarlos y pegarlos.
+
+Están en formato: Nombre de carta |Peso | Título | Tipo | Descripción | Número de copias de cada carta por ejemplo :(2 copias),(1 copia)
+
+1_antidoto | 1 | ANTÍDOTO | EQUIPO MÉDICO | DESTRÚYELA PARA PREVENIR TU SIGUIENTE HERIDA EN ESTE TURNO. | 2 copias
+1_apuntar | 1 | APUNTAR | ENTRENAMIENTO | CADA VEZ QUE USES UN ARMA DE FUEGO, MATA 1 ZOMBIE ADICIONAL. | 1 copia
+1_comida | 1 | COMIDA | EQUIPO | SI NO HAY ZOMBIES EN JUEGO, COLÓCALA EN LA PARTE SUPERIOR O INFERIOR DEL MAZO DE ÁREA PARA CURAR 1 HERIDA. | 1 copia
+1_corre | 1 | ¡CORRE! | EVENTO | DESCARTA 1 CARTA DE ZOMBIE. | 3 copias
+1_escopeta | 1 | ESCOPETA | ARMA DE FUEGO | DESCARTA // O DESTRUYE LA ESCOPETA PARA MATAR 1 ZOMBIE. (MÁX. 2 ARMAS PREPARADAS) | 2 copias
+1_habilidad_armas | 1 | HABILIDAD CON LAS ARMAS | ENTRENAMIENTO | CADA VEZ QUE PREPARES UN ARMA, MATA 1 ZOMBIE. | 1 copia
+1_habiliadades_caza | 1 | HABILIDADES DE CAZA | ENTRENAMIENTO | CADA VEZ QUE PREPARES UNA TRAMPA, MATA 1 ZOMBIE. | 1 copia
+1_kit_medico | 1 | KIT MÉDICO | EQUIPO MÉDICO | SI NO HAY ZOMBIES EN JUEGO, DESTRÚYELA PARA CURAR 2 HERIDAS. | 1 copia
+1_llave_inglesa | 1 | LLAVE INGLESA | ARMA CONTUNDENTE | DESCARTA 1 ZOMBIE CUANDO LA LLAVE INGLESA SEA PREPARADA. DESCÁRTALA PARA DESCARTAR 1 ZOMBIE. (MÁX. 2 ARMAS PREPARADAS) | 2 copias
+1_machete | 1 | MACHETE | ARMA CONTUNDENTE | UNA VEZ POR TURNO: DESCARTA 1 CARTA PARA MATAR 1 ZOMBIE. (MÁX. 2 ARMAS PREPARADAS) | 2 copias
+1_motocicleta | 1 | MOTOCICLETA | VEHÍCULO | DESCARTA 1 CARTA DE ZOMBIE CUANDO LA MOTOCICLETA SEA PREPARADA. DESCÁRTALA PARA DESCARTAR 1 CARTA DE ZOMBIE. (MÁX. 1 VEHÍCULO PREPARADO) | 2 copias
+1_superviviente | 1 | SUPERVIVIENTE | PERSONA | [Sin descripción] | 2 copias
+1_zombie_1 | 1 | ZOMBIE | ZOMBIE | [Sin descripción] | 5 copias
+2_ametralladora | 2 | AMETRALLADORA | ARMA DE FUEGO | DESCARTA // PARA MATAR 2 ZOMBIES. (MÁX. 2 ARMAS PREPARADAS) | 2 copias
+2_cargadores | 2 | CARGADORES | [Sin tipo] | COLOCA LOS CARGADORES COMO // EN UNA DE TUS ARMAS PREPARADAS. | 1 copia
+2_chaleco_antibalas | 2 | CHALECO ANTIBALAS | ARMADURA | DESTRÚYELA PARA PREVENIR LAS SIGUIENTES 2 HERIDAS QUE RECIBAS ESTE TURNO. | 2 copias
+2_comisaria | 2 | COMISARÍA | INSTALACIÓN | CUANDO JUEGUES UN REFUGIO, CURA 1 HERIDA. | 1 copia
+2_creamatorio | 2 | CREMATORIO | TRAMPA | DESCÁRTALA PARA MATAR 2 ZOMBIES. | 1 copia
+2_cura | 2 | CURA | EQUIPO MÉDICO | DESTRÚYELA PARA CONVERTIR 1 CARTA DE 1 ZOMBIE A UN SUPERVIVIENTE PREPARADO. CUANDO SEA RESCATADO, DEVUELVE LA CARTA DE 1 ZOMBIE A LA PILA DE ZOMBIES DE ESE JUGADOR. | 1 copia
+2_explorador | 2 | EXPLORADOR | PERSONA | DESCÁRTALA PARA EXPLORAR 2 CARTAS. | 1 copia
+2_fuego_cruzado | 2 | FUEGO CRUZADO | TRAMPA | DESCÁRTALA PARA MATAR 1 ZOMBIE POR CADA PERSONA PREPARADA QUE TENGAS. | 1 copia
+2_furgoneta | 2 | FURGONETA | VEHÍCULO | DESCÁRTALA PARA MATAR 1 CARTA DE ZOMBIE Y DESCARTAR EL RESTO. (MÁX. 1 VEHÍCULO PREPARADO) | 2 copias
+2_gasolina | 2 | GASOLINA | EQUIPO | DESTRÚYELA PARA PREPARAR CUALQUIER CANTIDAD DE TUS TRAMPAS, VEHÍCULOS Y ARMAS. | 1 copia
+2_gran_explosion | 2 | GRAN EXPLOSIÓN | TRAMPA | DESTRÚYELA PARA MATAR A TODOS LOS ZOMBIES EN JUEGO Y EN LA PILA DE DESCARTES DE UN MISMO JUGADOR. | 1 copia
+2_granada_explosiva | 2 | GRANADA EXPLOSIVA | ARMA ARROJADIZA | DESCÁRTALA PARA DESCARTAR 5 ZOMBIES. (MÁX. 2 ARMAS PREPARADAS) | 2 copias
+2_guia | GUÍA | PERSONA | DESCARTALÁ PARA ELIMINAR 2 ZOMBIES DE CUALQUIER PILA DE DESCARTES | 1 copia
+2_hospital | 2 | HOSPITAL | INSTALACIÓN | EN CUALQUIER MOMENTO, TU EQUIPO MÉDICO DESTRUIDO PUEDE SER COLOCADO EN LA PILA DE DESCARTES. | 1 copia
+2_motosierra | 2 | MOTOSIERRA | ARMA CONTUNDENTE | DESCÁRTALA PARA MATAR 6 ZOMBIES. (MÁX. 2 ARMAS PREPARADAS) | 2 copias
+2_perro | 2 | PERRO | ANIMAL | DESCÁRTALA PARA MATAR 1 ZOMBIE. | 1 copia
+2_pistola | 2 | PISTOLA | ARMA DE FUEGO | UNA VEZ POR TURNO: DESCARTA // O LA PISTOLA PARA MATAR 1 ZOMBIE. (MÁX. 2 ARMAS PREPARADAS) | 1 copia
+2_refugio | 2 | REFUGIO | EVENTO | RESCATA 1 O MÁS DE TUS SUPERVIVIENTES PREPARADOS. | 1 copia
+2_rifle | 2 | RIFLE | ARMA DE FUEGO | PUEDES AÑADIR CARTAS DE TU MANO COMO //. UNA VEZ POR TURNO: DESCARTA // PARA MATAR 1 ZOMBIE EN JUEGO O DE LA PILA DE DESCARTES. (MÁX. 2 ARMAS PREPARADAS) | 1 copia
+2_saquear | 2 | SAQUEAR | EVENTO | RECUPERA 1 CARTA GRATIS. | 1 copia
+2_trampa_perimetral | 2 | TRAMPA PERIMETRAL | TRAMPA | DESCÁRTALA PARA MATAR 6 ZOMBIES DE CUALQUIER PILA DE DESCARTES. | 1 copia
+2_tunel | 2 | TÚNEL | INSTALACIÓN | PREPARAR A TUS PERSONAS ES GRATIS. | 1 copia
+2_zombies_1 | 2 | ZOMBIES | ZOMBIE | [Sin descripción] | 2 copias
+3_lanzallamas | 3 | LANZALLAMAS | ARMA DE FUEGO | DESCÁRTALA PARA MATAR 3 ZOMBIES. (MÁX. 2 ARMAS PREPARADAS) | 1 copia
+3_vip | 3 | VIP | PERSONA | CUENTA COMO 3 SUPERVIVIENTES CUANDO SE JUEGA UN REFUGIO. ESTA CARTA SE DESTRUYE TRAS ESTO. | 1 copia
+3_zombies_1 | 3 | ZOMBIES | ZOMBIE | [Sin descripción] | 3 copias
+4_zombies_1 | 4 | ZOMBIES | ZOMBIE | [Sin descripción] | 2 copias
+
+
+
+Personajes
+
+Aquí tienes las cartas de los personajes adaptadas **exactamente al mismo formato** que el resto de la baraja, uniendo toda su información en la columna de descripción y con el número de copias separado por `|` al final.
+
+chen | - | CHEN ❄️ | PERSONA | EN JUEGO: SIGILO. MAZO INICIAL: (1-3) x 1-ZOMBIE, REFUGIO, 3 x SUPERVIVIENTE, 3 x ¡CORRE!, SAQUEAR, LLAVES MAESTRAS. RETIRA: RIFLE, MOTOSIERRA | 1 copia
+ruth | - | RUTH | PERSONA | EN JUEGO: COMISARÍA. MAZO INICIAL: (1-3) x 1-ZOMBIE, REFUGIO, 3 x SUPERVIVIENTE, ESCOPETA, CARGADORES, HABILIDADES DE CAZA, GRAN EXPLOSIÓN, CREMATORIO | 1 copia
+adam | - | ADAM | PERSONA | EN JUEGO: MACHETE. MAZO INICIAL: (1-3) x 1-ZOMBIE, 3 x SUPERVIVIENTE, 3 x ¡CORRE!, REFUGIO, PERRO, SAQUEAR | 1 copia
+jennie | - | JENNIE | PERSONA | EN JUEGO: HABILIDAD CON LAS ARMAS. MAZO INICIAL: (1-3) x 1-ZOMBIE, REFUGIO, 3 x SUPERVIVIENTE, 3 x ¡CORRE!, PISTOLA, EXPLORADOR | 1 copia
+robert | - | ROBERT | PERSONA | EN JUEGO: CHALECO ANTIBALAS. MAZO INICIAL: (1-3) x 1-ZOMBIE, REFUGIO, 2 x ¡CORRE!, 2 x SUPERVIVIENTE, LLAVE INGLESA, COMIDA, GUÍA, FUEGO CRUZADO | 1 copia
+angela | - | ANGELA | PERSONA | EN JUEGO: RIFLE. MAZO INICIAL: (1-3) x 1-ZOMBIE, REFUGIO, 3 x ¡CORRE!, 2 x SUPERVIVIENTE, KIT MÉDICO, MOTOCICLETA, GRANADA EXPLOSIVA | 1 copia
+bill | - | BILL | PERSONA | EN JUEGO: TÚNEL. MAZO INICIAL: (1-3) x 1-ZOMBIE, REFUGIO, 3 x SUPERVIVIENTE, 3 x ¡CORRE!, PISTOLA, APUNTAR | 1 copia
+mac | - | MAC | PERSONA | EN JUEGO: GASOLINA. MAZO INICIAL: (1-3) x 1-ZOMBIE, REFUGIO, 3 x SUPERVIVIENTE, ¡CORRE!, MOTOSIERRA, FURGONETA, TRAMPA PERIMETRAL, PERRO | 1 copia
+carrie | - | CARRIE ❄️ | PERSONA | EN JUEGO: REMENDAR ARMADURA. MAZO INICIAL: (1-3) x 1-ZOMBIE, REFUGIO, 3 x SUPERVIVIENTE, 2 x ¡CORRE!, RIFLE DE CAZA, CASCO, VENDAS. RETIRA: ¡CORRE!, LLAVE INGLESA, GASOLINA, GUÍA | 1 copia
+
+
+
+
+
+Misiones
+
+
+Aquí tienes todo el texto extraído del documento, organizado por misiones y con sus respectivas reglas y descripciones tal cual aparecen en el original:
+1. EL BROTE
+1A) Caos (Partida corta)El virus zombi está aquí y la sociedad se está haciendo pedazos muy rapidamente.  Tienes que crear algo de orden y trabajar en equipo o serás el siguiente.  Objetivo: acaba el turno con 6 cartas preparadas en juego.  Preparación: comienza con 1 oleada (recuerda siempre añadir de 1-3 cartas de zombi dependiendo del número de jugadores, a no ser que se indique lo contrario).  
+1B) MULTITUD DE MUERTOS (Partida corta)Paralizado por el terrible brote, has estado escondido durante días.  Mientras tanto, una gran cantidad de zombis se ha concentrado en tu barrio.  Ahora, debes salir a través de una multitud de zombis y encontrar a otros supervivientes.  Objetivo: acaba el turno con 4 Supervivientes rescatados.  Preparación: comienza con 1 oleada. Comienza con 5 cartas de zombi en cada mazo, independientemente del número de jugadores.  
+1C) Ponte a SALVO (PartIDA LARGA)Te das cuenta de que lo que necesitas es organizar algún tipo de resistencia.  Primero necesitas reunir a algunas personas y preparar un lugar seguro.  Objetivo: acaba el turno con 6 Supervivientes rescatados y una instalación preparada.  Preparación: comienza con 1 oleada.  
+2. La Base
+2A) Entrenando GUERREROS (Partida LARGA)No puedes pretender proteger a los supervivientes tú solo de las hordas de zombis.  Debes encontrar armas para los supervivientes y entrenarlos cuanto antes.  Objetivo: acaba el turno con 5 Supervivientes rescatados.  Preparación: comienza con 1 oleada.  Regla especial: para rescatar a un Superviviente también tendrás que destruir un arma preparada. Solo podrás rescatar a un Superviviente por cada Refugio que juegues. Los VIP no pueden usarse y la opción de recuperar no puede elegirse cuando un Superviviente sea rescatado. 
+2B) PREPARANDO La Base (PartIDA LARGA)Tu lugar provisional necesita ser fortificado y abastecido para soportar a los incansables zombis.  Objetivo: acaba el turno con 5 Supervivientes rescatados. También tienes que tener 3 trampas, 3 equipos y 3 instalaciones, en juego y preparadas.  Preparación: comienza con 1 oleada y con todas las cartas de instalaciones exploradas (Ruth sigue empezando con el Bar en juego). Baraja 3 cartas de 2 zombis en el mazo de área.  Regla especial: cuando explores (o recuperes al rescatar a un Superviviente) una carta de zombi del mazo de área, colócala en juego y roba otra carta del mazo de área en su lugar.  
+2C) Asalto (Partida Corta)De algún modo, los zombis de la región te han olfateado hasta tu nueva Base y se están acercando con todas sus fuerzas.  ¡Debes prepararte rápidamente para el asalto!  Objetivo: acaba el turno con 6 oleadas o más.  Preparación: comienza con 1 oleada.  Regla especial: cuando llegues a 5 oleadas, añade todas las cartas de zombi de la pila de zombis a la pila de descartes antes de barajarla.  
+3. Familia
+3A) La ayuda (Partida Corta)Has recibido la noticia de que tu familia ha sobrevivido, pero están atrapados en un pueblo cercano rodeados por hordas de zombis deambulantes.  Debes ir alli y ayudarlos a escapar.  Objetivo: acaba el turno con 8 oleadas o más.  Preparación: comienza con 5 oleadas. Cada jugador comienza con 1 carta de zombi, independientemente del número de jugadores.  
+3B) Salva a tu Familia (Partida Larga)Has llegado al pueblo donde está tu familia, pero tienes que prepararlos para el viaje y coger suministros por el vecindario.  Objetivo: acaba el turno con 4 personas, 3 equipos y 1 Coche, en juego y preparadas.  Preparación: comienza con 2 oleadas y con un Coche explorado.  
+4. GUERRA
+4A) EXPLORANDO (Partida LaRGA)Está la cosa tranquila desde hace días.  Es un buen momento para explorar las ruinas de la sociedad en busca de objetos útiles y encontrar señales de donde ha podido ir la gente.  Objetivo: acaba el turno con el mazo de área completamente explorado.  Preparación: baraja 3 cartas de 1 zombi y 2 cartas de 2 zombis en el mazo de área. Comienza con 1 oleada.  Regla especial: cuando explores (o recuperes al rescatar a un Superviviente) una carta de zombi del mazo de área, colócala en juego y roba otra carta del mazo de área en su lugar.  
+4B) RESCATE (Partida Larga)Durante tu exploración rescataste a un superviviente que venia del este.  Te contó que aún había más gente viva en su ciudad natal.  Encerrados en casas fortificadas con las calles llenas de zombis, es solo cuestión de tiempo que sean invadidos.  ¡Debes sacarlos de alli!  Objetivo: acaba el turno con 10 Supervivientes rescatados.  Preparación: comienza con 2 oleadas. Elige y explora 2 cartas cualesquiera del mazo de área.  
+4C) NOCHE SILENCIOSA (Partida Corta)Unos murmullos insistentes en la radio revelan que hay gente atrapada, sin comida ni munición, en medio de una ciudad plagada de zombis.  Para poder sacarlos de allí, tendrás que ir por la noche a hurtadillas y en total silencio...  Objetivo: acaba el turno con 5 Supervivientes rescatados.  Preparación: comienza con 1 oleada. Añade 1 carta de zombi extra a tu mazo inicial.  Regla especial: no puedes usar cartas que impliquen motores o explosivos (Motocicleta, Coche, Pistola, Rifle, Motosierra, Granada explosiva, Escopeta, Ametralladora o Gran explosión). Pero aún pueden usarse para pagar costes.  
+4D) LIMPIEZA (Partida Larga)Otra ciudad está pidiendo ayuda por la amenaza creciente de zombis.  La ciudad aún no ha sido invadida, por lo que si consigues limpiarla de zombis, podría ser un lugar seguro para los supervivientes.  Objetivo: acaba el turno habiendo matado al menos 100 zombis (puedes llevar la cuenta usando un marcador de rescadatos y colocando un marcador de herida por cada 20 zombis matados).  Preparación: comienza con 3 oleadas y con cualquier arma del mazo de área agotada en tu zona de juego. Baraja 3 cartas de 2 zombis en el mazo de área.  Regla especial: cuando explores (o recuperes al rescatar a un Superviviente) una carta de zombi del mazo de área, colócala en juego y roba otra carta del mazo de área en su lugar.  
+5. La cura
+5A) ENCUENTRA a La PROFESORA (Partida Larga)Un rumor dice que hay una profesora trabajando en una cura para la plaga zombi.  Debes encontrarla y traerla a tu Base junto a todo el equipo útil que pueda haber en su laboratorio.  Objetivo: acaba el turno con un Laboratorio preparado y un VIP rescatado (no obtienes cartas por ello).  Preparación: comienza con 2 oleadas y con el Laboratorio como carta 17 y el VIP como carta 18 en el mazo de área (colócalas en esa posición tras barajar el mazo de área).  
+5B) INVESTiga una cura (Partida Corta)La profesora ha descubierto que algunas personas son más resistentes frente al virus zombi.  Está intentando encontrar el remedio adecuado, pero el tiempo se acaba.  ¡Necesita tu ayuda!  Objetivo: acaba el turno con 6 oleadas o menos habiendo usado 5 equipos médicos (puedes llevar la cuenta usando un marcador de rescatados).  Preparación: comienza con 2 oleadas y un Laboratorio explorado.  Regla especial: los jugadores pueden ayudarse entre sí para lograr el objetivo (moviendo el marcador de rescatados de otro jugador en lugar del suyo propio).  
+5C) PROBANDO LA CURA (Partida Corta)¡La profesora ha hecho un gran descubrimiento!  Ahora necesita que pruebes la nueva cura en algunos zombis infectados.  Objetivo: acaba el turno habiendo curado a 6 zombis (puedes llevar la cuenta usando un marcador de rescatados).  Preparación: comienza con 2 oleadas, un Laboratorio y una Cura, en juego y preparadas. Añade 2 cartas de zombi extra a tu mazo de robo.  
+5D) La Batalla FINAL (Partida Corta)Mientras la profesora produce la cura en masa en su laboratorio protegido, tu propia colonia es infectada por el virus zombi.  Completamente solo, debes luchar contra las hordas de zombis y contra tus antiguos amigos.  ¿Podrás aguantar hasta que la profesora llegue con la cura?  Objetivo: acaba el turno con 6 oleadas o más.  Preparación: comienza con 1 oleada.  Regla especial: trata las cartas de Superviviente como cartas de 1 zombi, empiezan en tu mazo (pero colócalos en tu pila de zombis cuando los mates).  EPÍLOGO  Con una cura producida en masa, es solo cuestión de tiempo y algo de esfuerzo acabar finalmente con la plaga zombi.  Volverás a resurgir a la humanidad de entre sus cenizas, construyendo un mundo nuevo y mejor.  ¡Has sobrevivido!  
+
+
+
+
+
+REGLAS DEL JUEGO: AFTER THE VIRUS
+
+TRASFONDO
+El apocalipsis zombie ha llegado. El mundo ha sido golpeado por un virus que ha matado al 90% de la población. La mayoría de supervivientes se han convertido en zombies y el resto están débiles e indefensos. Debes rescatar a tantos como puedas mientras te preparas para frenar el incesante crecimiento de zombies.[cite: 3]
+
+RESUMEN
+En After the Virus, de 1 a 3 jugadores trabajarán juntos para completar misiones.[cite: 3] Cada jugador tiene un personaje único con su propio mazo inicial.[cite: 3] Durante la misión, explorarás la zona en busca de objetos para recuperarlos y prepararlos para su uso.[cite: 3] Muchos objetos son armas y trampas que podrás usar para acabar con el avance zombie.[cite: 3] También podrás intentar rescatar supervivientes jugándolos desde tu mano, preparándolos y jugando un Refugio para apartarlos del peligro.[cite: 3]
+
+Durante el turno, los jugadores realizarán acciones simultáneamente.[cite: 3] Cada vez que tengas que volver a barajar tu mazo, añadirás más zombies a él y, cuando robes zombies, deberás colocarlos en la mesa y enfrentarte a ellos o sufrir heridas cuando te ataquen.[cite: 3] Si recibes 3 heridas, mueres.[cite: 3] Si cualquier jugador muere, todos pierden.[cite: 3] Para ganar, todos los jugadores deben sobrevivir y haber alcanzado individualmente el objetivo de la misión.[cite: 3]
+
+CONTENIDO
+1 reglamento, 1 librito de misiones, 4 tableros de personaje, 3 mazos de jugador, 10 marcadores de herida, 3 marcadores de oleada y 3 marcadores de rescatados.[cite: 3]
+
+PREPARACIÓN
+1) Los jugadores eligen una misión del librito de misiones y leen sus instrucciones.[cite: 3] Las misiones están pensadas para ser jugadas en orden como parte de una historia dividida en 5 capítulos, pero también pueden jugarse por separado.[cite: 3] Ten en cuenta que una misión puede modificar la preparación descrita a continuación.[cite: 3]
+2) Cada jugador elige uno de los 4 tableros de personaje y coge un mazo de jugador.[cite: 3] Los mazos de cada jugador deben estar siempre separados, una carta de un mazo nunca se moverá al mazo de otro jugador.[cite: 3] Coloca un marcador de rescatados en el "0" y un marcador de oleada como venga indicado en las instrucciones de la misión.[cite: 3]
+3) Construye tu pila de zombies colocando bocarriba las 14 cartas de zombies de la siguiente manera: primero, las cartas de 4 zombies.[cite: 3] A continuación coloca encima de éstas las cartas de 3 zombies, luego las cartas de 2 zombies y, por último, las cartas de 1 zombie.[cite: 3] Durante la partida, la pila de zombies siempre debe estar ordenada de esta forma.[cite: 3]
+4) A la derecha de los tableros de personaje, los jugadores tienen una zona de juego para sus cartas.[cite: 3] Los jugadores comienzan la partida con una carta específica en juego.[cite: 3] Comprueba tu tablero de personaje y coloca la carta indicada agotada (apaisada) en el área de juego.[cite: 3]
+5) Construye tu mazo de robo inicial cogiendo el resto de cartas indicadas y añade una carta de zombie por cada jugador en la partida.[cite: 3] Las cartas de zombie siempre se cogen de la parte superior de la pila de zombies.[cite: 3] Baraja tu mazo de robo y colócalo, bocabajo, a la izquierda de tu tablero de personaje.[cite: 3] Ejemplo: en una partida de 3 jugadores, cada jugador añadiría 3 cartas de 1 zombie a sus mazos iniciales.[cite: 3] Mientras que, en una partida en solitario, el jugador solo tendría que añadir una carta de 1 zombie.[cite: 3]
+6) Las 30 cartas restantes del mazo de jugador se barajan para formar el mazo de área.[cite: 3]
+7) Deja espacio en la mesa para tu pila de descartes y tu pila de destruidas.[cite: 3]
+
+MECÁNICA DE JUEGO
+La partida se juega en una serie de turnos hasta que cada jugador, al final de cualquier turno, haya completado el objetivo de la misión, o hasta que un jugador muera o falle la misión.[cite: 3] Un jugador que ha completado el objetivo de la misión, debe seguir jugando hasta que todos los jugadores también lo consigan y todos ellos lo sigan cumpliendo en ese momento.[cite: 3]
+
+EL TURNO
+1) Fase de Robo: cada jugador roba 5 cartas del mazo de robo para formar su mano de cartas, después coloca cualquier carta de zombie robada en la mesa, en la zona de zombies atacantes.[cite: 3] Tienes que enfrentarte a los zombies atacantes durante la fase de acción.[cite: 3]
+Si hay menos de 5 cartas en el mazo de robo cuando haya que robar, roba las que puedas y luego habrá que barajar: primero aumenta en uno el marcador de oleada en tu tablero de personaje (cada jugador tiene su propia oleada).[cite: 3] Después añade tantas cartas de zombie como indique el marcador de oleada de la pila de zombies a tu pila de descartes.[cite: 3] Luego baraja la pila de descartes y colócala, bocabajo, para formar un nuevo mazo de robo.[cite: 3] Por último, roba el resto de cartas necesarias hasta haber robado 5 cartas y continúa como siempre (coloca cualquier carta de zombie robada en la zona de zombies atacantes).[cite: 3]
+Ejemplo: Moisés solo tiene 3 cartas en su mazo de robo al comienzo de su turno, por lo que necesitará barajar.[cite: 3] Primero roba esas 3 cartas.[cite: 3] Después, aumenta en uno el marcador de oleada, dejándolo en el 4, por lo que añade las 4 cartas superiores del mazo de zombies a su pila de descartes.[cite: 3] Tras esto baraja su pila de descartes y la coloca, bocabajo, para crear de nuevo el mazo de robo.[cite: 3] Luego roba las otras 2 cartas que le faltaban.[cite: 3] Por último, debe colocar todas las cartas de zombie robadas en la zona de zombies atacantes.[cite: 3]
+Si la pila de zombies se agota antes de añadir todas las cartas indicadas por el marcador de oleadas, añade tantas como puedas y después destruye 2 cartas cualesquiera (que no sean de zombie) de tu pila de descartes antes de barajarla.[cite: 3]
+
+2) Fase de Acción: los jugadores realizan sus acciones simultáneamente hasta que todos ellos hayan acabado.[cite: 3] Las acciones pueden realizarse cualquier cantidad de veces y en cualquier orden (la explicación de cada una de ellas podrás encontrarla más adelante).[cite: 3] Las cartas de tu mano podrás jugarlas, o descartarlas sin efecto como pago de otras acciones.[cite: 3]
+Esta fase acaba cuando no haya zombies atacantes, los jugadores no tengan más cartas en la mano y ningún jugador desee realizar más acciones.[cite: 3] Solo entonces, los jugadores podrán continuar con el siguiente turno (a no ser que ganen la partida).[cite: 3]
+¡Carta en mesa pesa![cite: 3] (No está permitido rectificar una acción una vez esté realizada).[cite: 3]
+
+ACCIONES (pueden realizarse cualquier número de veces y en cualquier orden):
+A) Jugar una carta de evento de tu mano (roja): recibe el efecto y coloca la carta de evento en tu pila de descartes.[cite: 3]
+B) Jugar una carta que no sea de evento de tu mano (con una flecha amarilla de preparado en la parte inferior izquierda): coloca la carta agotada (apaisada) en tu zona de juego.[cite: 3] No puedes usarla hasta que no la prepares (acción E).[cite: 3]
+C) Explorar: descarta una carta de tu mano para colocar la carta superior del mazo de área, bocarriba, en tu zona de cartas exploradas.[cite: 3] Puedes tener cualquier número de cartas en tu zona de cartas exploradas.[cite: 3]
+D) Recuperar: recupera una de tus cartas exploradas y colócala en tu zona de juego (agotada).[cite: 3] Para ello, descarta un número de cartas de tu mano igual al coste de recuperación (mostrado sobre el icono triangular con una mano).[cite: 3] Las cartas de evento recuperadas, se colocan directamente en tu pila de descartes sin efecto.[cite: 3]
+E) Preparar: prepara una de tus cartas agotadas (apaisadas) descartando el número de cartas de tu mano indicado por el número al lado de la flecha amarilla de preparado.[cite: 3] Algunas cartas requieren que descartes de tu mano una carta específica en lugar de una cantidad de cartas (como el Refugio o el Superviviente).[cite: 3] Desde ahora, la carta preparada podrá usarse (acción F).[cite: 3] Una carta preparada no puede volver a estar agotada.[cite: 3]
+F) Usar: usa tus cartas preparadas y aplica el efecto siguiendo el texto de la carta.[cite: 3] Si la carta no se descarta ni se destruye tras su uso, o no está limitada a una vez por turno, podrás usar la misma carta varias veces durante el turno (siempre y cuando puedas pagar cualquier coste indicado en la carta).[cite: 3] Cuando uses una carta, no se agota.[cite: 3] También hay que tener en cuenta la diferencia entre "descártala para" (indica que la propia carta tiene que descartarse para poder usarla) y "descarta una carta para" (indica que debes usar cualquier carta de tu mano para poder usarla).[cite: 3]
+G) Ataque zombie: tarde o temprano podrías tener que enfrentarte a los zombies atacantes en un combate cuerpo a cuerpo.[cite: 3] Cuando realices esta acción, uno de tus zombies atacantes te ataca, causándote una herida.[cite: 3] El zombie atacante muere en la lucha.[cite: 3] Aunque una carta de zombie muestre varios zombies, solo ataca e inflige una herida uno cada vez: cada zombie atacante ataca e inflige una herida, de forma individual (no como grupo).[cite: 3]
+Algunas cartas también pueden reaccionar a otras acciones durante la partida, ejemplo: la Comisaría te permite curar una herida a cualquier personaje cada vez que juegues un refugio.[cite: 3] Esto no se considera una acción, sino una reacción a algo, como viene indicado en la propia carta.[cite: 3]
+
+REGLAS GENERALES
+* Los efectos solo pueden afectar a un solo jugador al mismo tiempo.[cite: 3]
+* Los números en los efectos de las cartas deben leerse como "hasta ese número" como máximo, pero las cartas no pueden usarse sin realizar algún efecto.[cite: 3]
+* La única forma de poder interaccionar con otros jugadores es: combatiendo a sus zombies, curando sus heridas y hablando con ellos.[cite: 3]
+Ejemplo: el mortero, que mata a 6 zombies, puede usarse para matar de 1 a 6 zombies atacantes de un jugador.[cite: 3] Un arma no puede usarse si no hay ningún zombie al que combatir.[cite: 3]
+
+MATANDO Y DESCARTANDO ZOMBIES
+Una carta de zombie puede tener hasta 4 zombies que son tratados de forma independiente.[cite: 3] Lo que le ocurra a la carta de zombie dependerá de lo que hagas con los zombies mostrados en ella:
+* Si se mata a todos los zombies de la carta, coloca la carta de nuevo en la pila de zombies del jugador.[cite: 3]
+* Si se descarta a todos los zombies de la carta, coloca la carta en la pila de descartes del jugador.[cite: 3]
+* Si al menos un zombie de la carta es descartado y se mata al resto de zombies de la misma carta, coloca la carta en la pila de descartes del jugador.[cite: 3]
+Una carta de zombie permanece en juego hasta que cada uno de los zombies de esa carta se descarte o se mate.[cite: 3] Recuerda, no puede haber zombies atacantes al final del turno.[cite: 3] Si no puedes luchar contra ellos de otras maneras, finalmente te atacarán (acción G).[cite: 3]
+Puedes llevar la cuenta de cuántos zombies quedan en una carta colocando marcadores de herida sobre ella.[cite: 3]
+"Eliminar" un zombie funciona exactamente igual que si lo matas, pero temáticamente es diferente y no cuenta como que has matado al zombie.[cite: 3] Esta diferencia solo es importante en la Misión 4D: Limpieza.[cite: 3]
+
+HERIDAS
+Cuando recibas heridas, coloca una ficha de herida en un espacio de herida libre de tu tablero de personaje.[cite: 3] Si colocas una herida en el cerebro, mueres inmediatamente y todos perdéis la misión.[cite: 3]
+Si colocas una herida en tu brazo, solo podrás tener un arma preparada en juego.[cite: 3] Si en algún momento tienes más de un arma preparada (incluido el momento de colocar la herida en el brazo), debes destruir una de ellas (colocándola en la pila de destruidas).[cite: 3] Aun así, podrás seguir teniendo cualquier cantidad de armas agotadas en juego.[cite: 3]
+Si colocas una herida en tu pierna, no podrás jugar ninguna carta de evento ¡CORRE![cite: 3] (Pero sí podrás usarla para descartarla como pago).[cite: 3]
+Los efectos que curan heridas te permiten eliminar un marcador de herida de cualquier tablero de personaje.[cite: 3]
+Los efectos que previenen heridas solo pueden prevenir heridas que recibas tú, actúa como siempre, pero no coloques marcadores de herida.[cite: 3]
+
+MUNICIÓN
+Algunas cartas usan munición (= cartas colocadas bajo el arma).[cite: 3] La propia arma indica cuándo se añade munición y cómo la usa, cuando añades munición a un arma, simplemente coloca cualquier carta (o cartas) de tu mano debajo del arma para usarlas como munición.[cite: 3] Cuando una carta de munición deje de estar debajo de un arma, dejará de considerarse munición.[cite: 3] Si un arma con munición es descartada o destruida, coloca las cartas de munición de esa arma en tu pila de descartes.[cite: 3]
+Si la munición es parte del coste de preparación de un arma, necesitarás añadir munición desde tu mano para prepararla (normalmente es el único momento en el que podrás añadirle munición).[cite: 3] Un coste de preparación de "//" quiere decir que puedes añadir cualquier cantidad de cartas (incluso "0") desde tu mano para preparar el arma.[cite: 3]
+La carta Cargadores puede añadirse a un arma preparada (p.ej. la Ametralladora) por su propio efecto, sin importar lo que diga el arma.[cite: 3]
+
+LIMITACIÓN DE ARMAS Y VEHÍCULOS
+Normalmente, solo puedes tener un máximo de 2 armas preparadas en juego (o solo una si tu brazo está herido).[cite: 3] Si en cualquier momento tienes más de las permitidas (p.ej. al preparar un arma), inmediatamente deberás destruir una de tus armas para no superar el límite permitido (colocándola en la pila de destruidas).[cite: 3]
+Puedes tener cualquier cantidad de armas agotadas (apaisadas) en juego.[cite: 3]
+De la misma forma, no puedes tener nunca más de un vehículo preparado en juego.[cite: 3]
+
+RESCATANDO SUPERVIVIENTES
+Rescatar supervivientes puede ayudarte a completar el objetivo de tu misión, pero también puede ayudarte a conseguir nuevos recursos.[cite: 3]
+Para rescatar un superviviente, necesitarás jugarlo y después descartar una carta de tu mano para prepararlo.[cite: 3] Cuando tengas supervivientes preparados, podrás jugar una carta de evento Refugio para rescatar uno o más supervivientes.[cite: 3] Si lo haces, los supervivientes serán descartados (junto al evento Refugio) y podrás, por cada superviviente rescatado, elegir entre:
+A) Contarlo como rescatado y aumentar el marcador de rescatados un paso.[cite: 3]
+O bien
+B) Recuperar gratis una carta de la parte superior del mazo de área, colocándola agotada en tu zona de juego.[cite: 3]
+Gracias a la opción B), rescatar supervivientes puede ser una buena estrategia incluso cuando no se requiera rescatar a ningún superviviente para la misión.[cite: 3] También puede ser una buena opción (aunque necesites rescatar a algunos), si con ello consigues las herramientas necesarias para sobrevivir durante la misión.[cite: 3]
+
+AJUSTAR LA DIFICULTAD
+Las primeras tres misiones (1A, 1B y 1C) son un poco más sencillas que el resto de misiones.[cite: 3] Si quieres modificar la dificultad de cualquier misión, puedes disminuir la oleada inicial en 1 para hacer la misión más fácil.[cite: 3] Para hacerla más difícil, puedes añadir una carta de zombie extra al mazo de robo inicial de cada jugador.[cite: 3]
