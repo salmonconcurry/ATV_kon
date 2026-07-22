@@ -66,4 +66,8 @@ body, html {
 .cyber-theme { background: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
 .cyber-theme:hover { background: #fff; box-shadow: 0 0 20px var(--neon-blue); transform: scale(1.02); }
 
+/* NUEVO: Estilo Samurái para Scoundrel */
+.samurai-theme { background: #8b0000; color: #e6dfd3; box-shadow: 0 0 10px rgba(139, 0, 0, 0.5); border: 1px solid #111; }
+.samurai-theme:hover { background: #e6dfd3; color: #8b0000; box-shadow: 0 0 20px #8b0000; transform: scale(1.02); }
+
 .hidden { display: none !important; }
