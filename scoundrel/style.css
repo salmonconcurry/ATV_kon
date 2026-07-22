@@ -1,0 +1,118 @@
+:root {
+    --bg-color: #1a1a1a;
+    --paper-bg: #e6dfd3; /* Color papel pergamino */
+    --accent-red: #8b0000; /* Rojo sangre seca */
+    --ink-black: #111;
+    --card-w: 80px;
+    --card-h: 120px;
+}
+
+body {
+    background-color: var(--bg-color);
+    background-image: radial-gradient(circle, #2a2a2a 0%, #111 100%);
+    color: var(--paper-bg);
+    font-family: 'Palatino Linotype', 'Book Antiqua', serif;
+    margin: 0; padding: 0;
+    display: flex; justify-content: center;
+    height: 100vh;
+    box-sizing: border-box;
+    user-select: none;
+    overflow: hidden;
+}
+
+.game-container {
+    width: 100%; max-width: 500px;
+    display: flex; flex-direction: column;
+    padding: 15px;
+}
+
+/* Efectos de Daño y Curación */
+body.damage-flash { animation: shake 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; background-color: #300000; }
+@keyframes shake {
+    10%, 90% { transform: translate3d(-2px, 0, 0); }
+    20%, 80% { transform: translate3d(4px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+    40%, 60% { transform: translate3d(6px, 0, 0); }
+}
+@keyframes healPulse {
+    0%, 100% { transform: scale(1); color: var(--paper-bg); }
+    50% { transform: scale(1.3); color: #4caf50; text-shadow: 0 0 10px #4caf50; }
+}
+
+/* Cabecera y UI */
+.header {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 2px solid var(--accent-red);
+    padding-bottom: 10px; margin-bottom: 15px;
+}
+.stats { font-size: 1.2rem; font-weight: bold; }
+.hp-value { font-size: 1.6rem; color: var(--accent-red); }
+.hp-max { font-size: 0.9rem; color: #888; }
+h1 { text-align: center; margin: 0; font-size: 1.6rem; letter-spacing: 2px; color: var(--paper-bg); text-transform: uppercase;}
+.subtitle { font-size: 0.8rem; color: var(--accent-red); display: block; letter-spacing: 4px;}
+
+.btn {
+    background-color: transparent; color: var(--paper-bg);
+    border: 1px solid var(--accent-red); padding: 8px 16px;
+    font-family: inherit; font-size: 0.9rem; font-weight: bold;
+    cursor: pointer; transition: all 0.2s; border-radius: 2px;
+}
+.btn-run:hover:not(:disabled) { background-color: var(--accent-red); }
+.btn:disabled { border-color: #444; color: #555; pointer-events: none; }
+
+.message-board {
+    text-align: center; padding: 10px; color: #fff;
+    background: rgba(139, 0, 0, 0.2); border-left: 3px solid var(--accent-red);
+    font-style: italic; min-height: 1.5em; border-radius: 0 4px 4px 0;
+}
+
+.zone-title { font-size: 0.8rem; color: #777; text-align: center; letter-spacing: 2px; margin: 20px 0 10px; border-bottom: 1px solid #333; padding-bottom: 5px;}
+
+/* Área de Juego */
+.room {
+    display: flex; justify-content: center; gap: 10px;
+    min-height: calc(var(--card-h) + 10px); perspective: 1000px;
+}
+
+/* Cartas (Estilo Pergamino) */
+.card-container { width: var(--card-w); height: var(--card-h); position: relative; }
+.card {
+    width: 100%; height: 100%; position: absolute;
+    background-color: var(--paper-bg); border: 2px solid var(--ink-black);
+    border-radius: 4px; box-shadow: 2px 4px 10px rgba(0,0,0,0.5);
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+    background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.05"/></svg>');
+}
+.card:active { transform: scale(0.95); }
+.card.executed { opacity: 0; transform: scale(0.8) translateY(20px); pointer-events: none; }
+
+.red-suit { color: var(--accent-red); }
+.black-suit { color: var(--ink-black); }
+.card-label { font-size: 1.2rem; font-weight: bold; position: absolute; top: 5px; left: 8px; }
+.card-icon { font-size: 2.5rem; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); }
+
+.deal-anim { animation: dealCard 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: translateY(-50px) rotateX(45deg); }
+@keyframes dealCard { to { opacity: 1; transform: translateY(0) rotateX(0); } }
+
+/* Equipamiento */
+.equipment { display: flex; justify-content: center; gap: 40px; margin-top: 10px;}
+.deck-area, .weapon-area { display: flex; flex-direction: column; align-items: center; gap: 8px;}
+.label { font-size: 0.7rem; color: #888; letter-spacing: 1px;}
+
+.deck-pile {
+    width: var(--card-w); height: var(--card-h);
+    background-color: #2a2a2a; border: 2px solid #555;
+    border-radius: 4px; display: flex; justify-content: center; align-items: center;
+    position: relative; box-shadow: -2px 2px 0 #111, -4px 4px 0 #1a1a1a, -6px 6px 0 #111;
+    cursor: pointer;
+}
+.deck-icon { font-size: 2.5rem; opacity: 0.5; }
+.deck-count-overlay { position: absolute; bottom: 5px; right: 5px; font-size: 0.9rem; font-weight: bold; background: var(--accent-red); padding: 2px 6px; border-radius: 2px; }
+
+.weapon-slot { width: var(--card-w); height: var(--card-h); border: 2px dashed #555; border-radius: 4px; display: flex; justify-content: center; align-items: center; position: relative;}
+.empty-weapon { font-size: 0.8rem; color: #666; font-style: italic; text-align: center;}
+.weapon-stack { font-size: 0.8rem; color: var(--accent-red); text-align: center; font-weight: bold; min-height: 1.2em;}
+
+.floating-text { position: absolute; font-weight: bold; font-size: 1.5rem; pointer-events: none; animation: floatUp 1s ease-out forwards; z-index: 100; text-shadow: 0 2px 5px #000; }
+@keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-40px); } }

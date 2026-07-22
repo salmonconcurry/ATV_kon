@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Scoundrel: Samurai Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Audio de fondo (Descomentar cuando tengas el archivo) -->
+    <!-- <audio id="bgm" loop><source src="musica.mp3" type="audio/mpeg"></audio> -->
+
+    <div class="game-container">
+        <header class="header">
+            <div class="stats" id="hp-container">
+                <span class="hp-label">VIDA</span> 
+                <span id="hp" class="hp-value">20</span><span class="hp-max">/20</span>
+            </div>
+            <h1>SCOUNDREL<br><span class="subtitle">Samurai Edition</span></h1>
+            <button id="run-btn" class="btn btn-run" onclick="runAway()">HUIR</button>
+        </header>
+
+        <div id="message-board" class="message-board">La senda del guerrero comienza...</div>
+
+        <main class="battlefield">
+            <h2 class="zone-title">SALA ACTUAL</h2>
+            <div class="room" id="room">
+                <!-- Las cartas se inyectan aquí -->
+            </div>
+
+            <h2 class="zone-title">EQUIPAMIENTO</h2>
+            <div class="equipment">
+                <div class="deck-area">
+                    <div class="deck-pile" onclick="startAudio()">
+                        <span class="deck-icon">⛩️</span>
+                        <div class="deck-count-overlay" id="deck-count">44</div>
+                    </div>
+                    <span class="label">MAZO</span>
+                </div>
+                
+                <div class="weapon-area" id="weapon-area">
+                    <div id="weapon-slot" class="weapon-slot">
+                        <div class="empty-weapon">Desarmado</div>
+                    </div>
+                    <div class="weapon-stack" id="weapon-stack-info">Sin arma equipada</div>
+                    <span class="label">ARMA</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
