@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXO DE SIMULACIONES | Acceso</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="crt-overlay"></div>
+
+    <main class="terminal">
+        <header class="terminal-header">
+            <h1 class="glitch" data-text="PROTOCOLO DE SEGURIDAD">PROTOCOLO DE SEGURIDAD</h1>
+            <p class="status alert">ESTADO: ACCESO RESTRINGIDO</p>
+        </header>
+
+        <section class="interaction-zone" id="lock-screen">
+            <p>Se requiere anulación biométrica para acceder al nexo de simulaciones tácticas.</p>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            
+            <button class="hack-btn" id="hack-btn">
+                <span class="btn-text">MANTENER PARA DESENCRIPTAR</span>
+            </button>
+        </section>
+
+        <!-- PANEL DESBLOQUEADO -->
+        <section class="interaction-zone hidden" id="access-granted">
+            <h2 class="success">ACCESO CONCEDIDO</h2>
+            <p>Archivos recuperados. Seleccione la simulación a cargar:</p>
+            
+            <div class="mission-links">
+                <!-- Enlace a tu juego de zombies -->
+                <a href="./AfterTheVirus_Web/" class="portal-link zombie-theme">
+                    [1] AFTER THE VIRUS
+                </a>
+                <!-- Enlace corregido a tu juego de cartas -->
+                <a href="./Card_Capture/" class="portal-link cyber-theme">
+                    [2] CARD CAPTURE: CYBER MECH
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script src="main.js"></script>
+</body>
+</html>
