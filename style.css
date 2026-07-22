@@ -1,0 +1,69 @@
+:root {
+    --bg-color: #050a0f;
+    --neon-green: #39ff14;
+    --neon-red: #ff003c;
+    --neon-blue: #00f3ff;
+    --terminal-dark: #0a1929;
+    --text-color: #a0c0d0;
+}
+
+body, html {
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    background-color: var(--bg-color);
+    font-family: 'Courier New', Courier, monospace;
+    color: var(--text-color);
+    display: flex; justify-content: center; align-items: center;
+    overflow: hidden;
+}
+
+/* Efecto CRT (Monitor de tubo) */
+.crt-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+    background-size: 100% 4px; pointer-events: none; z-index: 100;
+}
+
+.terminal {
+    background: rgba(10, 25, 41, 0.8); border: 2px solid var(--neon-red);
+    padding: 2rem; max-width: 500px; width: 90%;
+    box-shadow: 0 0 20px rgba(255, 0, 60, 0.2), inset 0 0 15px rgba(255, 0, 60, 0.1);
+    position: relative; text-align: center;
+}
+
+.terminal-header { border-bottom: 1px dashed var(--neon-red); margin-bottom: 2rem; padding-bottom: 1rem; }
+
+/* Efectos Glitch y Alertas */
+.glitch { font-size: 1.8rem; font-weight: bold; color: var(--neon-red); position: relative; display: inline-block; margin: 0; text-shadow: 0 0 10px rgba(255,0,60,0.5); }
+.status.alert { color: var(--neon-red); font-weight: bold; letter-spacing: 2px; animation: blink 1s infinite; }
+.success { color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); margin-bottom: 5px;}
+
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* Interacción de Hackeo */
+.progress-container { width: 100%; height: 20px; background: #000; border: 1px solid #333; margin: 1.5rem 0; position: relative; }
+.progress-bar { width: 0%; height: 100%; background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); transition: width 0.1s; }
+
+.hack-btn {
+    background: transparent; border: 2px solid var(--text-color); color: var(--text-color);
+    padding: 15px 30px; font-family: inherit; font-size: 1rem; font-weight: bold;
+    cursor: pointer; transition: all 0.2s; width: 100%; text-transform: uppercase;
+    user-select: none; -webkit-user-select: none;
+}
+.hack-btn:active { background: rgba(255,255,255,0.1); transform: scale(0.98); }
+.hack-btn.hacking { border-color: var(--neon-green); color: var(--neon-green); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); }
+
+/* Contenedor de enlaces a los juegos */
+.mission-links { display: flex; flex-direction: column; gap: 15px; margin-top: 1.5rem; }
+
+.portal-link {
+    display: block; color: #000; padding: 15px; text-decoration: none; font-weight: bold; 
+    font-size: 1.1rem; border-radius: 4px; transition: all 0.3s;
+}
+
+.zombie-theme { background: #ffaa00; box-shadow: 0 0 10px rgba(255, 170, 0, 0.5); }
+.zombie-theme:hover { background: #ffcc00; box-shadow: 0 0 20px #ffaa00; transform: scale(1.02); }
+
+.cyber-theme { background: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
+.cyber-theme:hover { background: #fff; box-shadow: 0 0 20px var(--neon-blue); transform: scale(1.02); }
+
+.hidden { display: none !important; }
