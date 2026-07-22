@@ -5,141 +5,248 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>After the Virus - Motor Inteligente</title>
+    <title>After the Virus - Sistema de Supervivencia</title>
     
+    <!-- FUENTE TEMÁTICA -->
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     
-    <style>
-        :root { 
-            --bg-color: #121212; --panel-bg: #1c1c1e; --text-color: #f2f2f7; 
-            --accent-red: #ff453a; --accent-blue: #0a84ff; --accent-green: #30d158; --accent-orange: #ff9f0a; 
-            /* CARTAS MÁS GRANDES */
-            --card-w: 100px; 
-            --card-h: 140px; 
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        
-        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; overscroll-behavior-y: none; }
-        
-        /* MENU SETUP */
-        #setup-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; padding: 20px; }
-        .setup-box { background: var(--panel-bg); padding: 25px; border-radius: 20px; border: 1px solid #333; width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
-        .setup-box h1 { text-align: center; color: var(--accent-red); font-size: 24px; font-weight: 800; letter-spacing: 0.5px;}
-        .setup-box label { font-size: 12px; color: #8e8e93; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
-        .setup-box select { width: 100%; padding: 12px; border-radius: 10px; background: #2c2c2e; color: white; border: none; font-size: 16px; margin-top: 5px; -webkit-appearance: none; appearance: none;}
-        .btn-start { background: var(--accent-green); padding: 16px; border: none; border-radius: 12px; color: black; font-weight: bold; font-size: 17px; cursor: pointer; min-height: 44px;}
-        .btn-help { background: #2c2c2e; padding: 12px; border: none; border-radius: 10px; color: var(--accent-blue); font-weight: 600; font-size: 15px; cursor: pointer; margin-top: -5px; min-height: 44px;}
-        
-        /* HOW TO PLAY MODAL */
-        #how-to-play-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 10001; padding: 20px; }
-        .htp-box { background: var(--panel-bg); padding: 25px; border-radius: 20px; width: 100%; max-width: 450px; max-height: 85vh; overflow-y: auto; color: #e5e5ea; }
-        .htp-box h2 { color: var(--accent-orange); text-align: center; margin-bottom: 15px; font-size: 20px; font-weight: 700;}
-        .htp-box ul { margin-left: 20px; font-size: 15px; line-height: 1.5; display: flex; flex-direction: column; gap: 12px; }
-        
-        /* MODALS (ACTION & PAYMENT) */
-        #action-modal, #payment-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; flex-direction: column; justify-content: flex-end; align-items: center; z-index: 10000; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);}
-        .action-box { background: #1c1c1ee6; width: 100%; max-width: 600px; text-align: center; padding: 20px 15px; padding-bottom: max(20px, env(safe-area-inset-bottom)); border-radius: 20px 20px 0 0; animation: slideUp 0.25s cubic-bezier(0.1, 0.76, 0.55, 1); box-shadow: 0 -5px 20px rgba(0,0,0,0.4);}
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        
-        .action-box h3 { color: #8e8e93; margin-bottom: 15px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;}
-        .action-btn { width: 100%; background: #2c2c2e; color: #0a84ff; border: none; padding: 16px; margin: 4px 0; border-radius: 12px; font-size: 17px; font-weight: 600; cursor: pointer; min-height: 44px;}
-        .action-btn.execute { color: var(--accent-red); }
-        .action-btn.prepare { color: var(--accent-green); }
-        .action-btn.cancel { background: #2c2c2e; color: white; font-weight: bold; margin-top: 12px; }
+  <style>
+    :root { 
+        /* Fondos más claros para mejorar el contraste */
+        --bg-color: #141414; 
+        --panel-bg: rgba(30, 20, 20, 0.95); 
+        --text-color: #e0d6d6; 
+        --accent-red: #cc0000; 
+        --accent-blue: #0a84ff; 
+        --accent-green: #30d158; 
+        --accent-orange: #ff8800; 
+        --card-w: 100px; 
+        --card-h: 140px; 
+    }
+    
+    /* TERMINAL DE BÚNKER */
+    #bunker-terminal {
+        position: fixed;
+        bottom: 0;
+        right: 20px;
+        width: 320px;
+        height: 250px;
+        background: rgba(5, 20, 5, 0.95);
+        border: 1px solid #0f0;
+        border-bottom: none;
+        border-radius: 8px 8px 0 0;
+        display: flex;
+        flex-direction: column;
+        z-index: 10010;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 11px;
+        transition: transform 0.3s cubic-bezier(0.1, 0.76, 0.55, 1);
+        transform: translateY(220px); /* Oculto por defecto, solo muestra la cabecera */
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.1);
+    }
+    #bunker-terminal.open { transform: translateY(0); }
+    .terminal-header {
+        background: #0f0;
+        color: #000;
+        padding: 6px 10px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+        border-radius: 6px 6px 0 0;
+    }
+    #terminal-content {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        color: #0f0;
+        text-shadow: 0 0 3px rgba(0, 255, 0, 0.5);
+    }
+    .log-entry { margin-bottom: 5px; border-bottom: 1px dotted #030; padding-bottom: 3px; line-height: 1.3;}
+    .log-warn { color: #ffeb3b; text-shadow: 0 0 3px rgba(255, 235, 59, 0.5); }
+    .log-error { color: #ff3333; text-shadow: 0 0 3px rgba(255, 51, 51, 0.5); }
+    .log-time { opacity: 0.7; margin-right: 5px; }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; font-family: 'Courier New', Courier, monospace; }
+    
+    body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; overscroll-behavior-y: none; }
+    
+    /* EFECTO CRT Y VIÑETA CLAUSTROFÓBICA - AJUSTADO PARA MAYOR LUZ */
+    body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at center, transparent 60%, rgba(10, 0, 0, 0.6) 100%); pointer-events: none; z-index: 9998; }
+    body::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03)); background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 9997; opacity: 0.15; /* Bajado de 0.6 a 0.15 */ }
 
-        /* PAYMENT MODAL SPECIFICS */
-        #payment-cards { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 15px 0; min-height: 100px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px;}
-        .payment-card-wrap { position: relative; cursor: pointer; transition: transform 0.2s;}
-        .payment-card-wrap.selected { transform: scale(1.05); }
-        .payment-card-wrap.selected::after { content: "✓"; position: absolute; top: -10px; right: -10px; background: var(--accent-blue); border-radius: 50%; width: 24px; height: 24px; display: flex; justify-content: center; align-items: center; font-size: 14px; color: white; font-weight: bold; border: 2px solid var(--panel-bg);}
+    /* TÍTULOS TEMÁTICOS CON FLICKER / GLITCH */
+    h1, h2, h3, .zone-header, #action-title, #payment-title { font-family: 'Creepster', cursive; letter-spacing: 2px; font-weight: normal; text-shadow: 1px 1px 2px #000; }
+    
+    @keyframes flicker {
+        0% { opacity: 0.9; text-shadow: 2px 2px 5px rgba(255,0,0,0.8); }
+        5% { opacity: 0.5; text-shadow: none; }
+        10% { opacity: 1; text-shadow: 4px 0px 10px rgba(255,0,0,1); }
+        15% { opacity: 0.8; text-shadow: 2px 2px 5px rgba(255,0,0,0.8); }
+        100% { opacity: 0.9; text-shadow: 2px 2px 5px rgba(255,0,0,0.8); }
+    }
 
-        /* INFO PANEL */
-        #info-panel { position: fixed; top: env(safe-area-inset-top); left: 50%; transform: translateX(-50%); background: rgba(28, 28, 30, 0.95); border: 1px solid #3a3a3c; padding: 12px 20px; border-radius: 20px; width: 90%; max-width: 400px; z-index: 1000; display: none; pointer-events: none; color: white; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.5); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); margin-top: 10px;}
-        #info-panel h3 { color: var(--accent-green); margin-bottom: 6px; font-size: 15px; font-weight: 700;}
-        #info-panel span { font-size: 10px; color: #8e8e93; margin-left: 6px; background: #2c2c2e; padding: 3px 8px; border-radius: 8px; font-weight: 600;}
-        #info-panel p { font-size: 13px; line-height: 1.4; color: #d1d1d6;}
+    /* MENU SETUP */
+    #setup-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10005; padding: 20px; }
+    .setup-box { background: var(--panel-bg); padding: 30px 25px; border-radius: 5px; border: 1px solid #6a1a1a; width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; box-shadow: inset 0 0 20px rgba(200, 0, 0, 0.2), 0 10px 40px rgba(0,0,0,0.9);}
+    .setup-box h1 { text-align: center; color: var(--accent-red); font-size: 42px; animation: flicker 4s infinite;}
+    .setup-box label { font-size: 14px; color: #a89f9f; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;}
+    .setup-box select { width: 100%; padding: 12px; border-radius: 4px; background: #222; color: #fff; border: 1px solid #5a1a1a; font-size: 16px; margin-top: 5px; -webkit-appearance: none; appearance: none; outline: none;}
+    .btn-start { background: var(--accent-red); padding: 16px; border: 1px solid #ff4d4d; border-radius: 4px; color: #fff; font-family: 'Creepster', cursive; font-size: 26px; letter-spacing: 2px; cursor: pointer; text-shadow: 2px 2px 0px #000; transition: 0.2s; box-shadow: 0 0 15px rgba(158, 0, 0, 0.6);}
+    .btn-start:hover { background: #e60000; box-shadow: 0 0 25px rgba(255, 0, 0, 0.8); }
+    .btn-start:active { transform: scale(0.95); }
+    .btn-help { background: transparent; padding: 10px; border: 1px dashed #777; color: #bbb; font-weight: bold; cursor: pointer; transition: 0.2s;}
+    .btn-help:hover { color: #fff; border-color: #fff; }
+    
+    /* HOW TO PLAY MODAL */
+    #how-to-play-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 10006; padding: 20px; }
+    .htp-box { background: var(--panel-bg); padding: 25px; border-radius: 5px; width: 100%; max-width: 450px; max-height: 85vh; overflow-y: auto; color: #e5e5ea; border: 1px solid #6a1a1a; }
+    .htp-box h2 { color: var(--accent-red); font-size: 28px; border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 15px;}
+    .htp-box ul { margin-left: 20px; font-size: 14px; display: flex; flex-direction: column; gap: 12px; font-family: -apple-system, sans-serif;}
+    
+    /* MODALS (ACCIONES Y PAGOS) */
+    #action-modal, #payment-modal, #wound-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); display: none; flex-direction: column; justify-content: flex-end; align-items: center; z-index: 10000; backdrop-filter: blur(3px);}
+    .action-box { background: #1c1010e6; width: 100%; max-width: 600px; text-align: center; padding: 20px 15px; border-radius: 15px 15px 0 0; animation: slideUp 0.3s cubic-bezier(0.1, 0.76, 0.55, 1); border-top: 2px solid #800; box-shadow: 0 -10px 40px rgba(0,0,0,0.9);}
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    
+    .action-box h3 { color: #ff3333; margin-bottom: 15px; font-size: 26px; text-shadow: 2px 2px 4px black; letter-spacing: 1px;}
+    .action-btn { width: 100%; background: #2a1515; color: #eee; border: 1px solid #5a2a2a; padding: 16px; margin: 5px 0; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s;}
+    .action-btn.execute { color: #fff; background: var(--accent-red); border-color: #ff3333;}
+    .action-btn.prepare { color: #fff; background: var(--accent-green); border-color: #4cd964;}
+    .action-btn.cancel { background: transparent; color: #aaa; border: none; margin-top: 15px; text-decoration: underline;}
+    .action-btn:active { filter: brightness(1.5); }
+    .action-btn:disabled { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
 
-        /* UI JUEGO */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; background-color: #121212; padding: 8px 10px; padding-top: max(8px, env(safe-area-inset-top)); flex-wrap: wrap; gap: 5px; border-bottom: 1px solid #2c2c2e;}
-        .counter { display: flex; align-items: center; gap: 6px; background: #1c1c1e; padding: 6px 10px; border-radius: 10px; font-size: 14px; font-weight: 700; color: #e5e5ea;}
-        .counter button { background: #3a3a3c; color: white; border: none; width: 28px; height: 28px; border-radius: 6px; font-size: 18px; cursor: pointer;}
-        
-        /* BANNER DE MISIÓN */
-        #mission-banner { background: var(--accent-blue); color: white; text-align: center; padding: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.3px; z-index: 9;}
+    #payment-cards { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 15px 0; min-height: 120px; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 4px; border: 1px inset #400;}
+    .payment-card-wrap { position: relative; cursor: pointer; transition: transform 0.2s;}
+    .payment-card-wrap.selected { transform: scale(1.1) translateY(-5px); }
+    .payment-card-wrap.selected::after { content: "✓"; position: absolute; top: -10px; right: -10px; background: #e60000; border-radius: 50%; width: 26px; height: 26px; display: flex; justify-content: center; align-items: center; font-size: 14px; color: white; font-weight: bold; box-shadow: 0 0 10px red;}
 
-        .deck-controls { display: flex; justify-content: space-around; padding: 8px; background-color: #121212; gap: 8px; border-bottom: 1px solid #2c2c2e;}
-        .btn { flex: 1; padding: 12px 6px; border: none; border-radius: 10px; font-weight: 700; font-size: 12px; color: white; cursor: pointer; min-height: 44px; display: flex; justify-content: center; align-items: center; text-align: center; line-height: 1.2;}
-        .btn-shuffle { background: #0a84ff; }
-        .btn-explore { background: #ff9f0a; flex: 0.8;}
-        .btn-endturn { background: #bf5af2; }
-        
-        /* ZONAS: SCROLL VERTICAL PARA QUE NUNCA SE APLASTEN */
-        .game-area { display: flex; flex-direction: column; flex: 1 1 0%; overflow-y: auto; overflow-x: hidden; background: #000; scroll-behavior: smooth; }
-        .zone-container { flex: 0 0 auto; display: flex; flex-direction: column; position: relative; border-bottom: 1px solid #1c1c1e; min-height: 190px; } /* Ajustado a 190px */
-        .zone-header { font-size: 11px; text-transform: uppercase; color: #8e8e93; font-weight: 700; padding: 6px 10px; background: rgba(0,0,0,0.6); z-index: 5; display: flex; justify-content: space-between; letter-spacing: 0.5px;}
-        .zone { flex: 1; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 10px; padding: 12px; }
-        
-        #zombie-zone { background: radial-gradient(circle at top, #2c1212 0%, #000 100%); }
-        #explored-zone { background: radial-gradient(circle at top, #1a1a1c 0%, #000 100%); }
-        #table-zone { background: radial-gradient(circle at top, #122114 0%, #000 100%); min-height: 250px; flex: 1 0 auto; }
-        
-        /* BOTTOM AREA BLINDADA PARA iOS */
-        .bottom-area { flex: 0 0 auto; min-height: 200px; background-color: #121212; padding-bottom: max(10px, env(safe-area-inset-bottom)); border-top: 1px solid #2c2c2e; display: flex; }
-        .hand-container { flex: 1 1 auto; display: flex; flex-direction: column; border-right: 1px solid #2c2c2e; overflow: hidden; width: 60%;}
-        .hand-wrapper { display: flex; flex: 1 1 0%; min-height: 0; align-items: center; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0 12px; gap: 8px;}
-        #deck-visual-container { padding: 5px 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #000; border-right: 1px solid #1c1c1e; min-width: 115px;} /* Ajustado */
-        .deck-back { background-image: url('trasera/Trasera.png') !important; cursor: pointer; box-shadow: 0 2px 10px rgba(10, 132, 255, 0.4) !important;}
-        .discard-container { flex: 0 0 auto; min-width: 115px; display: flex; flex-direction: column; background: #0a0a0a; overflow: hidden;} /* Ajustado */
-        
-        /* CARTAS BASE */
-        .card { width: var(--card-w); height: var(--card-h); background-color: #2c2c2e; border-radius: 8px; border: 1px solid #48484a; display: flex; justify-content: center; align-items: center; padding: 2px; color: transparent; background-size: cover; background-position: center; box-shadow: 0 4px 10px rgba(0,0,0,0.8); position: relative; touch-action: manipulation; cursor: pointer; transition: transform 0.2s cubic-bezier(0.1, 0.76, 0.55, 1), border-color 0.2s; flex-shrink: 0;}
-        .card.exhausted { transform: rotate(90deg) scale(0.85) !important; border-color: #ff9f0a !important; opacity: 0.8; box-shadow: none; margin: 0 10px;}
-        .card.zombie { border-color: var(--accent-red); border-width: 2px;}
-        
-        /* FALLBACK VISUAL */
-        .card.no-image { background: radial-gradient(circle at center, #1a2a3a 0%, #0d1117 100%); border-color: #3498db; }
-        .fallback-text { background: rgba(0,0,0,0.7); padding: 4px; border-radius: 4px; color: #34dbb5; font-size: 11px; font-weight: bold; text-align: center; text-transform: uppercase; border: 1px dashed #3498db; text-shadow: 0 0 5px #000; width: 90%; word-wrap: break-word;}
-        
-        .sortable-ghost { opacity: 0.3; background-color: #3a3a3c; border: 2px dashed #8e8e93; }
-        @keyframes drawAnim { 0% { transform: translateY(-20px) scale(0.8); opacity: 0; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
-        .anim-draw { animation: drawAnim 0.25s ease-out forwards; }
-        
-        @media (min-width: 768px) {
-            .card { width: 115px; height: 161px; font-size: 13px; }
-            .fallback-text { font-size: 13px; }
-            .bottom-area { height: 230px; }
-            .game-area { flex-direction: row; flex-wrap: wrap; }
-            .zone-container { flex: 1 1 45%; border-right: 1px dashed #444; border-bottom: 1px dashed #444;}
-            #table-zone { flex: 1 1 100%; min-height: 250px; }
-        }
-    </style>
+    #info-panel { position: fixed; top: 10%; left: 50%; transform: translateX(-50%); background: rgba(20, 10, 10, 0.95); border: 1px solid #a00; padding: 15px; border-radius: 4px; width: 90%; max-width: 400px; z-index: 1000; display: none; pointer-events: none; color: white; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.9); }
+    #info-panel h3 { color: #ff4d4d; margin-bottom: 8px; font-size: 22px; }
+    #info-panel span { font-size: 11px; color: #111; background: #eee; padding: 3px 6px; border-radius: 2px; font-family: sans-serif; font-weight: bold;}
+    #info-panel p { font-size: 14px; line-height: 1.5; color: #ddd; font-family: -apple-system, sans-serif; margin-top: 10px;}
+
+    .top-bar { display: flex; justify-content: space-between; align-items: center; background-color: #0a0505; padding: 10px; border-bottom: 2px solid #700; position: relative; z-index: 10;}
+    .counter { display: flex; align-items: center; gap: 8px; background: #1a0a0a; padding: 8px 12px; border-radius: 4px; border: 1px solid #500; font-size: 14px; font-weight: bold; color: #fff; font-family: 'Courier New', Courier, monospace;}
+    .wound-label { font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; color: #aaa; text-transform: uppercase;}
+    .wound-label input { accent-color: var(--accent-red); width: 16px; height: 16px;}
+    
+    #mission-banner { background: #500000; color: #fff; text-align: center; padding: 8px; font-size: 13px; font-weight: bold; letter-spacing: 1px; border-bottom: 1px solid #222; font-family: sans-serif; position: relative; z-index: 10;}
+
+    .deck-controls { display: flex; justify-content: space-around; padding: 8px; background-color: #111; gap: 8px; border-bottom: 1px solid #333; position: relative; z-index: 10;}
+    .btn { flex: 1; padding: 10px 5px; border: 1px solid #555; border-radius: 4px; font-weight: bold; font-size: 12px; color: white; cursor: pointer; text-transform: uppercase; transition: 0.2s;}
+    .btn-shuffle { background: #1a1a1a; border-color: #666; color: #ccc; }
+    .btn-explore { background: #2a1805; border-color: var(--accent-orange); color: var(--accent-orange); flex: 0.8;}
+    .btn-endturn { background: #3a0000; border-color: var(--accent-red); color: #ff8888; font-family: 'Creepster', cursive; font-size: 18px; letter-spacing: 1px;}
+    .btn:active { transform: scale(0.95); }
+
+    .game-area { display: flex; flex-direction: column; flex: 1 1 0%; overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; position: relative; z-index: 5;}
+    .zone-container { flex: 0 0 auto; display: flex; flex-direction: column; position: relative; border-bottom: 1px dashed #444; min-height: 190px; } 
+    /* Zonas más claras para resaltar las cartas */
+    .zone-header { font-size: 16px; color: #bbb; padding: 6px 12px; background: rgba(20,20,20,0.9); display: flex; justify-content: space-between; border-bottom: 1px solid #333;}
+    .zone { flex: 1; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 10px; padding: 15px; }
+    
+    #zombie-zone { background: radial-gradient(circle at top, rgba(140,20,20,0.25) 0%, transparent 90%); }
+    #zombie-zone .zone-header { color: #ff4d4d; }
+    #explored-zone { background: radial-gradient(circle at top, rgba(80,80,80,0.35) 0%, transparent 100%); }
+    #table-zone { background: radial-gradient(circle at top, rgba(40,90,40,0.2) 0%, transparent 100%); min-height: 250px; flex: 1 0 auto; }
+    
+    .bottom-area { flex: 0 0 auto; min-height: 200px; background-color: #111; border-top: 2px solid #700; display: flex; z-index: 10;}
+    #deck-visual-container { padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0a0a0a; border-right: 1px solid #444; min-width: 110px;} 
+    .hand-container { flex: 1 1 auto; display: flex; flex-direction: column; border-right: 1px solid #444; overflow: hidden;}
+    .hand-wrapper { display: flex; flex: 1 1 0%; min-height: 0; align-items: center; overflow-x: auto; padding: 10px; gap: 10px;}
+    
+	/* --- ZONA DE DESCARTES AMPLIADA --- */
+	.discard-container { 
+    flex: 0 0 auto; 
+    min-width: 170px; 
+    width: 170px; 
+    display: flex; 
+    flex-direction: column; 
+    background: #080404; 
+    box-shadow: inset 10px 0 20px rgba(0,0,0,0.8);
+} 
+
+/* Opcional: Para que en pantallas de PC se vea aún más holgado */
+	@media (min-width: 768px) {
+    .discard-container {
+        min-width: 200px;
+        width: 200px;
+		}
+	} 
+    
+    .card { width: var(--card-w); height: var(--card-h); background-color: #222; border-radius: 4px; border: 1px solid #555; display: flex; justify-content: center; align-items: center; padding: 2px; color: transparent; background-size: cover; background-position: center; box-shadow: 2px 4px 12px rgba(0,0,0,0.8); position: relative; cursor: pointer; transition: transform 0.2s, border-color 0.2s, filter 0.2s; flex-shrink: 0;}
+    /* Cartas agotadas: Se ven mejor reduciendo el oscurecimiento */
+    .card.exhausted { transform: rotate(90deg) scale(0.85) !important; border-color: #888 !important; filter: grayscale(0.5) brightness(0.8); margin: 0 10px;}
+    .card.zombie { border-color: #ff3333; border-width: 2px; box-shadow: 0 0 12px rgba(255,0,0,0.5);}
+    .deck-back { background-image: url('trasera/Trasera.png') !important; box-shadow: 0 0 15px rgba(255, 255, 255, 0.1) !important; border-color: #666;}
+    
+    .card.no-image { background: repeating-linear-gradient(45deg, #2a2a2a, #2a2a2a 10px, #333 10px, #333 20px); border-color: #777; }
+    .fallback-text { background: rgba(0,0,0,0.9); padding: 5px; color: #fff; font-size: 12px; font-family: 'Creepster', cursive; letter-spacing: 1px; text-align: center; border: 1px solid #700; width: 95%; word-wrap: break-word;}
+    
+    .sortable-ghost { opacity: 0.1; background-color: #f00; border: 2px dashed #f00; }
+    @keyframes drawAnim { 0% { transform: translateY(-30px) scale(0.9); opacity: 0;} 100% { transform: translateY(0) scale(1); opacity: 1;} }
+    .anim-draw { animation: drawAnim 0.3s ease-out forwards; }
+    
+    /* EFECTOS VISUALES SANGRIENTOS MEJORADOS */
+    .shake { animation: shakeAnim 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+    @keyframes shakeAnim { 10%, 90% { transform: translate3d(-4px, 3px, 0); } 20%, 80% { transform: translate3d(6px, -4px, 0); } 30%, 50%, 70% { transform: translate3d(-10px, 5px, 0); } 40%, 60% { transform: translate3d(10px, -5px, 0); } }
+    
+    .blood-flash { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(200, 0, 0, 0.3); z-index: 10001; pointer-events: none; animation: flashAnim 0.5s ease-out forwards;}
+    @keyframes flashAnim { 0% { opacity: 1; backdrop-filter: blur(3px); } 100% { opacity: 0; backdrop-filter: blur(0px); } }
+    
+    .particle { position: fixed; border-radius: 50%; pointer-events: none; z-index: 10000; animation: particleAnim 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards; box-shadow: 0 0 5px currentColor;}
+    @keyframes particleAnim { 0% { transform: translate(0,0) scale(1.5); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0.2); opacity: 0; } }
+
+    .screen-banner { position: fixed; top: 35%; left: 50%; transform: translate(-50%, -50%); padding: 20px 50px; border-radius: 5px; font-size: 45px; font-family: 'Creepster', cursive; color: white; z-index: 10005; pointer-events: none; box-shadow: 0 20px 50px rgba(0,0,0,0.9); border: 2px solid rgba(255,50,50,0.5); animation: bannerAnim 2.5s forwards; text-align: center; text-transform: uppercase; letter-spacing: 5px; text-shadow: 4px 4px 0px #000; background: rgba(40,0,0,0.95);}
+    @keyframes bannerAnim { 0% { opacity: 0; transform: translate(-50%, -30%) scale(0.5); filter: blur(5px);} 10% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); filter: blur(0);} 20% { transform: translate(-50%, -50%) scale(1); } 80% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -70%) scale(0.8); filter: blur(5px);} }
+	/* ESTADO DE SAQUEO (MERCADO ILUMINADO) */
+    #explored-zone.looting-glow {
+        box-shadow: inset 0 0 50px rgba(48, 209, 88, 0.3);
+        border: 2px dashed #30d158;
+        animation: pulse-loot 1.5s infinite;
+        cursor: crosshair;
+    }
+    @keyframes pulse-loot {
+        0% { box-shadow: inset 0 0 30px rgba(48, 209, 88, 0.1); }
+        50% { box-shadow: inset 0 0 70px rgba(48, 209, 88, 0.6); }
+        100% { box-shadow: inset 0 0 30px rgba(48, 209, 88, 0.1); }
+    }
+	
+    @media (min-width: 768px) {
+        .card { width: 115px; height: 161px; }
+        .bottom-area { height: 230px; }
+        .game-area { flex-direction: row; flex-wrap: wrap; }
+        .zone-container { flex: 1 1 45%; border-right: 1px dashed #555; border-bottom: 1px dashed #555;}
+        #table-zone { flex: 1 1 100%; min-height: 250px; border-right: none;}
+    }
+</style>
 </head>
 <body>
 
-    <!-- HOW TO PLAY MODAL -->
     <div id="how-to-play-modal">
         <div class="htp-box">
-            <h2>📜 CÓMO JUGAR (ACLARACIONES)</h2>
+            <h2>📜 REGISTRO DE SUPERVIVENCIA</h2>
             <ul>
-                <li><b>🎯 OBJETIVO:</b> Sobrevive y cumple la condición de la misión mostrada en la barra superior.</li>
-                <li><b>👆 CONTROLES:</b> Para ejecutar el poder de una carta <b>NUNCA LA ARRASTRES A DESCARTES</b>. Haz <b>Clic/Tap</b> sobre ella y elige el botón de "💥 EJECUTAR".</li>
-                <li><b>🛒 MERCADO (Explorar y Recuperar):</b> Para sacar cartas al Mercado, pulsa "Explorar Área". Te costará <b>descartar 1 carta de tu mano</b> por cada carta. Para comprar una, haz clic en ella y pulsa "🛒 RECUPERAR" pagando el número de cartas de coste.</li>
-                <li><b>✋ LÍMITE DE MANO:</b> El sistema te impedirá tener más de 5 cartas normales en la mano.</li>
-                <li><b>🔄 CARTAS DE EQUIPO/ANIMALES:</b> Estas cartas entran a la mesa agotadas. Haz tap para <b>"Prepararlas"</b> pagando su coste, y una vez rectas, podrás "Ejecutarlas". ¡Al usarlas, volverán a girarse!</li>
-                <li><b>⚡ EVENTOS:</b> Se usan (ejecutan) directamente desde tu mano. No se bajan a la mesa.</li>
-                <li><b>🩸 ZOMBIES:</b> Si <b>MATAS</b>, el zombie vuelve a la reserva. Si <b>DESCARTAS</b> o el zombie te ataca al final del turno, irá a tu pila de descartes personal (saldrán de nuevo).</li>
+                <li><b>🎯 OBJETIVO:</b> Sobrevive y cumple la condición de la misión actual[cite: 3].</li>
+                <li><b>👆 CONTROLES:</b> Haz Clic/Tap sobre una carta para desplegar sus opciones de combate o uso. ¡El destino de la humanidad está a un tap de distancia!</li>
+                <li><b>🛒 MERCADO (ZONA ÁREA):</b> Pulsa "Explorar Área" para revelar cartas (coste: 1 carta de tu mano por revelación). Haz clic sobre ellas para comprarlas[cite: 3].</li>
+                <li><b>✋ LÍMITE DE MANO:</b> El sistema frena el robo automático a las 5 cartas en mano[cite: 3].</li>
+                <li><b>🔄 CARTAS DE EQUIPO/ANIMALES:</b> Entran a la mesa agotadas. Paga su coste de Preparación desde tu mano para ponerlas en activo[cite: 3].</li>
+                <li><b>⭐ ENTRENAMIENTOS:</b> Son pasivas (ej. "Apuntar"). Prepáralas en mesa y su bonificador estará activo siempre.</li>
             </ul>
             <button class="btn-start" style="width: 100%; margin-top: 20px;" onclick="document.getElementById('how-to-play-modal').style.display='none'">¡ENTENDIDO!</button>
         </div>
     </div>
 
-    <!-- SETUP SCREEN -->
     <div id="setup-screen">
         <div class="setup-box">
             <h1>AFTER THE VIRUS</h1>
-            <button class="btn-help" onclick="document.getElementById('how-to-play-modal').style.display='flex'">📜 CÓMO JUGAR / TUTORIAL</button>
+            <button class="btn-help" onclick="document.getElementById('how-to-play-modal').style.display='flex'">> ACCEDER AL ARCHIVO DE AYUDA <</button>
             <div>
-                <label>PERSONAJE:</label>
+                <label>SUPERVIVIENTE A CARGO:</label>
                 <select id="char-select">
                     <option value="adam">Adam (Machete)</option>
                     <option value="ruth">Ruth (Comisaría)</option>
@@ -153,7 +260,7 @@
                 </select>
             </div>
             <div>
-                <label>MISIÓN (CAMPAÑA):</label>
+                <label>EXPEDIENTE DE MISIÓN:</label>
                 <select id="mission-select">
                     <option value="1A">1A: Caos (Obj: 6 Cartas Preparadas)</option>
                     <option value="1B">1B: Multitud Muertos (Obj: 4 Rescatados)</option>
@@ -162,151 +269,203 @@
                     <option value="2B">2B: Preparando Base (Obj: 5 Rescatados + Defensas)</option>
                     <option value="2C">2C: Asalto (Obj: Llegar a Oleada 6)</option>
                     <option value="3A">3A: La Ayuda (Empieza Oleada 5)</option>
-                    <option value="3B">3B: Salva a tu Familia (Obj: 4 Personas + Coche)</option>
+                    <option value="3B">3B: Salva a tu Familia (Obj: 4 Personas + Furgoneta)</option>
                     <option value="4A">4A: Explorando (Obj: Mazo Área Vacío)</option>
                     <option value="4B">4B: Rescate (Obj: 10 Rescatados)</option>
                     <option value="4C">4C: Noche Silenciosa (Sin explosivos/motores)</option>
                     <option value="4D">4D: Limpieza (Matar 100 Zombies)</option>
-                    <option value="5A">5A: Encuentra Profesora (VIP + Lab)</option>
+                    <option value="5A">5A: Encuentra Profesora (VIP + Hospital en mesa)</option>
                     <option value="5B">5B: Investiga Cura (Usar 5 médicos)</option>
                     <option value="5C">5C: Probando Cura (Curar 6 Zombies)</option>
-                    <option value="5D">5D: Batalla Final (Supervivientes = Zombies)</option>
+                    <option value="5D">5D: Batalla Final (Llegar a Oleada 6)</option>
                 </select>
             </div>
-            <button class="btn-start" onclick="startGame()">INICIAR PARTIDA</button>
+            <button class="btn-start" onclick="startGame()">ENTRAR AL INFIERNO</button>
         </div>
     </div>
 
-    <!-- TOOLTIP & ACTION MODAL -->
     <div id="info-panel"><h3 id="info-title"></h3><p id="info-desc"></p></div>
     
     <div id="action-modal">
         <div class="action-box">
             <h3 id="action-title">Carta</h3>
             <div id="action-buttons"></div>
-            <button class="action-btn cancel" onclick="closeActionMenu()">Cancelar y Cerrar</button>
+            <button class="action-btn cancel" onclick="closeActionMenu()">Abortar Acción</button>
         </div>
     </div>
 
-    <!-- PAYMENT MODAL -->
+    <div id="wound-modal">
+        <div class="action-box">
+            <h3 style="color: #ff3333;">🩸 RECIBIR HERIDA CRÍTICA</h3>
+            <p style="font-size: 14px; color: #ccc; margin-bottom: 15px; font-family: -apple-system, sans-serif;">La infección avanza. Elige el foco del daño. Perderás 1 carta de tu mano al instante[cite: 3].</p>
+            <button class="action-btn" onclick="confirmWound('pierna')" id="btn-w-pierna">Pierna (Anula cartas ¡Corre!)</button>
+            <button class="action-btn" onclick="confirmWound('brazo')" id="btn-w-brazo">Brazo (Límite: Solo 1 Arma en mesa)</button>
+            <button class="action-btn execute" onclick="confirmWound('cerebro')">Cerebro (MUERTE INSTANTÁNEA)</button>
+            <button class="action-btn cancel" onclick="document.getElementById('wound-modal').style.display='none'">Atrás</button>
+        </div>
+    </div>
+
     <div id="payment-modal">
         <div class="action-box">
             <h3 id="payment-title">PAGAR COSTE</h3>
-            <p id="payment-desc" style="font-size: 13px; color: #ddd; margin-bottom: 10px;">Selecciona de tu mano las cartas que vas a descartar para pagar el coste.</p>
+            <p id="payment-desc" style="font-size: 14px; color: #ccc; margin-bottom: 10px; font-family: -apple-system, sans-serif;">Selecciona las cartas a descartar como pago.</p>
             <div id="payment-cards"></div>
-            <button id="payment-confirm-btn" class="action-btn prepare" onclick="confirmPayment()">Confirmar</button>
+            <button id="payment-confirm-btn" class="action-btn prepare" onclick="confirmPayment()">Confirmar Transferencia</button>
             <button class="action-btn cancel" onclick="document.getElementById('payment-modal').style.display='none'">Atrás</button>
         </div>
     </div>
 
-    <!-- UI JUEGO -->
     <div class="top-bar">
-        <div class="counter" title="Heridas">❤️ <button onclick="updateCount('hp', -1)">-</button> <span id="hp-count">0</span>/3 <button onclick="updateCount('hp', 1)">+</button></div>
-        <div class="counter" title="Oleada (Automática)">🌊 OLEADA: <span id="wave-count">1</span></div>
-        <div class="counter" title="Rescatados">🎯 Rescatados: <span id="rescued-count">0</span></div>
+        <div class="counter" title="Heridas (Límites y Penalizaciones)">
+            ❤️ 
+            <label class="wound-label"><input type="checkbox" id="w-pierna" onclick="toggleWound('pierna')"> Pierna</label>
+            <label class="wound-label"><input type="checkbox" id="w-brazo" onclick="toggleWound('brazo')"> Brazo</label>
+            <label class="wound-label"><input type="checkbox" id="w-cerebro" onclick="toggleWound('cerebro')"> Cerebro</label>
+        </div>
+        <div class="counter" title="Nivel de Amenaza (Oleada)">🌊 <span id="wave-count">1</span></div>
+        <div class="counter" title="Vidas Salvadas (Rescatados)">🎯 <span id="rescued-count">0</span></div>
     </div>
     
-    <!-- BANNER DE MISIÓN -->
-    <div id="mission-banner">Cargando misión...</div>
+    <div id="mission-banner">Sincronizando coordenadas de misión...</div>
 
     <div class="deck-controls">
         <button id="explore-btn" class="btn btn-explore" onclick="openPaymentMenu(null, 'explore')">🔍 Explorar Área (<span id="area-count">0</span>)</button>
-        <button id="shuffle-btn" class="btn btn-shuffle" onclick="shuffleDiscardToDeck()">Barajar Desc. (+Oleada)</button>
-        <button class="btn btn-endturn" onclick="endTurn()">Terminar Turno</button>
+        <button id="shuffle-btn" class="btn btn-shuffle" onclick="shuffleDiscardToDeck(false)">Ciclar Descartes (+Oleada)</button>
+        <button id="end-turn-btn" class="btn btn-endturn" onclick="endTurn()">TERMINAR TURNO</button>
     </div>
 
     <div class="game-area">
-        <div class="zone-container"><div class="zone-header">Zombies Atacantes</div><div id="zombie-zone" class="zone"></div></div>
-        <div class="zone-container"><div class="zone-header">Mercado (Exploradas)</div><div id="explored-zone" class="zone"></div></div>
-        <div class="zone-container" style="flex: 1 1 100%;"><div class="zone-header">Mesa de Juego</div><div id="table-zone" class="zone"></div></div>
+        <div class="zone-container"><div class="zone-header">ZONA DE INFECCIÓN (Zombies Atacantes)</div><div id="zombie-zone" class="zone"></div></div>
+        <div class="zone-container"><div class="zone-header">MERCADO (Área Explorada)</div><div id="explored-zone" class="zone"></div></div>
+        <div class="zone-container" id="table-zone-container"><div class="zone-header">BÚNKER (Mesa de Juego)</div><div id="table-zone" class="zone"></div></div>
     </div>
 
     <div class="bottom-area">
-        <div class="hand-container">
-            <div class="zone-header">Tu Mano</div>
-            <div class="hand-wrapper">
-                <div id="deck-visual-container">
-                    <div id="deck-visual" class="card deck-back" onclick="drawCards(1, false)" title="Robar 1"></div>
-                    <div style="font-size:10px; margin-top:2px; color:#aaa;">MAZO: <span id="deck-count">0</span></div>
-                </div>
-                <div id="hand-zone" class="zone"></div>
-            </div>
+        <div id="deck-visual-container">
+            <div id="deck-visual" class="card deck-back" onclick="drawCards(1, false)" title="Robar 1"></div>
+            <div style="font-size:12px; margin-top:8px; color:#999; font-weight: bold; text-align: center; font-family: -apple-system, sans-serif;">MAZO: <span id="deck-count">0</span></div>
         </div>
-        <div class="discard-container"><div class="zone-header">Desc. (<span id="discard-count">0</span>)</div><div id="discard-zone" class="zone"></div></div>
+        <div class="hand-container">
+            <div class="zone-header" style="background: transparent; padding: 4px 10px; border-bottom: 1px dashed #333; font-size: 14px;">TU MANO</div>
+            <div class="hand-wrapper" id="hand-zone"></div>
+        </div>
+        <div class="discard-container">
+            <div class="zone-header" style="background: transparent; padding: 4px 10px; border-bottom: 1px dashed #333; font-size: 14px;">DESC. (<span id="discard-count">0</span>)</div>
+            <div id="discard-zone" class="zone" style="overflow-y: auto;"></div>
+        </div>
     </div>
 
-    <script>
-        let hp = 0; let wave = 1; let rescued = 0; let currentMission = "";
+    <!-- TERMINAL DE REGISTRO DEL BÚNKER -->
+    <div id="bunker-terminal">
+        <div class="terminal-header" onclick="toggleTerminal()">
+            <span>> SYS.LOG // DEPÓSITO DE DATOS</span>
+            <span id="term-toggle-icon">▲</span>
+        </div>
+        <div id="terminal-content"></div>
+    </div>
+
+  <script>
+        let wave = 1; let rescued = 0; let currentMission = ""; let lootingActive = false; // Controla si el jugador está usando "Saquear"
         let deck = []; let zombieReserve = []; let areaDeck = [];
         let cardToPrepare = null; let cardsSelectedForPayment = [];
         let paymentMode = ''; 
-        let zombiesKilledGlobal = 0;
+        let zombiesKilledGlobal = 0; let medicsUsed = 0; let zombiesCured = 0; 
+        
         let gameWon = false;
+        let vipRescued = false; let furgonetaUsed = false; let preventWounds = 0;
+        let turnUsedWeapons = new Set();
+        let wounds = { pierna: false, brazo: false, cerebro: false };
+
+        function isGameOver() { return gameWon || wounds.cerebro; }
+
+        // --- MOTOR DE REGISTRO (LOGGER AVANZADO) ---
+        function toggleTerminal() { 
+            const term = document.getElementById('bunker-terminal');
+            term.classList.toggle('open');
+            document.getElementById('term-toggle-icon').innerText = term.classList.contains('open') ? '▼' : '▲';
+        }
+
+        function logAction(msg, type='info') {
+            const term = document.getElementById('terminal-content');
+            const d = new Date(); 
+            const time = d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0') + ':' + d.getSeconds().toString().padStart(2,'0');
+            
+            let colorCls = type === 'warn' ? 'log-warn' : (type === 'error' ? 'log-error' : '');
+            let icon = type === 'warn' ? '[!]' : (type === 'error' ? '[X]' : '[>]');
+            
+            term.innerHTML += `<div class="log-entry ${colorCls}"><span class="log-time">${time}</span> ${icon} ${msg}</div>`;
+            term.scrollTop = term.scrollHeight;
+            console.log(`[${type.toUpperCase()}] ${msg}`);
+        }
+
+        // Nueva función para evitar que el alert() bloquee el renderizado del DOM
+        function logAndAlert(logMsg, alertMsg, type = 'error') {
+            logAction(logMsg, type);
+            setTimeout(() => alert(alertMsg || logMsg), 50);
+        }
 
         const cardDictionary = {
-            "1_antidoto": { t: "ANTÍDOTO", type: "EQUIPO", d: "Destruye para prevenir la siguiente herida este turno." },
+            "1_antidoto": { t: "ANTÍDOTO", type: "EQUIPO MÉDICO", d: "Destrúyela para prevenir tu siguiente herida en este turno." },
             "1_apuntar": { t: "APUNTAR", type: "ENTRENAMIENTO", d: "Cada vez que uses un arma de fuego, mata 1 zombie adicional." },
-            "1_comida": { t: "COMIDA", type: "EQUIPO", d: "Si no hay zombies, devuélvela al Mazo Área para curar 1 herida." },
-            "1_corre": { t: "¡CORRE!", type: "EVENTO", d: "Descarta 1 CARTA de Zombie atacante a TU pila de descartes." },
-            "1_escopeta": { t: "ESCOPETA", type: "ARMA", d: "Hace 1 daño. Agota el arma." },
-            "1_habilidad_armas": { t: "HAB. ARMAS", type: "ENTRENAMIENTO", d: "Al preparar un arma, mata 1 zombie." },
-            "1_habiliadades_caza": { t: "HAB. CAZA", type: "ENTRENAMIENTO", d: "Al preparar una trampa, mata 1 zombie." },
-            "1_kit_medico": { t: "KIT MÉDICO", type: "EQUIPO", d: "Destruye (si no hay zombies) para curar 2 heridas." },
-            "1_llave_inglesa": { t: "LLAVE INGLESA", type: "ARMA", d: "Descarta 1 zombi al prepararla. Descártala para descartar zombi." },
-            "1_machete": { t: "MACHETE", type: "ARMA", d: "Hace 1 daño. Agota el arma." },
-            "1_motocicleta": { t: "MOTO", type: "VEHÍCULO", d: "Descarta zombie al prepararla. Descártala para descartar zombie." },
-            "1_superviviente": { t: "SUPERVIVIENTE", type: "PERSONA", d: "Rescátalo con un Refugio para avanzar en tu misión." },
-            "2_ametralladora": { t: "AMETRALLADORA", type: "ARMA", d: "Hace 2 de daño. Agota el arma." },
-            "2_cargadores": { t: "CARGADORES", type: "MUNICIÓN", d: "Úsala como munición extra para tus armas de fuego." },
+            "1_comida": { t: "COMIDA", type: "EQUIPO", d: "Si no hay zombies en juego, colócala en la parte superior o inferior del mazo de área para curar 1 herida." },
+            "1_corre": { t: "¡CORRE!", type: "EVENTO", d: "Descarta 1 carta de zombie atacante." },
+            "1_escopeta": { t: "ESCOPETA", type: "ARMA DE FUEGO", d: "Descarta munición o destruye la escopeta para matar 1 zombie (Máx 2 armas preparadas)." },
+            "1_habilidad_armas": { t: "HAB. CON LAS ARMAS", type: "ENTRENAMIENTO", d: "Cada vez que prepares un arma, mata 1 zombie." },
+            "1_habiliadades_caza": { t: "HAB. DE CAZA", type: "ENTRENAMIENTO", d: "Cada vez que prepares una trampa, mata 1 zombie." },
+            "1_kit_medico": { t: "KIT MÉDICO", type: "EQUIPO MÉDICO", d: "Si no hay zombies en juego, destrúyela para curar 2 heridas." },
+            "1_llave_inglesa": { t: "LLAVE INGLESA", type: "ARMA CONTUNDENTE", d: "Mata 1 zombi al prepararla. Descártala para descartar 1 zombi." },
+            "1_machete": { t: "MACHETE", type: "ARMA CONTUNDENTE", d: "Una vez por turno: descarta 1 carta de tu mano para matar 1 zombie." },
+            "1_motocicleta": { t: "MOTOCICLETA", type: "VEHÍCULO", d: "Descarta 1 zombie al prepararla. Descártala para descartar 1 zombie." },
+            "1_superviviente": { t: "SUPERVIVIENTE", type: "PERSONA", d: "Prepáralo y usa un refugio para rescatarlo." },
+            "2_ametralladora": { t: "AMETRALLADORA", type: "ARMA DE FUEGO", d: "Descarta munición para matar 2 zombies. (Máx 2 armas preparadas)." },
+            "2_cargadores": { t: "CARGADORES", type: "MUNICIÓN", d: "Coloca los cargadores como munición en una de tus armas preparadas." },
             "2_chaleco_antibalas": { t: "CHALECO ANTIBALAS", type: "ARMADURA", d: "Destrúyela para prevenir las siguientes 2 heridas que recibas este turno." },
-            "2_comisaria": { t: "COMISARÍA", type: "INSTALACIÓN", d: "Al jugar Refugio, cura 1 herida." },
+            "2_comisaria": { t: "COMISARÍA", type: "INSTALACIÓN", d: "Cuando juegues un refugio, cura 1 herida." },
             "2_creamatorio": { t: "CREMATORIO", type: "TRAMPA", d: "Descártala para matar 2 zombies." },
-            "2_cura": { t: "CURA", type: "EQUIPO", d: "Destrúyela para convertir 1 zombie en un superviviente preparado." },
-            "2_explorador": { t: "EXPLORADOR", type: "PERSONA", d: "Descártalo para explorar 2 cartas del Área." },
-            "2_fuego_cruzado": { t: "FUEGO CRUZADO", type: "TRAMPA", d: "Descarta para matar 1 zombie por cada persona preparada." },
-            "2_furgoneta": { t: "FURGONETA", type: "VEHÍCULO", d: "Descártala para destruir 1 carta de zombie y descartar el resto." },
-            "2_gasolina": { t: "GASOLINA", type: "EQUIPO", d: "Destrúyela para preparar gratis cualquier cantidad de trampas, vehículos y armas." },
-            "2_gran_explosion": { t: "GRAN EXPLOSIÓN", type: "TRAMPA", d: "Destrúyela para matar TODOS los zombies en juego." },
-            "2_granada_explosiva": { t: "GRANADA EXPLOSIVA", type: "ARMA", d: "Descártala para descartar 5 zombies atacantes." },
-            "2_guia": { t: "GUÍA", type: "PERSONA", d: "Descártalo para eliminar 2 zombies de cualquier pila de descartes." },
-            "2_hospital": { t: "HOSPITAL", type: "INSTALACIÓN", d: "Tu equipo médico destruido va a la pila de descartes en vez de eliminarse de la partida." },
-            "2_motosierra": { t: "MOTOSIERRA", type: "ARMA", d: "Hace 6 de daño. Descarta la carta." },
-            "2_pistola": { t: "PISTOLA", type: "ARMA", d: "Hace 1 daño. Agota el arma." },
-            "2_perro": { t: "PERRO", type: "ANIMAL", d: "Hace 1 daño. Descarta la carta." },
-            "2_refugio": { t: "REFUGIO", type: "EVENTO", d: "Rescata Supervivientes preparados." },
-            "2_rifle": { t: "RIFLE", type: "ARMA", d: "Hace 1 daño. Agota el arma." },
-            "2_saquear": { t: "SAQUEAR", type: "EVENTO", d: "Recupera 1 carta explorada gratis." },
+            "2_cura": { t: "CURA", type: "EQUIPO MÉDICO", d: "Destrúyela para convertir 1 carta de 1 zombie a un superviviente preparado." },
+            "2_explorador": { t: "EXPLORADOR", type: "PERSONA", d: "Descártala para explorar 2 cartas." },
+            "2_fuego_cruzado": { t: "FUEGO CRUZADO", type: "TRAMPA", d: "Descártala para matar 1 zombie por cada persona preparada que tengas." },
+            "2_furgoneta": { t: "FURGONETA", type: "VEHÍCULO", d: "Descártala para matar 1 carta de zombie y descartar el resto." },
+            "2_gasolina": { t: "GASOLINA", type: "EQUIPO", d: "Destrúyela para preparar cualquier cantidad de tus trampas, vehículos y armas." },
+            "2_gran_explosion": { t: "GRAN EXPLOSIÓN", type: "TRAMPA", d: "Destrúyela para matar a TODOS los zombies en juego y en la pila de descartes." },
+            "2_granada_explosiva": { t: "GRANADA EXPLOSIVA", type: "ARMA ARROJADIZA", d: "Descártala para descartar 5 zombies atacantes." },
+            "2_guia": { t: "GUÍA", type: "PERSONA", d: "Descártala para eliminar 2 zombies de cualquier pila de descartes." },
+            "2_hospital": { t: "HOSPITAL", type: "INSTALACIÓN", d: "En cualquier momento, tu equipo médico destruido puede ser colocado en la pila de descartes." },
+            "2_motosierra": { t: "MOTOSIERRA", type: "ARMA CONTUNDENTE", d: "Descártala para matar 6 zombies." },
+            "2_pistola": { t: "PISTOLA", type: "ARMA DE FUEGO", d: "Una vez por turno: Descarta munición o la pistola para matar 1 zombie." },
+            "2_perro": { t: "PERRO", type: "ANIMAL", d: "Descártala para matar 1 zombie." },
+            "2_refugio": { t: "REFUGIO", type: "EVENTO", d: "Rescata 1 o más de tus supervivientes preparados." },
+            "2_rifle": { t: "RIFLE", type: "ARMA DE FUEGO", d: "Una vez por turno: descarta munición para matar 1 zombie en juego o pila de descartes." },
+            "2_saquear": { t: "SAQUEAR", type: "EVENTO", d: "Recupera 1 carta gratis del área." },
             "2_trampa_perimetral": { t: "TRAMPA PERIMETRAL", type: "TRAMPA", d: "Descártala para matar 6 zombies de cualquier pila de descartes." },
             "2_tunel": { t: "TÚNEL", type: "INSTALACIÓN", d: "Preparar a tus personas es gratis." },
-            "3_lanzallamas": { t: "LANZALLAMAS", type: "ARMA", d: "Descártala para matar 3 zombies." },
-            "3_vip": { t: "VIP", type: "PERSONA", d: "Cuenta como 3 supervivientes al usar Refugio. Se destruye tras usarlo." },
-            "3_coche": { t: "COCHE", type: "VEHÍCULO", d: "Necesario para Misión 3B. Descártalo para destruir 1 zombie y rescatar supervivientes." },
-            "3_laboratorio": { t: "LABORATORIO", type: "INSTALACIÓN", d: "Necesario para Misión 5A. Mientras esté preparado, te permite avanzar en la investigación." },
-            "zombie": { t: "ZOMBIE", type: "ENEMIGO", d: "Al final del turno, cada zombie vivo te hará heridas." },
-            "adam": { t: "ADAM", type: "PERSONAJE", d: "Habilidad Base: Machete. 3 Heridas de salud máxima." },
-            "ruth": { t: "RUTH", type: "PERSONAJE", d: "Habilidad Base: Comisaría. 3 Heridas de salud máxima." },
-            "jennie": { t: "JENNIE", type: "PERSONAJE", d: "Habilidad Base: Hab. Armas. 3 Heridas de salud máxima." },
-            "robert": { t: "ROBERT", type: "PERSONAJE", d: "Habilidad Base: Chaleco. 3 Heridas de salud máxima." },
-            "angela": { t: "ANGELA", type: "PERSONAJE", d: "Habilidad Base: Rifle. 3 Heridas de salud máxima." },
-            "bill": { t: "BILL", type: "PERSONAJE", d: "Habilidad Base: Túnel. 3 Heridas de salud máxima." },
-            "chen": { t: "CHEN", type: "PERSONAJE", d: "Habilidad Base: Sigilo. 3 Heridas de salud máxima." },
-            "mac": { t: "MAC", type: "PERSONAJE", d: "Habilidad Base: Gasolina. 3 Heridas de salud máxima." },
-            "carrie": { t: "CARRIE", type: "PERSONAJE", d: "Habilidad Base: Armadura. 3 Heridas de salud máxima." }
+            "3_lanzallamas": { t: "LANZALLAMAS", type: "ARMA DE FUEGO", d: "Descártala para matar 3 zombies." },
+            "3_vip": { t: "VIP", type: "PERSONA", d: "Cuenta como 3 supervivientes cuando se juega un refugio. Esta carta se destruye tras esto." },
+            "zombie": { t: "ZOMBIE", type: "ENEMIGO", d: "Si no lo matas, te hará daño (Herida: 1 Marca y descarta 1 carta)." },
+            "adam": { t: "ADAM", type: "PERSONAJE", d: "Empieza con: Machete en juego." },
+            "ruth": { t: "RUTH", type: "PERSONAJE", d: "Empieza con: Comisaría en juego." },
+            "jennie": { t: "JENNIE", type: "PERSONAJE", d: "Empieza con: Habilidad con las armas en juego." },
+            "robert": { t: "ROBERT", type: "PERSONAJE", d: "Empieza con: Chaleco antibalas en juego." },
+            "angela": { t: "ANGELA", type: "PERSONAJE", d: "Empieza con: Rifle en juego." },
+            "bill": { t: "BILL", type: "PERSONAJE", d: "Empieza con: Túnel en juego." },
+            "chen": { t: "CHEN ❄️", type: "PERSONAJE", d: "Empieza con: Sigilo en juego." },
+            "mac": { t: "MAC", type: "PERSONAJE", d: "Empieza con: Gasolina en juego." },
+            "carrie": { t: "CARRIE ❄️", type: "PERSONAJE", d: "Empieza con: Remendar armadura en juego." }
         };
 
         const characters = {
-            adam: { inPlay: "adam", inPlayExtra: "1_machete", deck: ["1_corre_1", "1_corre_2", "1_corre_3", "1_superviviente_1", "1_superviviente_2", "1_superviviente_3", "2_saquear", "2_perro", "2_refugio"] },
-            ruth: { inPlay: "ruth", inPlayExtra: "2_comisaria", deck: ["1_superviviente_1", "1_superviviente_2", "1_superviviente_3", "2_refugio", "1_escopeta", "2_cargadores", "1_habiliadades_caza", "2_gran_explosion", "2_creamatorio"] },
-            jennie: { inPlay: "jennie", inPlayExtra: "1_habilidad_armas", deck: ["1_corre_1", "1_corre_2", "1_corre_3", "1_superviviente_1", "1_superviviente_2", "1_superviviente_3", "2_refugio", "2_pistola", "2_explorador"] },
-            robert: { inPlay: "robert", inPlayExtra: "2_chaleco_antibalas", deck: ["1_corre_1", "1_corre_2", "1_superviviente_1", "1_superviviente_2", "2_refugio", "1_llave_inglesa", "1_comida", "2_guia", "2_fuego_cruzado"] },
-            angela: { inPlay: "angela", inPlayExtra: "2_rifle", deck: ["1_corre_1", "1_corre_2", "1_corre_3", "1_superviviente_1", "1_superviviente_2", "2_refugio", "1_kit_medico", "1_motocicleta", "2_granada_explosiva"] },
-            bill: { inPlay: "bill", inPlayExtra: "2_tunel", deck: ["1_corre_1", "1_corre_2", "1_corre_3", "1_superviviente_1", "1_superviviente_2", "1_superviviente_3", "2_refugio", "2_pistola", "1_apuntar"] },
-            chen: { inPlay: "chen", inPlayExtra: null, deck: ["1_corre_1", "1_corre_2", "1_corre_3", "1_superviviente_1", "1_superviviente_2", "1_superviviente_3", "2_refugio", "2_saquear"] },
-            mac: { inPlay: "mac", inPlayExtra: "2_gasolina", deck: ["1_corre_1", "1_superviviente_1", "1_superviviente_2", "1_superviviente_3", "2_refugio", "2_motosierra", "2_furgoneta", "2_trampa_perimetral", "2_perro"] },
-            carrie: { inPlay: "carrie", inPlayExtra: null, deck: ["1_corre_1", "1_corre_2", "1_superviviente_1", "1_superviviente_2", "1_superviviente_3", "2_refugio"] }
+            adam: { inPlay: "adam", inPlayExtra: "1_machete", deck: ["1_corre", "1_corre", "1_corre", "1_superviviente", "1_superviviente", "1_superviviente", "2_saquear", "2_perro", "2_refugio"] },
+            ruth: { inPlay: "ruth", inPlayExtra: "2_comisaria", deck: ["1_superviviente", "1_superviviente", "1_superviviente", "2_refugio", "1_escopeta", "2_cargadores", "1_habiliadades_caza", "2_gran_explosion", "2_creamatorio"] },
+            jennie: { inPlay: "jennie", inPlayExtra: "1_habilidad_armas", deck: ["1_corre", "1_corre", "1_corre", "1_superviviente", "1_superviviente", "1_superviviente", "2_refugio", "2_pistola", "2_explorador"] },
+            robert: { inPlay: "robert", inPlayExtra: "2_chaleco_antibalas", deck: ["1_corre", "1_corre", "1_superviviente", "1_superviviente", "2_refugio", "1_llave_inglesa", "1_comida", "2_guia", "2_fuego_cruzado"] },
+            angela: { inPlay: "angela", inPlayExtra: "2_rifle", deck: ["1_corre", "1_corre", "1_corre", "1_superviviente", "1_superviviente", "2_refugio", "1_kit_medico", "1_motocicleta", "2_granada_explosiva"] },
+            bill: { inPlay: "bill", inPlayExtra: "2_tunel", deck: ["1_corre", "1_corre", "1_corre", "1_superviviente", "1_superviviente", "1_superviviente", "2_refugio", "2_pistola", "1_apuntar"] },
+            chen: { inPlay: "chen", inPlayExtra: null, deck: ["1_corre", "1_corre", "1_corre", "1_superviviente", "1_superviviente", "1_superviviente", "2_refugio", "2_saquear"] },
+            mac: { inPlay: "mac", inPlayExtra: "2_gasolina", deck: ["1_corre", "1_superviviente", "1_superviviente", "1_superviviente", "2_refugio", "2_motosierra", "2_furgoneta", "2_trampa_perimetral", "2_perro"] },
+            carrie: { inPlay: "carrie", inPlayExtra: null, deck: ["1_corre", "1_corre", "1_superviviente", "1_superviviente", "1_superviviente", "2_refugio"] }
         };
 
-        const allAreaCards = [
+        const baseAreaCards = [
             "1_antidoto", "1_antidoto", "1_comida", "1_comida", "1_escopeta", 
             "1_habilidad_armas", "1_habiliadades_caza", "1_kit_medico", "1_kit_medico", 
             "1_llave_inglesa", "1_machete", "1_motocicleta", "1_apuntar", 
@@ -316,10 +475,86 @@
             "2_rifle", "2_trampa_perimetral", "2_cura", "2_cura", "2_explorador", 
             "2_cargadores", "2_creamatorio", "2_fuego_cruzado", "2_guia", 
             "2_saquear", "2_saquear", "2_refugio", "2_refugio", "2_perro", "2_perro",
-            "3_lanzallamas", "3_vip", "3_laboratorio", "3_coche"
+            "3_lanzallamas", "3_vip"
         ];
         
         const strictZombieStack = ["4_zombies_2", "4_zombies_1", "3_zombies_3", "3_zombies_2", "3_zombies_1", "2_zombies_4", "2_zombies_3", "2_zombies_2", "2_zombies_1", "1_zombie_5", "1_zombie_4", "1_zombie_3", "1_zombie_2", "1_zombie_1"];
+
+        function triggerActionEffect(card, color) {
+            if(!card) return;
+            const rect = card.getBoundingClientRect();
+            createParticles(rect.left + rect.width/2, rect.top + rect.height/2, color);
+        }
+        
+        function discardOrDestroyMed(card, name) {
+            const table = Array.from(document.getElementById('table-zone').children).filter(c => !c.classList.contains('exhausted'));
+            if (table.some(c => c.dataset.name.includes('hospital'))) {
+                logAction(`Hospital activo: Equipo médico [${name}] desviado a descartes en lugar de ser destruido.`, 'info');
+                moveCardToZone(card, 'discard-zone', false);
+            } else {
+                card.remove(); 
+            }
+        }
+        
+        function createParticles(x, y, color) {
+            let amount = (color === '#8a0303' || color === '#ff453a') ? 35 : 15; 
+            for(let i=0; i<amount; i++) {
+                let p = document.createElement('div'); p.className = 'particle'; p.style.color = color; p.style.backgroundColor = color;
+                p.style.width = (Math.random() * 8 + 3) + 'px'; 
+                p.style.height = p.style.width;
+                p.style.left = (x - 5) + 'px'; p.style.top = (y - 5) + 'px';
+                p.style.setProperty('--tx', (Math.random() * 200 - 100) + 'px');
+                p.style.setProperty('--ty', (Math.random() * 200 - 100) + 'px');
+                document.body.appendChild(p); setTimeout(() => p.remove(), 600);
+            }
+        }
+
+        function triggerShake() { document.body.classList.remove('shake'); void document.body.offsetWidth; document.body.classList.add('shake'); }
+
+        function showScreenBanner(text, bgColor) {
+            let banner = document.createElement('div'); banner.className = 'screen-banner';
+            banner.style.backgroundColor = bgColor; banner.innerText = text; document.body.appendChild(banner);
+            setTimeout(() => banner.remove(), 2500);
+        }
+        
+        function triggerBloodFlash() {
+            let flash = document.createElement('div'); flash.className = 'blood-flash';
+            document.body.appendChild(flash); setTimeout(() => flash.remove(), 500);
+        }
+
+        function toggleWound(part) {
+            if (isGameOver()) { document.getElementById('w-' + part).checked = wounds[part]; return; }
+            wounds[part] = document.getElementById('w-' + part).checked;
+            logAction(`Estado de salud actualizado: Zona [${part}] marcada como herida.`, 'warn');
+            if (part === 'brazo' && wounds.brazo) {
+                let tableWeapons = Array.from(document.getElementById('table-zone').children).filter(c => !c.classList.contains('exhausted') && cardDictionary[c.dataset.name.replace(/_\d+$/, '')]?.type.includes('ARMA'));
+                if (tableWeapons.length > 1) {
+                    logAndAlert('Límite de armas excedido por herida en el brazo. Destruyendo exceso.', '¡LÍMITE EXCEDIDO! Al herirte el brazo, tu límite de armas baja a 1. Pierdes un arma.');
+                    tableWeapons[0].remove();
+                }
+            }
+            checkDeath();
+            updateCounters();
+        }
+
+        function healDamage(amount) {
+            for(let i=0; i<amount; i++) {
+                if(wounds.cerebro) { wounds.cerebro = false; document.getElementById('w-cerebro').checked = false; logAction('Herida en Cerebro curada.', 'info');}
+                else if(wounds.brazo) { wounds.brazo = false; document.getElementById('w-brazo').checked = false; logAction('Herida en Brazo curada.', 'info');}
+                else if(wounds.pierna) { wounds.pierna = false; document.getElementById('w-pierna').checked = false; logAction('Herida en Pierna curada.', 'info');}
+            }
+        }
+
+        function checkDeath() {
+            if(wounds.cerebro && !gameWon) {
+                setTimeout(() => { 
+                    triggerBloodFlash(); triggerShake();
+                    showScreenBanner("💀 HAS MUERTO", "rgba(100, 0, 0, 0.95)"); 
+                    logAndAlert('Infección letal alcanzada (Cerebro). Fin de partida.', 'El virus ha alcanzado el cerebro. Fin de la partida.', 'error');
+                    desactivarBotones();
+                }, 100);
+            }
+        }
 
         function getImagePath(name) {
             if(name.includes('zombie')) return `zombies/${name}.png`;
@@ -333,67 +568,100 @@
             let charConfig = characters[document.getElementById('char-select').value];
             
             zombieReserve = [...strictZombieStack];
-            areaDeck = allAreaCards.map((name, i) => ({ id: `card-a-${Date.now()}-${i}`, name: name, type: 'basic' }));
+            let missionArea = [...baseAreaCards];
+            if (currentMission === "2B" || currentMission === "4A" || currentMission === "4D") {
+                missionArea.push("1_zombie_1", "1_zombie_2", "2_zombies_1"); 
+            }
+            areaDeck = missionArea.map((name, i) => ({ id: `card-a-${Date.now()}-${i}`, name: name, type: name.includes('zombie') ? 'zombie' : 'basic' }));
             deck = charConfig.deck.map((name, i) => ({ id: `card-d-${Date.now()}-${i}`, name: name, type: name.includes('superviviente') ? 'superviviente' : 'basic' }));
             
-            let startZombies = 1; wave = 1; hp = 0; rescued = 0; zombiesKilledGlobal = 0; gameWon = false;
+            wave = 1; rescued = 0; zombiesKilledGlobal = 0; medicsUsed = 0; zombiesCured = 0; gameWon = false;
+            vipRescued = false; furgonetaUsed = false; preventWounds = 0; turnUsedWeapons.clear();
+            wounds = { pierna: false, brazo: false, cerebro: false };
+            document.getElementById('w-pierna').checked = false; document.getElementById('w-brazo').checked = false; document.getElementById('w-cerebro').checked = false;
+            document.getElementById('table-zone').innerHTML = ''; document.getElementById('zombie-zone').innerHTML = ''; document.getElementById('hand-zone').innerHTML = ''; document.getElementById('discard-zone').innerHTML = ''; document.getElementById('explored-zone').innerHTML = '';
+
+            let startZombies = 1; 
             if (currentMission === "1B") startZombies = 5;
             if (currentMission === "3A") { wave = 5; }
+            if (currentMission === "4B") { wave = 2; }
+            if (currentMission === "4D") { wave = 3; }
+            if (currentMission === "4C") { startZombies++; }
             if (currentMission === "3B" || currentMission.startsWith("5")) { wave = 2; }
+            
+            if (currentMission === "3B") { document.getElementById('explored-zone').appendChild(createCardElement({ id: `card-furgoneta`, name: "2_furgoneta", type: 'basic' })); }
             if (currentMission === "5D") { deck.forEach(c => { if(c.type === 'superviviente') c.type = 'zombie'; }); }
 
-            for(let i=0; i<startZombies; i++) {
-                if(zombieReserve.length > 0) deck.push({ id: `card-z-${Date.now()}-${i}`, name: zombieReserve.pop(), type: 'zombie' });
-            }
+            for(let i=0; i<startZombies; i++) { if(zombieReserve.length > 0) deck.push({ id: `card-z-${Date.now()}-${i}`, name: zombieReserve.pop(), type: 'zombie' }); }
 
-            let charCard = { id: `card-char-${Date.now()}`, name: charConfig.inPlay, type: 'personaje' };
-            document.getElementById('table-zone').appendChild(createCardElement(charCard));
-
+            document.getElementById('table-zone').appendChild(createCardElement({ id: `card-char-${Date.now()}`, name: charConfig.inPlay, type: 'personaje' }));
             if(charConfig.inPlayExtra) {
-                let initialCard = { id: `card-init-${Date.now()}`, name: charConfig.inPlayExtra, type: 'basic' };
-                let el = createCardElement(initialCard); el.classList.add('exhausted');
-                document.getElementById('table-zone').appendChild(el);
+                let el = createCardElement({ id: `card-init-${Date.now()}`, name: charConfig.inPlayExtra, type: 'basic' });
+                el.classList.add('exhausted'); document.getElementById('table-zone').appendChild(el);
             }
             
             shuffleArray(deck); shuffleArray(areaDeck);
             updateCounters(); initSortableZones(); drawCards(5, true);
+            
+            logAction(`Sistema iniciado. Misión: ${currentMission}. Personaje: ${charConfig.inPlay.toUpperCase()}`);
         }
 
         function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
 
+        function desactivarBotones() {
+            document.getElementById('explore-btn').disabled = true;
+            document.getElementById('shuffle-btn').disabled = true;
+            document.getElementById('end-turn-btn').disabled = true;
+        }
+
         function endTurn() {
+            if(isGameOver()) return;
+
             const zZone = document.getElementById('zombie-zone');
+            
+            if(zZone.children.length > 0) {
+                logAndAlert('Bloqueo de Cambio de Turno: Zona de Infección no está despejada.', "⚠️ ¡Infección inminente! Aún tienes zombies en tu zona de ataque.\n\nHaz clic en cada zombie y selecciona '🩸 Recibir Herida' para sufrir daño, descartar carta y matar al zombie antes de avanzar.", 'error');
+                return;
+            }
+
             const hZone = document.getElementById('hand-zone');
             const dZone = document.getElementById('discard-zone');
             
-            let damage = 0;
-            Array.from(zZone.children).forEach(c => {
-                damage += parseInt(c.dataset.name.charAt(0)); 
-            });
+            preventWounds = 0; turnUsedWeapons.clear();
+            logAction(`Cambio de Turno ejecutado correctamente. Prevenciones y uso de armas reiniciados.`);
 
-            if(damage > 0) { 
-                updateCount('hp', damage);
-                if (hp < 3) {
-                    alert(`¡Fin de turno! Los zombies supervivientes te han atacado y recibes ${damage} herida(s).`);
-                }
-            }
-            if(hp >= 3) { return; } 
-
-            while(hZone.firstChild) { 
-                hZone.firstChild.classList.remove('exhausted'); 
-                dZone.appendChild(hZone.firstChild); 
+            while(hZone.firstElementChild) { 
+                hZone.firstElementChild.classList.remove('exhausted'); 
+                dZone.appendChild(hZone.firstElementChild); 
             }
             
-            while(zZone.firstChild) { 
-                dZone.appendChild(zZone.firstChild); 
-            }
+            showScreenBanner("CAMBIO DE TURNO", "rgba(30, 30, 30, 0.9)");
+            setTimeout(() => drawCards(5, true), 800);
+        }
+
+        function drawCards(num, isSystemAction) {
+            if(isGameOver()) return;
+
+            const handZone = document.getElementById('hand-zone');
+            const zZone = document.getElementById('zombie-zone');
+            let safetyCounter = 0; let cardsDrawn = 0;
             
-            drawCards(5, true);
+            while(handZone.children.length < 5 && safetyCounter < 50 && num > 0) {
+                safetyCounter++;
+                if(deck.length === 0) { shuffleDiscardToDeck(true); if(deck.length === 0) break; }
+                
+                let cardData = deck.pop();
+                let cardEl = createCardElement(cardData); cardEl.classList.add('anim-draw');
+                
+                if(cardData.type === 'zombie') { zZone.appendChild(cardEl); logAction(`Zombie robado y movido a Zona de Infección: ${cardData.name}`, 'warn'); } 
+                else { handZone.appendChild(cardEl); num--; cardsDrawn++; }
+            }
+            if(cardsDrawn > 0) logAction(`${cardsDrawn} carta(s) añadidas a tu mano.`);
+            updateCounters();
         }
 
         function checkMissionObjectives() {
             if (gameWon) return; 
-
             let win = false; 
             const tableCards = Array.from(document.getElementById('table-zone').children);
             const preparedCardsCount = tableCards.filter(c => !c.classList.contains('exhausted') && !c.id.includes('card-char')).length;
@@ -401,117 +669,121 @@
             switch(currentMission) {
                 case "1A": if(preparedCardsCount >= 6) win = true; break;
                 case "1B": if(rescued >= 4) win = true; break;
-                case "1C": if(rescued >= 6) win = true; break; 
+                case "1C": if(rescued >= 6 && tableCards.some(c => cardDictionary[c.dataset.name.replace(/_\d+$/, '')]?.type === 'INSTALACIÓN' && !c.classList.contains('exhausted'))) win = true; break;
+                case "2A": if(rescued >= 5) win = true; break;
+                case "2B": if(rescued >= 5 && tableCards.some(c => c.dataset.name.includes('trampa'))) win = true; break;
                 case "2C": if(wave >= 6) win = true; break;
+                case "3A": if(wave >= 6) win = true; break;
+                case "3B": if(rescued >= 4 && furgonetaUsed) win = true; break;
+                case "4A": if(areaDeck.length === 0) win = true; break;
                 case "4B": if(rescued >= 10) win = true; break;
+                case "4C": if(wave >= 6) win = true; break;
                 case "4D": if(zombiesKilledGlobal >= 100) win = true; break;
+                case "5A": if(vipRescued && tableCards.some(c => c.dataset.name.includes('hospital') && !c.classList.contains('exhausted'))) win = true; break;
+                case "5B": if(medicsUsed >= 5 && wave <= 6) win = true; break;
+                case "5C": if(zombiesCured >= 6) win = true; break;
+                case "5D": if(wave >= 6) win = true; break;
             }
-            
-            if(win) {
-                gameWon = true;
-                setTimeout(() => alert("🎉 ¡OBJETIVO DE MISIÓN CUMPLIDO! ¡HAS GANADO LA PARTIDA!"), 200);
+            if(win) { 
+                gameWon = true; 
+                logAction('¡OBJETIVOS DE LA MISIÓN CUMPLIDOS!', 'info');
+                showScreenBanner("🏆 ¡SUPERVIVIENTE!", "rgba(10, 80, 10, 0.9)"); 
+                setTimeout(() => alert("🎉 ¡OBJETIVO CUMPLIDO! La partida ha finalizado con éxito. Recarga la página para continuar la pesadilla."), 500);
+                desactivarBotones();
             }
         }
 
         function initSortableZones() {
             const commonOpts = { animation: 200, delay: 150, delayOnTouchOnly: true, touchStartThreshold: 3, ghostClass: 'sortable-ghost',
                 onEnd: function (evt) {
+                    if (isGameOver()) return; 
                     evt.item.style.transform = ''; 
-                    if (evt.to.id === 'table-zone' && evt.from.id !== 'table-zone') evt.item.classList.add('exhausted');
+                    if (evt.to.id === 'table-zone' && evt.from.id !== 'table-zone') {
+                        evt.item.classList.add('exhausted');
+                        logAction(`Carta bajada a Búnker: [${evt.item.dataset.name}] (Entra agotada).`);
+                    }
                     if (evt.to.id !== 'table-zone') evt.item.classList.remove('exhausted');
                     updateCounters();
                 }
             };
             new Sortable(document.getElementById('hand-zone'), { ...commonOpts, group: { name: 'shared', put: (to) => to.el.children.length < 5 } });
-            
             new Sortable(document.getElementById('table-zone'), { ...commonOpts, group: { name: 'shared', put: (to, from, el) => {
-                const n = el.dataset.name;
-                const isEvent = n.includes('corre') || n.includes('refugio') || n.includes('saquear');
-                return !n.includes('zombie') && !isEvent;
+                const n = el.dataset.name; const isEvent = n.includes('corre') || n.includes('refugio') || n.includes('saquear'); return !n.includes('zombie') && !isEvent;
             } } });
-            
             new Sortable(document.getElementById('zombie-zone'), { ...commonOpts, group: { name: 'shared', put: (to, from, el) => el.dataset.name.includes('zombie') || el.dataset.name.includes('superviviente') } });
             new Sortable(document.getElementById('discard-zone'), { ...commonOpts, group: { name: 'shared', put: true } });
-            new Sortable(document.getElementById('explored-zone'), { ...commonOpts, group: { name: 'shared', put: false } });
-        }
-
-        function drawCards(num, isSystemAction) {
-            const handZone = document.getElementById('hand-zone');
-            
-            for(let i=0; i<num; i++) {
-                if(deck.length === 0) {
-                    if(!isSystemAction) alert("El mazo está vacío. Usa 'Barajar Desc.' para reponerlo y subir de oleada.");
-                    break;
-                }
-                
-                const isNextCardZombie = deck[deck.length-1].type === 'zombie';
-                if(!isNextCardZombie && handZone.children.length >= 5) {
-                    if(!isSystemAction) alert("✋ LÍMITE: Tu mano ya tiene 5 cartas. No puedes robar más cartas normales del mazo.");
-                    break; 
-                }
-                
-                let cardData = deck.pop();
-                let cardEl = createCardElement(cardData); cardEl.classList.add('anim-draw');
-                
-                if(cardData.type === 'zombie') {
-                    document.getElementById('zombie-zone').appendChild(cardEl);
-                } else {
-                    handZone.appendChild(cardEl);
-                }
-            }
-            updateCounters();
+            new Sortable(document.getElementById('explored-zone'), { ...commonOpts, group: { name: 'shared', put: false, pull: false } });
         }
 
         function exploreCard() {
-            if(areaDeck.length === 0) {
-                alert("El mazo de Área se ha quedado vacío.");
-                return;
+            if (isGameOver()) return;
+            if(areaDeck.length === 0) { 
+                logAndAlert('Fallo de exploración: Mazo de Área agotado.', "El Sector de Área está agotado (Mazo Vacío).", 'warn'); 
+                return; 
             }
-            let cardEl = createCardElement(areaDeck.pop()); cardEl.classList.add('anim-draw');
-            document.getElementById('explored-zone').appendChild(cardEl); 
+            let cardData = areaDeck.pop();
+            let cardEl = createCardElement(cardData); cardEl.classList.add('anim-draw');
+            
+            if(cardData.type === 'zombie') {
+                document.getElementById('zombie-zone').appendChild(cardEl); 
+                logAction(`¡Trampa/Peligro en exploración! Zombie [${cardData.name}] directo a zona de infección.`, 'warn');
+                exploreCard(); 
+            } else { 
+                document.getElementById('explored-zone').appendChild(cardEl); 
+                logAction(`Área explorada: Objeto [${cardData.name}] disponible en Mercado.`);
+            }
             updateCounters();
         }
 
-        function shuffleDiscardToDeck() {
+        function shuffleDiscardToDeck(isAuto = false) {
+            if (!isAuto && isGameOver()) return;
+
             wave++;
+            logAction(`==== NIVEL DE AMENAZA AUMENTADO: OLEADA ${wave} ====`, 'warn');
+            
             const discardZone = document.getElementById('discard-zone');
+            
+            if (currentMission === "2C" && wave === 5) {
+                while(zombieReserve.length > 0) { discardZone.appendChild(createCardElement({id:`card-z-${Date.now()}-${zombieReserve.length}`, name: zombieReserve.pop(), type: 'zombie'})); }
+            }
+
+            if (zombieReserve.length < wave) {
+                let nonZ = Array.from(discardZone.children).filter(c => !c.dataset.name.includes('zombie'));
+                let dest = 0;
+                while(dest < 2 && nonZ.length > 0) { nonZ.pop().remove(); dest++; }
+                if(dest > 0) logAndAlert(`Penalización de Infección aplicada: Destruidas ${dest} cartas.`, `¡PENALIZACIÓN DE INFECCIÓN!\nNo hay zombies suficientes en reserva. Destruidas ${dest} carta(s) de tus descartes.`);
+                while(zombieReserve.length > 0) { deck.push({ id: `card-z-${Date.now()}-${zombieReserve.length}`, name: zombieReserve.pop(), type: 'zombie' }); }
+            } else {
+                for(let i=0; i<wave; i++){ deck.push({ id: `card-z-${Date.now()}-${i}`, name: zombieReserve.pop(), type: 'zombie' }); }
+            }
+
             Array.from(discardZone.children).forEach(el => {
                 let type = el.dataset.name.includes('zombie') ? 'zombie' : (el.dataset.name.includes('superviviente') ? 'superviviente' : 'basic');
                 deck.push({ id: el.id, name: el.dataset.name, type: type });
             });
             discardZone.innerHTML = '';
-            for(let i=0; i<wave; i++){
-                if(zombieReserve.length > 0) deck.push({ id: `card-z-${Date.now()}-${i}`, name: zombieReserve.pop(), type: 'zombie' });
-            }
-            shuffleArray(deck); updateCounters();
+            
+            shuffleArray(deck); 
+            if(isAuto && deck.length > 0) { showScreenBanner(`¡OLEADA ${wave}!`, "rgba(150, 0, 0, 0.95)"); triggerBloodFlash(); }
+            updateCounters();
         }
 
-        // --- NUEVA FUNCIÓN: CARGA IMÁGENES O APLICA FALLBACK VISUAL ---
         function applyCardImage(div, cardName) {
             let imgPath = getImagePath(cardName);
             div.style.backgroundImage = `url('${imgPath}')`;
-            div.classList.remove('no-image');
-            div.innerHTML = ''; // Limpiamos si tenía texto antes
+            div.classList.remove('no-image'); div.innerHTML = ''; 
 
-            let imgTest = new Image();
-            imgTest.onload = function() {
-                // Si la imagen carga, no hacemos nada más (la carta queda limpia)
-            };
+            let imgTest = new Image(); imgTest.onload = function() {};
             imgTest.onerror = function() {
-                // Si la imagen NO existe, aplicamos la clase de fallback y añadimos el nombre de la carta
-                div.classList.add('no-image');
-                let cleanName = cardName.replace(/^\d+_/, '').replace(/_/g, ' ').toUpperCase();
+                div.classList.add('no-image'); let cleanName = cardName.replace(/^\d+_/, '').replace(/_/g, ' ').toUpperCase();
                 div.innerHTML = `<span class="fallback-text">${cleanName}</span>`;
             };
             imgTest.src = imgPath;
         }
 
         function createCardElement(cardData) {
-            let div = document.createElement('div');
-            div.className = `card ${cardData.type === 'zombie' ? 'zombie' : ''}`;
+            let div = document.createElement('div'); div.className = `card ${cardData.type === 'zombie' ? 'zombie' : ''}`;
             div.id = cardData.id; div.dataset.name = cardData.name;
-            
-            // Usamos la nueva función para aplicar la imagen o el fallback
             applyCardImage(div, cardData.name);
             
             div.addEventListener('click', () => openActionMenu(div));
@@ -525,63 +797,54 @@
         function showInfo(cardName) {
             let base = cardName.replace(/_\d+$/, ''); if(cardName.includes('zombie')) base = 'zombie'; 
             let info = cardDictionary[base] || { t: cardName.toUpperCase(), type: "CARTA", d: "Sin descripción." };
-            
             document.getElementById('info-title').innerHTML = `${info.t} <span>${info.type}</span>`;
-            document.getElementById('info-desc').innerText = info.d;
-            document.getElementById('info-panel').style.display = 'block';
+            document.getElementById('info-desc').innerText = info.d; document.getElementById('info-panel').style.display = 'block';
         }
         function hideInfo() { document.getElementById('info-panel').style.display = 'none'; }
 
         function openPaymentMenu(targetCardEl, mode) {
-            closeActionMenu();
-            cardToPrepare = targetCardEl;
-            paymentMode = mode;
-            cardsSelectedForPayment = [];
-            
-            let requiredCost = 0;
+            if (isGameOver()) return;
 
+            closeActionMenu(); cardToPrepare = targetCardEl; paymentMode = mode; cardsSelectedForPayment = [];
+            let requiredCost = 0;
+            
             if (targetCardEl) {
-                let match = targetCardEl.dataset.name.match(/^(\d+)_/);
-                requiredCost = match ? parseInt(match[1]) : 0;
-                
-                let base = targetCardEl.dataset.name.replace(/_\d+$/, '');
-                let info = cardDictionary[base] || {};
+                let match = targetCardEl.dataset.name.match(/^(\d+)_/); requiredCost = match ? parseInt(match[1]) : 0;
+                let base = targetCardEl.dataset.name.replace(/_\d+$/, ''); let info = cardDictionary[base] || {};
                 
                 if (mode === 'prepare' && info.type === 'PERSONA') {
-                    let isTunnelActive = Array.from(document.getElementById('table-zone').children).some(c => c.dataset.name.includes('tunel') && !c.classList.contains('exhausted'));
-                    if (isTunnelActive) requiredCost = 0;
+                    if(Array.from(document.getElementById('table-zone').children).some(c => c.dataset.name.includes('tunel') && !c.classList.contains('exhausted'))) requiredCost = 0;
+                }
+                
+                let tableWps = Array.from(document.getElementById('table-zone').children).filter(c => !c.classList.contains('exhausted') && cardDictionary[c.dataset.name.replace(/_\d+$/, '')]?.type.includes('ARMA'));
+                let tableVehs = Array.from(document.getElementById('table-zone').children).filter(c => !c.classList.contains('exhausted') && cardDictionary[c.dataset.name.replace(/_\d+$/, '')]?.type === 'VEHÍCULO');
+                
+                if (mode === 'prepare') {
+                    if (info.type === 'VEHÍCULO' && tableVehs.length >= 1) { 
+                        logAndAlert('Preparación bloqueada: Límite de Vehículos alcanzado.', "⚠️ LÍMITE ALCANZADO: Solo puedes tener 1 vehículo preparado. Agota o destruye el actual[cite: 3]."); 
+                        return; 
+                    }
+                    let maxW = wounds.brazo ? 1 : 2;
+                    if (info.type.includes('ARMA') && tableWps.length >= maxW) { 
+                        logAndAlert(`Preparación bloqueada: Límite de Armas (${maxW}) alcanzado.`, `⚠️ LÍMITE ALCANZADO: Tu capacidad es ${maxW} armas. Debes destruir una para preparar otra[cite: 3].`); 
+                        return; 
+                    }
                 }
             }
 
             window.currentRequiredCost = requiredCost;
-            
             const handCards = Array.from(document.getElementById('hand-zone').children);
-            const paymentContainer = document.getElementById('payment-cards');
-            paymentContainer.innerHTML = '';
+            const paymentContainer = document.getElementById('payment-cards'); paymentContainer.innerHTML = '';
             
-            if (mode === 'prepare') {
-                document.getElementById('payment-title').innerText = `PAGAR COSTE DE PREPARACIÓN`;
-                document.getElementById('payment-desc').innerText = `Selecciona exactamente ${requiredCost} carta(s) de tu mano para descartar.`;
-                document.getElementById('payment-confirm-btn').innerText = "Confirmar y Preparar";
-            } else if (mode === 'buy') {
-                document.getElementById('payment-title').innerText = `COMPRAR (RECUPERAR) CARTA`;
-                document.getElementById('payment-desc').innerText = `Selecciona exactamente ${requiredCost} carta(s) de tu mano para comprar esta carta del Mercado.`;
-                document.getElementById('payment-confirm-btn').innerText = "Confirmar y a Descartes";
-            } else if (mode === 'explore') {
-                document.getElementById('payment-title').innerText = "EXPLORAR EL ÁREA";
-                document.getElementById('payment-desc').innerText = "Selecciona las cartas de tu mano que vas a descartar. Por cada carta descartada, revelarás 1 carta del Área.";
-                document.getElementById('payment-confirm-btn').innerText = "Descartar y Explorar";
-            }
+            if (mode === 'prepare') { document.getElementById('payment-title').innerText = `PAGAR COSTE DE PREPARACIÓN`; document.getElementById('payment-desc').innerText = `Selecciona exactamente ${requiredCost} carta(s).`; } 
+            else if (mode === 'buy') { document.getElementById('payment-title').innerText = `COMPRAR CARTA DE ÁREA`; document.getElementById('payment-desc').innerText = `Selecciona exactamente ${requiredCost} carta(s).`; } 
+            else if (mode === 'explore') { document.getElementById('payment-title').innerText = "EXPLORAR EL ÁREA"; document.getElementById('payment-desc').innerText = "Selecciona las cartas que vas a usar (1 por exploración)."; }
 
-            if(handCards.length === 0) {
-                paymentContainer.innerHTML = `<p style='color:#f39c12; font-size:12px;'>Tu mano está vacía. No puedes realizar esta acción (salvo que el coste sea 0).</p>`;
-            } else {
+            if(handCards.length === 0) { paymentContainer.innerHTML = `<p style='color:#f39c12; font-size:12px; font-family:sans-serif;'>Tu mano está vacía. Solo es válido si el coste requerido es 0.</p>`; } 
+            else {
                 handCards.forEach(c => {
                     let wrapper = document.createElement('div'); wrapper.className = "payment-card-wrap";
-                    let clone = c.cloneNode(true); 
-                    clone.removeAttribute('id'); 
-                    clone.style.pointerEvents = "none"; 
-                    wrapper.appendChild(clone);
+                    let clone = c.cloneNode(true); clone.removeAttribute('id'); clone.style.pointerEvents = "none"; wrapper.appendChild(clone);
                     wrapper.onclick = function() {
                         if(wrapper.classList.contains('selected')) { wrapper.classList.remove('selected'); cardsSelectedForPayment = cardsSelectedForPayment.filter(id => id !== c.id); } 
                         else { wrapper.classList.add('selected'); cardsSelectedForPayment.push(c.id); }
@@ -592,337 +855,398 @@
             document.getElementById('payment-modal').style.display = 'flex';
         }
 
-        // LÓGICA DE PAGO CORREGIDA
         function confirmPayment() {
+            if (isGameOver()) return;
+
             const discardZone = document.getElementById('discard-zone');
             let cardsDiscarded = cardsSelectedForPayment.length;
 
-            // 1. Validar la cantidad de cartas seleccionadas
-            if (paymentMode === 'explore') {
-                if (cardsDiscarded === 0) {
-                    document.getElementById('payment-modal').style.display = 'none';
-                    return; 
-                }
-            } else if (cardToPrepare) {
-                if (cardsDiscarded !== window.currentRequiredCost) {
-                    alert(`⚠️ ATENCIÓN: El coste de esta acción es de ${window.currentRequiredCost} carta(s). Has seleccionado ${cardsDiscarded}.`);
+            if (paymentMode === 'explore') { if (cardsDiscarded === 0) { document.getElementById('payment-modal').style.display = 'none'; return; } } 
+            else if (cardToPrepare) {
+                if (cardsDiscarded !== window.currentRequiredCost) { 
+                    logAndAlert(`Transacción bloqueada: Pago requerido ${window.currentRequiredCost}, insertadas ${cardsDiscarded}.`, `⚠️ DISCREPANCIA: El coste es ${window.currentRequiredCost}, has seleccionado ${cardsDiscarded}.`); 
                     return; 
                 }
             }
+            
+            cardsSelectedForPayment.forEach(id => { let originalCard = document.getElementById(id); if(originalCard) { originalCard.classList.remove('exhausted'); discardZone.appendChild(originalCard); } });
 
-            // 2. Mover físicamente las cartas pagadas a tu Pila de Descartes
-            cardsSelectedForPayment.forEach(id => { 
-                let originalCard = document.getElementById(id); 
-                if(originalCard) {
-                    originalCard.classList.remove('exhausted'); // Por si acaso
-                    discardZone.appendChild(originalCard); 
-                }
-            });
-
-            // 3. Aplicar el efecto correspondiente
-            if (paymentMode === 'explore') {
-                for(let i=0; i<cardsDiscarded; i++) exploreCard();
-            } else if (cardToPrepare) {
+            if (paymentMode === 'explore') { 
+                logAction(`Explorando Área ${cardsDiscarded} vez(veces).`);
+                for(let i=0; i<cardsDiscarded; i++) exploreCard(); 
+            } 
+            else if (cardToPrepare) {
                 cardToPrepare.classList.remove('exhausted');
-                if (paymentMode === 'buy') {
-                    discardZone.appendChild(cardToPrepare); // La carta comprada también va a descartes
-                }
-            }
-            
-            document.getElementById('payment-modal').style.display = 'none'; 
-            updateCounters();
-        }
-
-        function openActionMenu(cardEl) {
-            const name = cardEl.dataset.name; const zone = cardEl.parentElement.id; const isExhausted = cardEl.classList.contains('exhausted');
-            const isEvent = name.includes('corre') || name.includes('refugio') || name.includes('saquear');
-            
-            let base = name.replace(/_\d+$/, ''); if(name.includes('zombie')) base = 'zombie';
-            let info = cardDictionary[base] || { t: name.toUpperCase() };
-            document.getElementById('action-title').innerText = info.t;
-            
-            const btnC = document.getElementById('action-buttons'); btnC.innerHTML = '';
-
-            if (zone === 'explored-zone') {
-                createBtn(btnC, "🛒 COMPRAR / RECUPERAR (Pagar Coste)", () => openPaymentMenu(cardEl, 'buy'), 'prepare');
-                createBtn(btnC, "🗑️ Tirar a Descartes (Solo para efecto Saquear)", () => moveCardToZone(cardEl, 'discard-zone', false));
-            }
-            else if (zone === 'hand-zone') {
-                if (!isEvent) {
-                    createBtn(btnC, "👇 Bajar a Mesa (Entra Girada)", () => moveCardToZone(cardEl, 'table-zone', true));
-                }
-                createBtn(btnC, "🗑️ Tirar a Descartes (Sin efecto)", () => moveCardToZone(cardEl, 'discard-zone', false));
                 
-                if(name.includes('explorador')) createBtn(btnC, "💥 USAR EXPLORADOR (Explora 2 y Descarta)", () => { exploreCard(); exploreCard(); moveCardToZone(cardEl, 'discard-zone', false); }, 'execute');
-                else if(name.includes('saquear')) createBtn(btnC, "💥 USAR SAQUEAR (Recuperar Gratis)", () => { alert("Para usar Saquear gratis: Tira manualmente a tus Descartes la carta que quieras del Mercado, y luego tira este Saquear a los Descartes."); moveCardToZone(cardEl, 'discard-zone', false); }, 'execute');
-                else if(name.includes('corre')) createBtn(btnC, "💥 USAR ¡CORRE! (Descarta 1 Carta Zombie)", () => executeAutomatedCard(cardEl, name), 'execute');
-                else if(name.includes('refugio')) createBtn(btnC, "💥 USAR REFUGIO (Rescata Supervivientes)", () => executeAutomatedCard(cardEl, name), 'execute');
-            } 
-            else if (zone === 'table-zone') {
-                if(name.includes('personaje')) { createBtn(btnC, "Cerrar", closeActionMenu); }
-                else if (isExhausted) { 
-                    createBtn(btnC, "🔄 PREPARAR (Girar y Pagar Coste)", () => openPaymentMenu(cardEl, 'prepare'), 'prepare'); 
-                } 
-                else {
-                    let execText = "💥 EJECUTAR / USAR";
-                    if (name.includes('perro')) execText = "💥 AZUZAR PERRO (Mata 1 y se descarta)";
-                    if (name.includes('motosierra')) execText = "💥 USAR MOTOSIERRA (Hace 6 daños y se descarta)";
-                    if (name.includes('lanzallamas')) execText = "💥 USAR LANZALLAMAS (Mata 3 y se descarta)";
-                    if (name.includes('creamatorio')) execText = "💥 USAR CREMATORIO (Mata 2 y se descarta)";
-                    if (name.includes('llave_inglesa') || name.includes('motocicleta')) execText = "💥 USAR (Descarta 1 Zombie y se descarta)";
-                    if (name.includes('coche')) execText = "💥 USAR COCHE (Mata 1, Rescata y se descarta)";
-                    if (name.includes('cura')) execText = "💥 USAR CURA (Convierte Zombie a Superviviente y Destruye)";
-                    if (name.includes('antidoto')) execText = "💥 USAR ANTÍDOTO (Destruye para prevenir herida)";
-                    if (name.includes('gran_explosion')) execText = "💥 DETONAR EXPLOSIÓN (Mata TODOS y se destruye)";
-                    if (name.includes('machete') || name.includes('pistola') || name.includes('escopeta') || name.includes('rifle')) execText = "💥 ATACAR (Hace 1 daño y se Agota)";
-                    if (name.includes('ametralladora')) execText = "💥 ATACAR RÁFAGA (Hace 2 daños y se Agota)";
-                    if (name.includes('gasolina')) execText = "💥 PRENDER GASOLINA (Prepara armas gratis)";
-                    
-                    createBtn(btnC, execText, () => executeAutomatedCard(cardEl, name), 'execute');
-                    createBtn(btnC, "🔄 Agotar (Sin usar)", () => { cardEl.classList.add('exhausted'); closeActionMenu(); });
-                }
-                if(!name.includes('personaje')) createBtn(btnC, "🗑️ Tirar a Descartes (Sin efecto)", () => moveCardToZone(cardEl, 'discard-zone', false));
-                if(!name.includes('personaje')) createBtn(btnC, "🔥 Destruir de la Partida", () => { cardEl.remove(); updateCounters(); closeActionMenu(); });
-            } 
-            else if (zone === 'zombie-zone') {
-                createBtn(btnC, "🗡️ Aplicar 1 Daño (Resta 1 al Grupo)", () => { applyWeaponDamage(1); triggerActionEffect(cardEl, '#ff453a'); });
-                createBtn(btnC, "💀 Eliminar Grupo Completo (A la Reserva)", () => killZombieCard(cardEl));
-                createBtn(btnC, "🗑️ Forzar Descarte (A tu Mazo)", () => moveCardToZone(cardEl, 'discard-zone', false));
-            }
-            document.getElementById('action-modal').style.display = 'flex';
-        }
-
-        function createBtn(c, txt, act, cls='') { let b=document.createElement('button'); b.className=`action-btn ${cls}`; b.innerText=txt; b.onclick=act; c.appendChild(b); }
-        function moveCardToZone(c, zId, exh) { if(exh) c.classList.add('exhausted'); else c.classList.remove('exhausted'); document.getElementById(zId).appendChild(c); closeActionMenu(); updateCounters(); }
-
-        function triggerActionEffect(card, colorCode) {
-            let rect = card.getBoundingClientRect();
-            createParticles(rect.left + rect.width/2, rect.top + rect.height/2, colorCode);
-        }
-
-        function applyWeaponDamage(amount) {
-            const zZone = document.getElementById('zombie-zone');
-            
-            while (amount > 0 && zZone.children.length > 0) {
-                let zCard = zZone.children[0];
-                let zName = zCard.dataset.name;
-                let zSize = parseInt(zName.charAt(0));
+                let baseN = cardToPrepare.dataset.name.replace(/_\d+$/, ''); let info = cardDictionary[baseN];
+                let tableCards = Array.from(document.getElementById('table-zone').children).filter(c=>!c.classList.contains('exhausted'));
                 
-                if (amount >= zSize) {
-                    amount -= zSize;
-                    zombiesKilledGlobal += zSize;
-                    zombieReserve.push(zName);
-                    triggerActionEffect(zCard, '#ff453a');
-                    zCard.remove();
-                } else {
-                    let newSize = zSize - amount;
-                    zombiesKilledGlobal += amount;
-                    amount = 0; 
-                    
-                    zombieReserve.push(zName); 
-                    
-                    let replacementIdx = zombieReserve.findIndex(z => parseInt(z.charAt(0)) === newSize);
-                    let replacementName = (replacementIdx !== -1) ? zombieReserve.splice(replacementIdx, 1)[0] : (newSize === 1 ? "1_zombie_1" : `${newSize}_zombies_1`);
-                    
-                    zCard.dataset.name = replacementName;
-                    applyCardImage(zCard, replacementName);
-                    triggerActionEffect(zCard, '#ff453a');
+                logAction(`Carta PREPARADA en Mesa: [${baseN}].`);
+
+                if (baseN.includes('llave_inglesa') || baseN.includes('motocicleta')) applyWeaponDamage(1);
+                if (info && info.type.includes('ARMA') && tableCards.some(c=>c.dataset.name.includes('habilidad_armas'))) applyWeaponDamage(1);
+                if (info && info.type === 'TRAMPA' && tableCards.some(c=>c.dataset.name.includes('habiliadades_caza'))) applyWeaponDamage(1);
+
+                if (paymentMode === 'buy') { 
+                    discardZone.appendChild(cardToPrepare); 
+                    logAction(`Objeto [${baseN}] comprado del Mercado y enviado a Descartes.`);
                 }
+            }
+            document.getElementById('payment-modal').style.display = 'none'; updateCounters();
+        }
+
+        function openWoundModal(cardEl) {
+            closeActionMenu();
+            window.zombieToWound = cardEl;
+
+            if (preventWounds > 0) {
+                preventWounds--;
+                triggerActionEffect(cardEl, '#0a6bcf');
+                logAndAlert(`Escudo/Antídoto activado: Daño bloqueado. Te quedan ${preventWounds} cargas.`, "🛡️ ¡Herida EVITADA por tu equipamiento defensivo!\n\nPrevenciones restantes este turno: " + preventWounds, 'info');
+                resolveWoundEffect(false); 
+                return;
+            }
+
+            document.getElementById('btn-w-pierna').disabled = wounds.pierna;
+            document.getElementById('btn-w-brazo').disabled = wounds.brazo;
+            document.getElementById('wound-modal').style.display = 'flex';
+        }
+
+        function confirmWound(part) {
+            document.getElementById('wound-modal').style.display = 'none';
+            document.getElementById('w-' + part).checked = true;
+            toggleWound(part); 
+
+            triggerShake();
+            triggerBloodFlash();
+            showScreenBanner("¡IMPACTO CRÍTICO!", "rgba(180, 0, 0, 0.9)");
+            resolveWoundEffect(true);
+        }
+
+        function resolveWoundEffect(tookWound) {
+            let hand = document.getElementById('hand-zone');
+            if(hand.firstElementChild && tookWound) {
+                logAction(`Carta descartada de la mano debido al daño recibido.`);
+                moveCardToZone(hand.firstElementChild, 'discard-zone', false);
+            }
+
+            let zCard = window.zombieToWound;
+            let zName = zCard.dataset.name;
+            let zSize = parseInt(zName.charAt(0));
+
+            if (zSize === 1) {
+                zombiesKilledGlobal += 1;
+                zombieReserve.push(zName);
+                triggerActionEffect(zCard, '#8a0303');
+                zCard.remove();
+            } else {
+                zombiesKilledGlobal += 1;
+                zombieReserve.push(zName);
+                let newSize = zSize - 1;
+                let replacementIdx = zombieReserve.findIndex(z => parseInt(z.charAt(0)) === newSize);
+                let replacementName = (replacementIdx !== -1) ? zombieReserve.splice(replacementIdx, 1)[0] : (newSize === 1 ? "1_zombie_1" : `${newSize}_zombies_1`);
+                zCard.dataset.name = replacementName;
+                applyCardImage(zCard, replacementName);
+                triggerActionEffect(zCard, '#8a0303');
             }
             zombieReserve.sort((a,b) => parseInt(b.charAt(0)) - parseInt(a.charAt(0)));
             updateCounters();
         }
 
-        function executeAutomatedCard(card, name) {
-            closeActionMenu();
+        function openActionMenu(cardEl) {
+            if (isGameOver()) return;
+
+            // INTERCEPTOR DE ESTADO: MODO SAQUEO
+            if (lootingActive) {
+                if (cardEl.parentElement.id === 'explored-zone') {
+                    lootingActive = false;
+                    document.getElementById('explored-zone').classList.remove('looting-glow');
+                    moveCardToZone(cardEl, 'table-zone', true); // Recuperar pone la carta agotada en juego
+                    logAction(`Objeto recuperado gratis mediante Saquear: [${cardEl.dataset.name}]`, "info");
+                    showScreenBanner("¡OBJETO ASEGURADO!", "rgba(40, 150, 40, 0.9)");
+                    return;
+                } else {
+                    logAndAlert("Acción bloqueada", "Modo Saqueo activo: Debes hacer clic en una carta del MERCADO (Área Explorada) para recuperarla.", "warn");
+                    return;
+                }
+            }
+
+            const name = cardEl.dataset.name; const zone = cardEl.parentElement.id; const isExhausted = cardEl.classList.contains('exhausted');
+            const isEvent = name.includes('corre') || name.includes('refugio') || name.includes('saquear');
+            
+            let base = name.replace(/_\d+$/, ''); if(name.includes('zombie')) base = 'zombie';
+            let info = cardDictionary[base] || { t: name.toUpperCase() }; document.getElementById('action-title').innerText = info.t;
+            const btnC = document.getElementById('action-buttons'); btnC.innerHTML = '';
+
+            if (zone === 'explored-zone') {
+                createBtn(btnC, "🛒 COMPRAR DEL ÁREA", () => openPaymentMenu(cardEl, 'buy'), 'prepare');
+            }
+            else if (zone === 'hand-zone') {
+                if (!isEvent) { createBtn(btnC, "👇 Bajar a Mesa (Inactiva)", () => moveCardToZone(cardEl, 'table-zone', true)); }
+                createBtn(btnC, "🗑️ Tirar a Descartes", () => moveCardToZone(cardEl, 'discard-zone', false));
+                
+                if(name.includes('explorador')) createBtn(btnC, "💥 USAR EXPLORADOR (Revela 2)", () => { exploreCard(); exploreCard(); moveCardToZone(cardEl, 'discard-zone', false); }, 'execute');
+                else if(name.includes('saquear')) createBtn(btnC, "💥 USAR SAQUEAR", () => { 
+                    const exploredCards = document.getElementById('explored-zone').children;
+                    if(exploredCards.length === 0) {
+                        logAndAlert("Mercado vacío", "Operación fallida: No hay cartas en el Mercado para recuperar.", "error");
+                        return;
+                    }
+                    startLootingMode(cardEl); 
+                }, 'execute');
+                else if(name.includes('corre')) createBtn(btnC, "💥 USAR ¡CORRE! (Huir de Zombie)", () => executeAutomatedCard(cardEl, name), 'execute');
+                else if(name.includes('refugio')) createBtn(btnC, "💥 USAR REFUGIO", () => executeAutomatedCard(cardEl, name), 'execute');
+            } 
+            else if (zone === 'table-zone') {
+                if(name.includes('personaje')) { createBtn(btnC, "Cerrar", closeActionMenu); }
+                else if (isExhausted) { createBtn(btnC, "🔄 PREPARAR ACTIVO", () => openPaymentMenu(cardEl, 'prepare'), 'prepare'); } 
+                else {
+                    let execText = "💥 EJECUTAR ACCIÓN";
+                    
+                    if (info.type === 'ENTRENAMIENTO') {
+                        createBtn(btnC, "⭐ Habilidad Activa (Pasiva)", () => closeActionMenu(), 'prepare');
+                    } else {
+                        if (name.includes('perro') || name.includes('motosierra') || name.includes('lanzallamas') || name.includes('creamatorio') || name.includes('gran_explosion') || name.includes('granada_explosiva') || name.includes('cura') || name.includes('antidoto') || name.includes('kit_medico') || name.includes('chaleco_antibalas') || name.includes('guia') || name.includes('fuego_cruzado') || name.includes('trampa_perimetral') || name.includes('furgoneta')) {
+                            execText = "💥 USAR (Se Consume)";
+                        } else if (name.includes('llave_inglesa') || name.includes('motocicleta')) {
+                            execText = "💥 DESCARTAR PARA MATAR 1";
+                        } else if (name.includes('machete') || name.includes('pistola') || name.includes('escopeta') || name.includes('rifle')) {
+                            execText = "💥 ATACAR Y AGOTAR";
+                        } else if (name.includes('ametralladora')) {
+                            execText = "💥 RÁFAGA (2 Daños y agota)";
+                        } else if (name.includes('gasolina')) { 
+                            execText = "💥 PRENDER GASOLINA"; 
+                        }
+                        
+                        createBtn(btnC, execText, () => executeAutomatedCard(cardEl, name), 'execute');
+                        createBtn(btnC, "🔄 Agotar (Sin efecto)", () => { cardEl.classList.add('exhausted'); closeActionMenu(); });
+                    }
+                }
+                if(!name.includes('personaje')) createBtn(btnC, "🗑️ Tirar a Descartes", () => moveCardToZone(cardEl, 'discard-zone', false));
+                if(!name.includes('personaje')) createBtn(btnC, "🔥 DESTRUIR DEL JUEGO", () => { cardEl.remove(); updateCounters(); closeActionMenu(); });
+            } 
+            else if (zone === 'zombie-zone') {
+                createBtn(btnC, "🗡️ Daño Manual (-1 HP)", () => { applyWeaponDamage(1, cardEl); });
+                createBtn(btnC, "🩸 Recibir Herida Crítica", () => openWoundModal(cardEl), 'execute');
+                createBtn(btnC, "💀 Forzar Ejecución Global", () => killZombieCard(cardEl));
+                createBtn(btnC, "🗑️ Forzar Descarte Directo", () => moveCardToZone(cardEl, 'discard-zone', false));
+            }
+            document.getElementById('action-modal').style.display = 'flex';
+        }
+		
+        function applyWeaponDamage(amount, targetCard = null) {
             const zZone = document.getElementById('zombie-zone');
             
+            while (amount > 0 && zZone.children.length > 0) {
+                let zCard = (targetCard && targetCard.parentElement === zZone) ? targetCard : zZone.firstElementChild;
+                if (!zCard) break;
+
+                let zName = zCard.dataset.name; 
+                let zSize = parseInt(zName.charAt(0));
+                
+                if (amount >= zSize) {
+                    amount -= zSize; 
+                    zombiesKilledGlobal += zSize; 
+                    zombieReserve.push(zName);
+                    triggerActionEffect(zCard, '#ff0000'); 
+                    zCard.remove();
+                    targetCard = null; 
+                } else {
+                    let newSize = zSize - amount; 
+                    zombiesKilledGlobal += amount; 
+                    amount = 0; 
+                    
+                    zombieReserve.push(zName); 
+                    let replacementIdx = zombieReserve.findIndex(z => parseInt(z.charAt(0)) === newSize);
+                    let replacementName = (replacementIdx !== -1) ? zombieReserve.splice(replacementIdx, 1)[0] : (newSize === 1 ? "1_zombie_1" : `${newSize}_zombies_1`);
+                    
+                    zCard.dataset.name = replacementName; 
+                    applyCardImage(zCard, replacementName);
+                    triggerActionEffect(zCard, '#ff0000');
+                }
+            }
+            zombieReserve.sort((a,b) => parseInt(b.charAt(0)) - parseInt(a.charAt(0))); updateCounters();
+        }
+
+        function executeAutomatedCard(card, name) {
+            closeActionMenu();
+            const zZone = document.getElementById('zombie-zone'); const dZone = document.getElementById('discard-zone');
+            const table = Array.from(document.getElementById('table-zone').children).filter(c=>!c.classList.contains('exhausted'));
+            
+            if (currentMission === "4C" && (name.includes('motosierra') || name.includes('motocicleta') || name.includes('furgoneta') || name.includes('gran_explosion') || name.includes('granada_explosiva') || name.includes('lanzallamas') || name.includes('ametralladora'))) {
+                logAndAlert('Acción denegada: Motores/Explosivos vetados en Noche Silenciosa.', "Restricción Misión 4C: ¡No puedes hacer ruido (Motores/Explosivos) en Noche Silenciosa!");
+                return;
+            }
+            if (name.includes('machete') || name.includes('pistola') || name.includes('rifle') || name.includes('escopeta') || name.includes('ametralladora')) {
+                if (turnUsedWeapons.has(card.id)) { 
+                    logAndAlert(`Bloqueo de seguridad: El arma [${name}] ya ha sido disparada en este turno.`, "Esta arma ya ha disparado/atacado en este turno.");
+                    return; 
+                }
+                turnUsedWeapons.add(card.id);
+                logAction(`Arma disparada con éxito: [${name}]. Registrada como usada en el turno actual.`);
+            }
+            if (name.includes('comida') || name.includes('kit_medico')) {
+                if (zZone.children.length > 0) { 
+                    logAndAlert('Acción denegada: Intervención médica imposible bajo ataque de zombies.', "¡Peligro! No puedes curarte mientras estás bajo ataque directo.");
+                    return; 
+                }
+            }
+
             if (name.includes('gran_explosion')) {
-                triggerShake();
-                while(zZone.firstChild) killZombieCard(zZone.firstChild, false);
-                triggerActionEffect(card, '#ffa502');
-                card.remove(); 
-                alert("¡BOOM! Gran Explosión eliminó a todos los zombies y se destruyó.");
+                triggerShake(); triggerBloodFlash();
+                while(zZone.firstElementChild) killZombieCard(zZone.firstElementChild, false); 
+                triggerActionEffect(card, '#ffa502'); card.remove(); 
+                logAction('Gran Explosión ejecutada. Área limpia.', 'warn');
+            }
+            else if (name.includes('granada_explosiva')) {
+                triggerShake(); triggerBloodFlash();
+                for(let i=0; i<5; i++) { if(zZone.firstElementChild) moveCardToZone(zZone.firstElementChild, 'discard-zone', false); }
+                triggerActionEffect(card, '#ffa502'); moveCardToZone(card, 'discard-zone', false);
+                logAction('Granada Explosiva usada. Descartes forzados.', 'warn');
             }
             else if (name.includes('gasolina')) {
-                const tableZone = document.getElementById('table-zone');
-                Array.from(tableZone.children).forEach(c => {
-                    let base = c.dataset.name.replace(/_\d+$/, '');
-                    let info = cardDictionary[base];
-                    if (info && (info.type === 'ARMA' || info.type === 'VEHÍCULO' || info.type === 'TRAMPA')) {
-                        c.classList.remove('exhausted');
-                    }
+                Array.from(document.getElementById('table-zone').children).forEach(c => {
+                    let b = c.dataset.name.replace(/_\d+$/, ''); let i = cardDictionary[b];
+                    if (i && (i.type.includes('ARMA') || i.type === 'VEHÍCULO' || i.type === 'TRAMPA')) c.classList.remove('exhausted');
                 });
-                triggerActionEffect(card, '#ffa502');
-                card.remove();
+                triggerActionEffect(card, '#ffa502'); card.remove();
+                logAction('Gasolina consumida: Equipos reactivados.', 'info');
             }
-            else if (name.includes('motosierra')) {
-                if(zZone.children.length > 0) applyWeaponDamage(6);
-                triggerActionEffect(card, '#ff453a');
-                moveCardToZone(card, 'discard-zone', false);
+            else if (name.includes('motosierra')) { triggerShake(); applyWeaponDamage(6); triggerActionEffect(card, '#ff453a'); moveCardToZone(card, 'discard-zone', false); logAction('Motosierra usada (6 Daños).', 'warn');}
+            else if (name.includes('lanzallamas')) { applyWeaponDamage(3); triggerActionEffect(card, '#ffa502'); moveCardToZone(card, 'discard-zone', false); }
+            else if (name.includes('creamatorio')) { applyWeaponDamage(2); triggerActionEffect(card, '#ffa502'); moveCardToZone(card, 'discard-zone', false); }
+            else if (name.includes('llave_inglesa') || name.includes('motocicleta')) { applyWeaponDamage(1); triggerActionEffect(card, '#ff453a'); moveCardToZone(card, 'discard-zone', false); }
+            else if (name.includes('fuego_cruzado')) {
+                let p = table.filter(c => cardDictionary[c.dataset.name.replace(/_\d+$/, '')]?.type === 'PERSONA').length;
+                applyWeaponDamage(p); triggerActionEffect(card, '#ffa502'); moveCardToZone(card, 'discard-zone', false);
             }
-            else if (name.includes('lanzallamas')) {
-                if(zZone.children.length > 0) applyWeaponDamage(3);
-                triggerActionEffect(card, '#ffa502');
-                moveCardToZone(card, 'discard-zone', false);
+            else if (name.includes('trampa_perimetral')) {
+                let zs = Array.from(dZone.children).filter(c => c.dataset.name.includes('zombie'));
+                for(let i=0; i<6 && i<zs.length; i++) { zombieReserve.push(zs[i].dataset.name); zs[i].remove(); }
+                triggerActionEffect(card, '#ffa502'); moveCardToZone(card, 'discard-zone', false);
             }
-            else if (name.includes('creamatorio')) {
-                if(zZone.children.length > 0) applyWeaponDamage(2);
-                triggerActionEffect(card, '#ffa502');
-                moveCardToZone(card, 'discard-zone', false);
+            else if (name.includes('guia')) {
+                let zs = Array.from(dZone.children).filter(c => c.dataset.name.includes('zombie'));
+                for(let i=0; i<2 && i<zs.length; i++) { zombieReserve.push(zs[i].dataset.name); zs[i].remove(); }
+                triggerActionEffect(card, '#25a145'); moveCardToZone(card, 'discard-zone', false);
             }
-            else if (name.includes('llave_inglesa') || name.includes('motocicleta')) {
-                if(zZone.children.length > 0) {
-                    triggerActionEffect(zZone.children[0], '#ff453a');
-                    moveCardToZone(zZone.children[0], 'discard-zone', false);
-                }
-                moveCardToZone(card, 'discard-zone', false);
-            }
-            else if (name.includes('coche')) {
-                if(zZone.children.length > 0) killZombieCard(zZone.children[0], false);
-                const tableZone = document.getElementById('table-zone');
-                const tableCards = Array.from(tableZone.children);
-                let rescuedCount = 0; let survivorsToDiscard = []; let vipsToDestroy = [];
-
-                tableCards.forEach(c => {
-                    if (!c.classList.contains('exhausted')) {
-                        if (c.dataset.name.includes('superviviente')) { rescuedCount += 1; survivorsToDiscard.push(c); } 
-                        else if (c.dataset.name.includes('vip')) { rescuedCount += 3; vipsToDestroy.push(c); }
-                    }
-                });
-
-                if (rescuedCount > 0) {
-                    updateCount('rescued', rescuedCount);
-                    survivorsToDiscard.forEach(c => moveCardToZone(c, 'discard-zone', false));
-                    vipsToDestroy.forEach(c => c.remove());
-                    alert(`¡Coche usado! Has matado a 1 zombie y rescatado a ${rescuedCount} superviviente(s).`);
-                }
-                triggerActionEffect(card, '#30d158');
-                moveCardToZone(card, 'discard-zone', false);
+            else if (name.includes('furgoneta')) {
+                if(zZone.firstElementChild) killZombieCard(zZone.firstElementChild, false);
+                while(zZone.firstElementChild) moveCardToZone(zZone.firstElementChild, 'discard-zone', false);
+                triggerActionEffect(card, '#ffa502'); moveCardToZone(card, 'discard-zone', false);
+                furgonetaUsed = true;
+                logAction('Furgoneta usada. Área de infección evadida.', 'warn');
             }
             else if (name.includes('cura')) {
                 if (zZone.children.length > 0) {
                     killZombieCard(zZone.children[0], false);
-                    let sCard = { id: `card-s-${Date.now()}`, name: '1_superviviente', type: 'superviviente' };
-                    document.getElementById('table-zone').appendChild(createCardElement(sCard));
-                    alert("¡Cura usada! Has convertido a un zombie en un superviviente preparado en la mesa.");
+                    document.getElementById('table-zone').appendChild(createCardElement({ id: `card-s-${Date.now()}`, name: '1_superviviente', type: 'superviviente' }));
+                    zombiesCured++; medicsUsed++; triggerActionEffect(card, '#25a145');
+                    logAction('Zombie curado y transformado en Superviviente.', 'info');
                 }
-                card.remove();
+                discardOrDestroyMed(card, name);
             }
             else if (name.includes('corre')) {
-                if(zZone.children.length > 0) moveCardToZone(zZone.children[0], 'discard-zone', false);
+                if (wounds.pierna) { logAndAlert('Huída fallida: Pierna herida.', "¡Tienes la pierna herida, no puedes escapar![cite: 3]"); } 
+                else if(zZone.children.length > 0) { moveCardToZone(zZone.children[0], 'discard-zone', false); logAction('Evadido: 1 Zombie mandado a descartes.', 'info');}
                 moveCardToZone(card, 'discard-zone', false);
             }
-            else if (name.includes('perro')) {
-                if(zZone.children.length > 0) {
-                    applyWeaponDamage(1);
-                    moveCardToZone(card, 'discard-zone', false);
-                } else alert("No hay zombies a los que echarle el perro.");
-            }
+            else if (name.includes('perro')) { applyWeaponDamage(1); triggerActionEffect(card, '#ff453a'); moveCardToZone(card, 'discard-zone', false); }
             else if (name.includes('refugio')) {
-                const tableZone = document.getElementById('table-zone');
-                const tableCards = Array.from(tableZone.children);
-                let rescuedCount = 0; let survivorsToDiscard = []; let vipsToDestroy = [];
-
-                tableCards.forEach(c => {
-                    if (!c.classList.contains('exhausted')) {
-                        if (c.dataset.name.includes('superviviente')) { rescuedCount += 1; survivorsToDiscard.push(c); } 
-                        else if (c.dataset.name.includes('vip')) { rescuedCount += 3; vipsToDestroy.push(c); }
-                    }
-                });
-
-                if (rescuedCount > 0) {
-                    updateCount('rescued', rescuedCount);
-                    survivorsToDiscard.forEach(c => moveCardToZone(c, 'discard-zone', false));
-                    vipsToDestroy.forEach(c => c.remove());
-                    moveCardToZone(card, 'discard-zone', false);
-                    alert(`¡Refugio usado! Has rescatado a ${rescuedCount} superviviente(s) automáticamente.`);
+                if (confirm("ELIGE TÁCTICA PARA EL REFUGIO:\n\n[ACEPTAR] Extraer Supervivientes Preparados.\n[CANCELAR] Explorar gratis del Área.")) {
+                    let rC = 0; let sToDis = []; let vToDest = [];
+                    table.forEach(c => {
+                        if (c.dataset.name.includes('superviviente')) { rC += 1; sToDis.push(c); } 
+                        else if (c.dataset.name.includes('vip') && currentMission !== "2A") { rC += 3; vToDest.push(c); vipRescued = true; }
+                    });
+                    if (rC > 0) {
+                        if(currentMission === "2A") {
+                            if (!confirm("Restricción Misión 2A: Tienes que DESTRUIR un Arma para asegurar el rescate[cite: 1]. ¿Proceder?")) return;
+                            let wps = table.filter(c => cardDictionary[c.dataset.name.replace(/_\d+$/, '')]?.type.includes('ARMA'));
+                            if(wps.length === 0) { logAndAlert('Fallo de rescate 2A: No hay armas para destruir.', "Falta artillería pesada. No tienes armas para destruir."); return; }
+                            wps[0].remove(); rC = 1; sToDis = [sToDis[0]];
+                            logAction('Arma destruida como peaje de rescate en Misión 2A.', 'warn');
+                        }
+                        rescued += rC;
+                        sToDis.forEach(c => moveCardToZone(c, 'discard-zone', false)); vToDest.forEach(c => c.remove());
+                        if(table.some(c=>c.dataset.name.includes('comisaria'))) healDamage(1);
+                        triggerActionEffect(card, '#25a145'); moveCardToZone(card, 'discard-zone', false);
+                        logAction(`¡Extracción exitosa! Rescatadas ${rC} persona(s).`, 'info');
+                    } else { logAndAlert('Intento de rescate fallido: Nadie preparado en Búnker.', "Nadie disponible para rescatar.", 'warn'); }
                 } else {
-                    alert("No tienes supervivientes preparados (rectos) en la mesa para rescatar.");
+                    if(areaDeck.length > 0) {
+                        let nC = createCardElement(areaDeck.pop()); nC.classList.add('exhausted'); document.getElementById('table-zone').appendChild(nC);
+                        logAction('Refugio usado para explorar Área gratis.', 'info');
+                    } else { logAndAlert('Fallo al explorar con Refugio: Mazo vacío.', "Zona despejada. El Mazo de Área está vacío.", 'warn'); }
+                    moveCardToZone(card, 'discard-zone', false);
                 }
             }
-            else if (name.includes('comida')) {
-                updateCount('hp', -1);
-                moveCardToZone(card, 'discard-zone', false);
+            else if (name.includes('comida')) { healDamage(1); triggerActionEffect(card, '#25a145'); areaDeck.unshift({id: card.id, name: '1_comida', type: 'basic'}); card.remove(); logAction('Comida consumida (+1 Salud).', 'info');}
+            else if (name.includes('kit_medico')) { healDamage(2); medicsUsed++; triggerActionEffect(card, '#25a145'); discardOrDestroyMed(card, name); logAction('Kit Médico usado (+2 Salud).', 'info');}
+            else if (name.includes('chaleco_antibalas')) { preventWounds += 2; triggerActionEffect(card, '#0a6bcf'); card.remove(); logAction('Chaleco Antibalas desplegado (+2 Prevenciones).', 'info');}
+            else if (name.includes('antidoto')) { preventWounds += 1; triggerActionEffect(card, '#0a6bcf'); card.remove(); logAction('Antídoto consumido (+1 Prevención).', 'info');}
+            else if (name.includes('ametralladora') || name.includes('pistola') || name.includes('escopeta') || name.includes('machete') || name.includes('rifle')) {
+                let d = parseInt(cardDictionary[name.replace(/_\d+$/, '')].d.match(/\d+/)[0]); 
+                if (table.some(c=>c.dataset.name.includes('apuntar') && !c.classList.contains('exhausted')) && !name.includes('machete')) d += 1;
+                applyWeaponDamage(d); triggerActionEffect(card, '#ff453a'); card.classList.add('exhausted');
             }
-            else if (name.includes('comisaria')) {
-                updateCount('hp', -1);
-                card.classList.add('exhausted'); 
-            }
-            else if (name.includes('kit_medico') || name.includes('cura') || name.includes('chaleco_antibalas')) {
-                if (name.includes('kit_medico')) updateCount('hp', -2);
-                card.remove();
-            }
-            else if (name.includes('furgoneta')) {
-                if(zZone.children.length > 0) killZombieCard(zZone.children[0], false);
-                while(zZone.firstChild) moveCardToZone(zZone.firstChild, 'discard-zone', false);
-                moveCardToZone(card, 'discard-zone', false);
-                alert("FURGONETA: Matas 1 carta entera de zombie y descartas el resto.");
-            }
-            else if (name.includes('ametralladora')) {
-                if(zZone.children.length > 0) applyWeaponDamage(2);
-                card.classList.add('exhausted');
-            }
-            else if (name.includes('pistola') || name.includes('escopeta') || name.includes('machete') || name.includes('rifle') || name.includes('habilidad_armas')) {
-                if(zZone.children.length > 0) {
-                    applyWeaponDamage(1);
-                    card.classList.add('exhausted'); 
-                } else alert("No hay zombies a los que atacar.");
-            }
-            else {
-                card.classList.add('exhausted');
-            }
+            else { card.classList.add('exhausted'); }
+            
             updateCounters();
         }
+
+        function createBtn(c, txt, act, cls='') { let b=document.createElement('button'); b.className=`action-btn ${cls}`; b.innerText=txt; b.onclick=act; c.appendChild(b); }
+        function moveCardToZone(c, zId, exh) { if(exh) c.classList.add('exhausted'); else c.classList.remove('exhausted'); document.getElementById(zId).appendChild(c); closeActionMenu(); updateCounters(); }
 
         function killZombieCard(zCard, closeMenu=true) {
             let zSize = parseInt(zCard.dataset.name.charAt(0));
             zombiesKilledGlobal += zSize;
             zombieReserve.push(zCard.dataset.name);
             zombieReserve.sort((a,b) => parseInt(b.charAt(0)) - parseInt(a.charAt(0)));
-            triggerActionEffect(zCard, '#ff453a');
+            triggerActionEffect(zCard, '#ff0000');
             zCard.remove(); if(closeMenu) closeActionMenu(); updateCounters();
         }
 
         function closeActionMenu() { document.getElementById('action-modal').style.display = 'none'; }
         
+		function startLootingMode(saquearCard) {
+            closeActionMenu();
+            lootingActive = true;
+            document.getElementById('explored-zone').classList.add('looting-glow');
+            showScreenBanner("SELECCIONA BOTÍN", "rgba(20, 80, 20, 0.95)");
+            logAction("Modo Saqueo activado. Haz clic en una carta del Mercado.", "warn");
+            moveCardToZone(saquearCard, 'discard-zone', false); // Descartamos el evento Saquear
+        }
+		
         function updateCounters() {
-            document.getElementById('area-count').innerText = areaDeck.length;
-            document.getElementById('hp-count').innerText = hp; document.getElementById('wave-count').innerText = wave; document.getElementById('rescued-count').innerText = rescued;
+            document.getElementById('area-count').innerText = areaDeck.length; document.getElementById('wave-count').innerText = wave; document.getElementById('rescued-count').innerText = rescued;
             document.getElementById('deck-count').innerText = deck.length; document.getElementById('discard-count').innerText = document.getElementById('discard-zone').childElementCount;
             document.getElementById('deck-visual').style.display = (deck.length > 0) ? 'block' : 'none';
             
-            let progressText = "Misión Actual";
+            let progressText = "OPERACIÓN LIBRE";
             const tableCards = Array.from(document.getElementById('table-zone').children);
             const preparedCardsCount = tableCards.filter(c => !c.classList.contains('exhausted') && !c.id.includes('card-char')).length;
 
             switch(currentMission) {
-                case "1A": progressText = `🎯 Misión 1A: Caos | Objetivo: 6 Cartas Preparadas en mesa | Progreso: ${preparedCardsCount}/6`; break;
-                case "1B": progressText = `🎯 Misión 1B: Multitud de Muertos | Objetivo: 4 Rescatados | Progreso: ${rescued}/4`; break;
-                case "1C": progressText = `🎯 Misión 1C: Ponte a Salvo | Objetivo: 6 Rescatados | Progreso: ${rescued}/6`; break;
-                case "2A": progressText = `🎯 Misión 2A: Entrenando | Objetivo: 5 Rescatados | Progreso: ${rescued}/5`; break;
-                case "2B": progressText = `🎯 Misión 2B: Preparando la Base | Objetivo: 5 Rescatados | Progreso: ${rescued}/5`; break;
-                case "2C": progressText = `🎯 Misión 2C: El Asalto | Objetivo: Llegar a la Oleada 6 | Oleada Actual: ${wave}/6`; break;
-                case "3A": progressText = `🎯 Misión 3A: La Ayuda | Sobrevive a la horda (Oleada 5)`; break;
-                case "3B": progressText = `🎯 Misión 3B: Salva a tu Familia | Objetivo: 4 Personas + Vehículo`; break;
-                case "4A": progressText = `🎯 Misión 4A: Explorando | Objetivo: Vaciar Mazo de Área | Cartas restantes: ${areaDeck.length}`; break;
-                case "4B": progressText = `🎯 Misión 4B: Rescate | Objetivo: 10 Rescatados | Progreso: ${rescued}/10`; break;
-                case "4C": progressText = `🎯 Misión 4C: Noche Silenciosa | Objetivo: Sobrevive sin hacer ruido`; break;
-                case "4D": progressText = `🎯 Misión 4D: Limpieza | Objetivo: Matar 100 Zombies | Muertos: ${zombiesKilledGlobal}/100`; break;
-                default: progressText = `🎯 Misión Libre | Sobrevive todo lo que puedas`;
+                case "1A": progressText = `🎯 1A: CAOS | Objetivo: 6 Defensas | En mesa: ${preparedCardsCount}/6`; break;
+                case "1B": progressText = `🎯 1B: LA MULTITUD | Obj: 4 Rescates | Progreso: ${rescued}/4`; break;
+                case "1C": progressText = `🎯 1C: A SALVO | Obj: 6 Rescates + Búnker | Progreso: ${rescued}/6`; break;
+                case "2A": progressText = `🎯 2A: GUERREROS | Obj: 5 Rescates | Progreso: ${rescued}/5`; break;
+                case "2B": progressText = `🎯 2B: BASE SEGURA | Obj: 5 Rescates + Trampas | Progreso: ${rescued}/5`; break;
+                case "2C": progressText = `🎯 2C: EL ASALTO | Sobrevive hasta Ol. 6 | Actual: ${wave}/6`; break;
+                case "3A": progressText = `🎯 3A: LA LLAMADA | Sobrevive hasta Ol. 8 | Actual: ${wave}/8`; break;
+                case "3B": progressText = `🎯 3B: FAMILIA | Obj: 4 Resc. + Escape Motorizado`; break;
+                case "4A": progressText = `🎯 4A: EXPLORACIÓN | Obj: Vaciar Mercado | Quedan: ${areaDeck.length}`; break;
+                case "4B": progressText = `🎯 4B: LA EXTRACCIÓN | Obj: 10 Rescates | Progreso: ${rescued}/10`; break;
+                case "4C": progressText = `🎯 4C: SILENCIO | Sobrevive hasta Ol. 6 | Actual: ${wave}/6`; break;
+                case "4D": progressText = `🎯 4D: PURGA | Matar 100 Zombies | Bajas: ${zombiesKilledGlobal}/100`; break;
+                case "5A": progressText = `🎯 5A: LA DOCTORA | Obj: VIP + Hospital Operativo`; break;
+                case "5B": progressText = `🎯 5B: INVESTIGACIÓN | Curar (Usar 5 Med) | Prog: ${medicsUsed}/5`; break;
+                case "5C": progressText = `🎯 5C: PRUEBAS | Obj: Curar 6 Zombies | Progreso: ${zombiesCured}/6`; break;
+                case "5D": progressText = `🎯 5D: LA BATALLA FINAL | Sobrevive hasta Ol. 6 | Actual: ${wave}/6`; break;
             }
             document.getElementById('mission-banner').innerText = progressText;
-
             checkMissionObjectives();
-        }
-        
-        function updateCount(t, v) {
-            if(t==='hp') {
-                hp = Math.max(0, Math.min(3, hp + v));
-                if(hp >= 3) alert("☠️ ¡CUIDADO, HAS RECIBIDO 3 HERIDAS Y HAS MUERTO!");
-            }
-            if(t==='rescued') rescued = Math.max(0, rescued + v);
-            updateCounters();
         }
     </script>
 </body>
