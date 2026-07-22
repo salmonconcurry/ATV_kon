@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Card Capture: Cyber Mech</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Efecto visual de monitor de tubo (CRT) -->
+    <div class="crt-overlay"></div>
+
+    <header class="header">
+        <h1>Card Capture</h1>
+        <div class="phase-indicator" id="phase-display">INICIALIZANDO SISTEMA...</div>
+    </header>
+
+    <main class="game-board">
+        <!-- SECTOR ENEMIGO -->
+        <section class="area enemy-area">
+            <h2 class="zone-title">HUD Enemigo - Fila de Asalto</h2>
+            <div class="row">
+                <div class="slot deck" id="enemy-deck">Deck<br><span id="e-deck-count">0</span></div>
+                <div class="slot" id="pos4"></div>
+                <div class="slot" id="pos3"></div>
+                <div class="slot" id="pos2"></div>
+                <div class="slot" id="pos1"></div>
+                <div class="slot capture-pile" id="enemy-capture">Pila<br>Capt</div>
+            </div>
+        </section>
+
+        <!-- PANEL DE MENSAJES DEL SISTEMA -->
+        <div id="message-board">Cargando protocolo de combate...</div>
+        
+        <!-- PANEL DE CONTROLES -->
+        <nav class="controls" id="control-panel">
+            <!-- Los botones se inyectan dinámicamente mediante JS -->
+        </nav>
+
+        <!-- SECTOR JUGADOR -->
+        <section class="area player-area">
+            <h2 class="zone-title">Tus Bots y Herramientas</h2>
+            <div class="row" id="player-hand">
+                <!-- Cartas de la mano -->
+            </div>
+            <div class="row deck-row">
+                <div class="slot deck" id="player-deck">Reserva<br><span id="p-deck-count">0</span></div>
+                <div class="center-label">MANO TÁCTICA</div>
+                <div class="slot discard-pile" id="player-discard">Tu<br>Desc</div>
+            </div>
+        </section>
+    </main>
+
+    <script src="game.js"></script>
+</body>
+</html>

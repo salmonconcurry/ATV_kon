@@ -1,0 +1,184 @@
+/* ==========================================
+   VARIABLES GLOBALES Y SISTEMA DE DISEÑO
+   ========================================== */
+:root {
+    --bg-color: #03070b;
+    --neon-blue: #00f3ff;
+    --neon-red: #ff003c;
+    --neon-green: #39ff14;
+    --text-main: #e0f7fa;
+    
+    /* Escalado fluido: La carta se adapta al ancho de la pantalla */
+    --card-w: clamp(45px, 14vw, 75px);
+    --card-h: calc(var(--card-w) * 1.45);
+}
+
+/* ==========================================
+   RESET Y BASE
+   ========================================== */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    box-sizing: border-box;
+    user-select: none;
+    overflow: hidden;
+    background-image: 
+        linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+/* EFECTO SCANLINES (CRT) */
+.crt-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.5;
+}
+
+/* ==========================================
+   ESTRUCTURA UI
+   ========================================== */
+.header { text-align: center; border-bottom: 2px solid var(--neon-blue); padding: 10px 5px; box-shadow: 0 5px 15px rgba(0,243,255,0.1);}
+h1 { margin: 0; font-size: 1.5rem; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); text-transform: uppercase; letter-spacing: 3px;}
+.phase-indicator { color: var(--neon-green); font-weight: bold; font-size: 0.9rem; margin-top: 5px; animation: pulse 2s infinite; }
+
+.game-board { display: flex; flex-direction: column; padding: 10px; gap: 10px; flex-grow: 1; justify-content: space-evenly;}
+.zone-title { font-size: 0.75rem; color: #698ba8; text-transform: uppercase; margin: 0 0 8px 0; text-align: center; letter-spacing: 1px;}
+.area { background: rgba(10, 25, 41, 0.6); border: 1px solid #1f3a5e; border-radius: 8px; padding: 10px; backdrop-filter: blur(4px); box-shadow: inset 0 0 20px rgba(0,0,0,0.5);}
+
+.row { display: flex; justify-content: space-between; gap: 4px; align-items: center; min-height: var(--card-h); }
+.deck-row { margin-top: 15px; }
+.center-label { flex-grow: 1; text-align:center; color:#555; font-size: 0.75rem; letter-spacing: 2px;}
+
+/* ==========================================
+   SLOTS Y CARTAS CYBERPUNK (Rediseño)
+   ========================================== */
+.slot {
+    width: var(--card-w); height: var(--card-h); border: 1px dashed rgba(255, 255, 255, 0.2); border-radius: 2px;
+    display: flex; justify-content: center; align-items: center; font-size: 0.7rem; color: #555; text-align: center;
+    background: rgba(0,0,0,0.4);
+    clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%);
+}
+
+.card {
+    width: var(--card-w); height: var(--card-h); 
+    background: #04090e; 
+    border: 1px solid var(--neon-blue);
+    display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+    font-weight: bold; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
+    position: relative;
+    clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%);
+    padding: 4px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* Textura de micro-circuito o rejilla de fondo */
+.card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(circle at center, rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 6px 6px;
+    z-index: 0; pointer-events: none;
+}
+
+/* Efectos al interactuar */
+.card:active { transform: scale(0.9); }
+.card.selected { transform: translateY(-12px) scale(1.05); box-shadow: 0 15px 25px var(--neon-green); border: 2px solid var(--neon-green); z-index: 10;}
+.card.enemy-target { transform: scale(1.1); border: 2px solid var(--neon-red); animation: targetPulse 1s infinite alternate; z-index: 10;}
+
+/* Estructura interna de la carta */
+.card-val, .card-val-bottom {
+    font-size: clamp(0.7rem, 3.5vw, 1.1rem);
+    z-index: 1; text-shadow: 0 0 5px currentColor;
+    font-family: 'Courier New', monospace;
+}
+.card-val { align-self: flex-start; }
+.card-val-bottom { align-self: flex-end; transform: rotate(180deg); }
+.card-icon {
+    font-size: clamp(1.4rem, 6vw, 2.2rem);
+    z-index: 1; filter: drop-shadow(0 0 8px currentColor);
+    margin: auto 0;
+}
+
+/* Colores y brillos internos según el palo (Suit) */
+.suit-red { color: #ff3366; border-color: rgba(255, 51, 102, 0.5); }
+.suit-red::after { content:''; position:absolute; inset:0; box-shadow: inset 0 0 20px rgba(255,51,102,0.15); z-index:0; pointer-events: none;}
+
+.suit-black { color: #00e5ff; border-color: rgba(0, 229, 255, 0.5); }
+.suit-black::after { content:''; position:absolute; inset:0; box-shadow: inset 0 0 20px rgba(0,229,255,0.15); z-index:0; pointer-events: none;}
+
+/* Estilo para los Mechas (Figuras) */
+.face-card {
+    background: linear-gradient(135deg, rgba(255,0,60,0.1) 0%, rgba(0,0,0,0) 50%, rgba(255,0,60,0.1) 100%), #04090e;
+    border: 1px solid var(--neon-red);
+}
+.face-card .card-val, .face-card .card-val-bottom { color: var(--text-main); }
+
+/* Estilo para los Virus/Bots Comodines (Jokers) */
+.joker {
+    color: #b000ff; border-color: #b000ff;
+    background: linear-gradient(135deg, #1a0033, #04090e);
+}
+.joker::after { content:''; position:absolute; inset:0; box-shadow: inset 0 0 30px rgba(176,0,255,0.3); z-index:0; pointer-events: none;}
+.joker .card-icon { animation: glitchFloat 2s infinite ease-in-out; }
+
+/* ==========================================
+   MAZOS Y PILAS
+   ========================================== */
+.deck { background: #111; border: 2px solid #333; color: #666; font-size: 0.7rem; clip-path: none; border-radius: 6px;}
+.capture-pile { border-color: var(--neon-red); color: var(--neon-red); box-shadow: inset 0 0 10px rgba(255,0,60,0.2); clip-path: none; border-radius: 6px;}
+.discard-pile { border-color: var(--neon-green); color: var(--neon-green); box-shadow: inset 0 0 10px rgba(57,255,20,0.2); clip-path: none; border-radius: 6px;}
+
+/* ==========================================
+   CONTROLES Y MENSAJES
+   ========================================== */
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; }
+.btn {
+    background: rgba(0, 0, 0, 0.8); color: var(--neon-blue); border: 1px solid var(--neon-blue);
+    padding: 10px 5px; font-family: inherit; font-size: 0.75rem; border-radius: 4px;
+    cursor: pointer; text-transform: uppercase; transition: all 0.2s; font-weight: bold;
+    min-height: 48px; 
+}
+.btn:active { background: var(--neon-blue); color: #000; transform: translateY(2px);}
+.btn:disabled { border-color: #333; color: #444; pointer-events: none; box-shadow: none; }
+.btn.action-btn { border-color: var(--neon-green); color: var(--neon-green); box-shadow: 0 0 10px rgba(57,255,20,0.2); }
+.btn.danger-btn { border-color: var(--neon-red); color: var(--neon-red); box-shadow: 0 0 10px rgba(255,0,60,0.2); }
+
+#message-board {
+    text-align: center; padding: 12px; color: #fff; font-size: 0.85rem; 
+    background: rgba(0, 243, 255, 0.1); border-radius: 4px; border-left: 4px solid var(--neon-blue);
+    min-height: 2.5em; display: flex; align-items: center; justify-content: center;
+}
+
+/* ==========================================
+   ANIMACIONES
+   ========================================== */
+@keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; text-shadow: 0 0 10px var(--neon-green); } 100% { opacity: 0.7; } }
+@keyframes targetPulse { 0% { box-shadow: 0 0 10px var(--neon-red); } 100% { box-shadow: 0 0 30px var(--neon-red); } }
+@keyframes glitchFloat {
+    0%, 100% { transform: translateY(0) skew(0deg); filter: drop-shadow(0 0 8px #b000ff); }
+    50% { transform: translateY(-3px) skew(2deg); filter: drop-shadow(0 0 15px #ff00ff); }
+}
+
+.floating-text { position: absolute; font-weight: bold; font-size: 1.5rem; pointer-events: none; animation: floatUp 1.2s cubic-bezier(0.2, 1, 0.3, 1) forwards; z-index: 1000; text-shadow: 2px 2px 0 #000; text-align: center; width: 100%; left: 0;}
+@keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-60px) scale(1.5); } }
+
+.damage-flash { animation: flashRed 0.4s; }
+@keyframes flashRed { 0%, 100% { filter: hue-rotate(0deg); } 50% { filter: sepia(1) hue-rotate(-50deg) saturate(5); background-color: #300; } }
+
+/* PARCHE DE INTERACCIÓN: Evita que los elementos internos roben el clic */
+.card * {
+    pointer-events: none;
+}
