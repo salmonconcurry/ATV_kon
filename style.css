@@ -7,13 +7,15 @@
     --text-color: #a0c0d0;
 }
 
-body, html {
-    margin: 0; padding: 0; width: 100%; height: 100%;
+*, *::before, *::after { box-sizing: border-box; }
+
+html { background-color: var(--bg-color); }
+body {
+    margin: 0; min-height: 100vh; padding: 24px 16px;
     background-color: var(--bg-color);
     font-family: 'Courier New', Courier, monospace;
     color: var(--text-color);
     display: flex; justify-content: center; align-items: center;
-    overflow: hidden;
 }
 
 /* Efecto CRT (Monitor de tubo) */
@@ -25,10 +27,14 @@ body, html {
 
 .terminal {
     background: rgba(10, 25, 41, 0.8); border: 2px solid var(--neon-red);
-    padding: 2rem; max-width: 500px; width: 90%;
+    padding: 2rem; max-width: 500px; width: 100%;
     box-shadow: 0 0 20px rgba(255, 0, 60, 0.2), inset 0 0 15px rgba(255, 0, 60, 0.1);
     position: relative; text-align: center;
+    transition: max-width 0.4s ease;
 }
+/* Al desbloquear, la terminal se ensancha para mostrar el catálogo */
+.terminal.unlocked { max-width: 1040px; }
+@media (max-width: 560px) { .terminal { padding: 1.25rem; } .glitch { font-size: 1.35rem; } }
 
 .terminal-header { border-bottom: 1px dashed var(--neon-red); margin-bottom: 2rem; padding-bottom: 1rem; }
 
@@ -53,12 +59,34 @@ body, html {
 .hack-btn.hacking { border-color: var(--neon-green); color: var(--neon-green); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); }
 
 /* Contenedor de enlaces a los juegos */
-.mission-links { display: flex; flex-direction: column; gap: 15px; margin-top: 1.5rem; }
+.filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 1.25rem; }
+.filter {
+    background: transparent; border: 1px solid #2a4a5e; color: var(--text-color);
+    font-family: inherit; font-size: 0.8rem; font-weight: bold; letter-spacing: 1px;
+    padding: 8px 12px; cursor: pointer; min-height: 36px;
+}
+.filter:hover { border-color: var(--neon-green); color: var(--neon-green); }
+.filter.on { background: var(--neon-green); border-color: var(--neon-green); color: #000; }
+
+.mission-links {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 14px; margin-top: 1.25rem; text-align: left;
+}
 
 .portal-link {
-    display: block; color: #000; padding: 15px; text-decoration: none; font-weight: bold; 
-    font-size: 1.1rem; border-radius: 4px; transition: all 0.3s;
+    display: grid; grid-template-columns: auto 1fr; align-content: start; gap: 4px 10px;
+    color: #000; padding: 14px; text-decoration: none; font-weight: bold;
+    border-radius: 4px; transition: all 0.3s; min-height: 150px;
 }
+.portal-link .file-id { font-size: 0.85rem; opacity: 0.75; }
+.portal-link .file-name { font-size: 1.05rem; line-height: 1.2; }
+.portal-link .file-genre {
+    grid-column: 1 / -1; font-size: 0.72rem; letter-spacing: 1px; text-transform: uppercase;
+    opacity: 0.8; border-bottom: 1px dashed currentColor; padding-bottom: 6px; margin-bottom: 2px;
+}
+.portal-link .file-desc { grid-column: 1 / -1; font-size: 0.85rem; font-weight: normal; line-height: 1.35; }
+.portal-link:focus-visible { outline: 2px solid var(--neon-green); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .portal-link, .terminal { transition: none; } .portal-link:hover { transform: none !important; } }
 
 .zombie-theme { background: #ffaa00; box-shadow: 0 0 10px rgba(255, 170, 0, 0.5); }
 .zombie-theme:hover { background: #ffcc00; box-shadow: 0 0 20px #ffaa00; transform: scale(1.02); }

@@ -17,11 +17,11 @@
 
         <section class="interaction-zone" id="lock-screen">
             <p>Se requiere anulación biométrica para acceder al nexo de simulaciones tácticas.</p>
-            
+
             <div class="progress-container">
                 <div class="progress-bar" id="progress-bar"></div>
             </div>
-            
+
             <button class="hack-btn" id="hack-btn">
                 <span class="btn-text">MANTENER PARA DESENCRIPTAR</span>
             </button>
@@ -30,47 +30,78 @@
         <!-- PANEL DESBLOQUEADO -->
         <section class="interaction-zone hidden" id="access-granted">
             <h2 class="success">ACCESO CONCEDIDO</h2>
-            <p>Archivos recuperados. Seleccione la simulación a cargar:</p>
-            
+            <p>Archivos recuperados: 8 simulaciones. Seleccione la simulación a cargar.</p>
+
+            <nav class="filters" aria-label="Filtrar simulaciones">
+                <button class="filter on" data-filter="all">TODAS</button>
+                <button class="filter" data-filter="solo">SOLITARIO</button>
+                <button class="filter" data-filter="deck">CONSTRUCCIÓN DE MAZO</button>
+                <button class="filter" data-filter="horror">HORROR</button>
+            </nav>
+
             <div class="mission-links">
                 <!-- [1] Zombie Theme -->
-                <a href="./AfterTheVirus_Web/" class="portal-link zombie-theme">
-                    [1] AFTER THE VIRUS
-                </a>
-                
-                <!-- [2] Cyberpunk Theme -->
-                <a href="./Card_Capture/" class="portal-link cyber-theme">
-                    [2] CARD CAPTURE: CYBER MECH
+                <a href="./AfterTheVirus_Web/" class="portal-link zombie-theme" data-tags="solo horror">
+                    <span class="file-id">[01]</span>
+                    <span class="file-name">AFTER THE VIRUS</span>
+                    <span class="file-genre">Zombies · Supervivencia</span>
+                    <span class="file-desc">Gestiona tus recursos y defiéndete de las hordas antes de que el mazo se agote.</span>
                 </a>
 
-                <!-- [3] Samurai Theme (NUEVO) -->
-                <a href="./scoundrel/" class="portal-link samurai-theme">
-                    [3] SCOUNDREL: SAMURAI EDITION
+                <!-- [2] Cyberpunk Theme -->
+                <a href="./Card_Capture/" class="portal-link cyber-theme" data-tags="solo">
+                    <span class="file-id">[02]</span>
+                    <span class="file-name">CARD CAPTURE: CYBER MECH</span>
+                    <span class="file-genre">Cyberpunk · Hacking</span>
+                    <span class="file-desc">Empareja palos con tus bots para capturar a los Mechas antes de que entren en la red.</span>
+                </a>
+
+                <!-- [3] Samurai Theme -->
+                <a href="./scoundrel/" class="portal-link samurai-theme" data-tags="solo">
+                    <span class="file-id">[03]</span>
+                    <span class="file-name">SCOUNDREL: SAMURAI EDITION</span>
+                    <span class="file-genre">Japón feudal · Roguelike</span>
+                    <span class="file-desc">Eres un Ronin cruzando salas hostiles. Equipa armas, bebe sake y sobrevive a 44 cartas.</span>
                 </a>
 
                 <!-- [4] Lovecraft Theme -->
-                <a href="./Marea_de_Innsmouth/" class="portal-link abyss-theme">
-                    [4] MAREA DE INNSMOUTH
+                <a href="./Marea_de_Innsmouth/" class="portal-link abyss-theme" data-tags="deck horror">
+                    <span class="file-id">[04]</span>
+                    <span class="file-name">MAREA DE INNSMOUTH</span>
+                    <span class="file-genre">Lovecraft · Construcción de mazo</span>
+                    <span class="file-desc">Derrota a los Horrores que suben al Muelle y al jefe antes de perder la Cordura.</span>
                 </a>
 
                 <!-- [5] Lovecraft Theme -->
-                <a href="./Ecos_de_Rlyeh/" class="portal-link abyss-theme">
-                    [5] ECOS DE R'LYEH
+                <a href="./Ecos_de_Rlyeh/" class="portal-link abyss-theme" data-tags="solo horror">
+                    <span class="file-id">[05]</span>
+                    <span class="file-name">ECOS DE R'LYEH</span>
+                    <span class="file-genre">Lovecraft · Solitario</span>
+                    <span class="file-desc">Adquiere o quema lo que revelas, construye tu Estudio y destierra lo que cruza el Umbral.</span>
                 </a>
 
                 <!-- [6] Lovecraft Theme -->
-                <a href="./Ultima_Vigilia/" class="portal-link abyss-theme">
-                    [6] ÚLTIMA VIGILIA
+                <a href="./Ultima_Vigilia/" class="portal-link abyss-theme" data-tags="deck horror">
+                    <span class="file-id">[06]</span>
+                    <span class="file-name">ÚLTIMA VIGILIA</span>
+                    <span class="file-genre">Lovecraft · Asedio</span>
+                    <span class="file-desc">Defiende el pueblo frente a un jefe de tres fases. Cada partida, una Biblioteca distinta.</span>
                 </a>
 
                 <!-- [7] Prohibition Theme -->
-                <a href="./Ley_Seca/" class="portal-link gangster-theme">
-                    [7] LEY SECA
+                <a href="./Ley_Seca/" class="portal-link gangster-theme" data-tags="deck">
+                    <span class="file-id">[07]</span>
+                    <span class="file-name">LEY SECA</span>
+                    <span class="file-genre">Chicago 1925 · Territorio</span>
+                    <span class="file-desc">Controla barrios, abre bares clandestinos y vigila el Calor frente a las familias rivales.</span>
                 </a>
 
                 <!-- [8] Sci-fi Horror Theme -->
-                <a href="./Erebus/" class="portal-link erebus-theme">
-                    [8] EREBUS
+                <a href="./Erebus/" class="portal-link erebus-theme" data-tags="solo horror">
+                    <span class="file-id">[08]</span>
+                    <span class="file-name">EREBUS</span>
+                    <span class="file-genre">Ciencia ficción · Terror</span>
+                    <span class="file-desc">Algo salió del Laboratorio. Monta el cañón, usa la esclusa o huye en la lanzadera.</span>
                 </a>
             </div>
         </section>

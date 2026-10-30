@@ -61,7 +61,24 @@ document.addEventListener('DOMContentLoaded', () => {
         // Ocultar pantalla de bloqueo y mostrar los juegos
         lockScreen.classList.add('hidden');
         accessScreen.classList.remove('hidden');
+        terminal.classList.add('unlocked');
+
+        // Recordar el acceso durante la sesión para no repetir el hackeo al volver de un juego
+        try { sessionStorage.setItem('nexo-unlocked', '1'); } catch (e) {}
     };
+
+    // Filtros del catálogo
+    const filters = document.querySelectorAll('.filter');
+    const links = document.querySelectorAll('.portal-link');
+    filters.forEach(f => f.addEventListener('click', () => {
+        filters.forEach(x => x.classList.toggle('on', x === f));
+        const tag = f.dataset.filter;
+        links.forEach(a => a.classList.toggle('hidden', tag !== 'all' && !a.dataset.tags.split(' ').includes(tag)));
+    }));
+
+    let unlocked = false;
+    try { unlocked = sessionStorage.getItem('nexo-unlocked') === '1'; } catch (e) {}
+    if (unlocked) { progress = 100; progressBar.style.width = '100%'; unlockSystem(); }
 
     // Escuchadores de eventos para ratón y pantallas táctiles
     btn.addEventListener('mousedown', startPress);
