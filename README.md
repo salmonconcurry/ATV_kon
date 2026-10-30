@@ -49,7 +49,7 @@ Deckbuilder de control de territorio en el Chicago de 1925. Coloca a tus hombres
 * **Ruta:** `/Ley_Seca`
 
 ### [8] Erebus
-Supervivencia en solitario a bordo de un carguero minero. Explora el plano de la nave, reúne a la tripulación y acaba con la criatura: con el cañón de plasma, por la esclusa o huyendo en la lanzadera.
+Supervivencia en solitario a bordo de un carguero minero. Cada turno gastas Aliento en cartas de protocolo (moverte, atacar, registrar, reaccionar…) que se resuelven con tiradas de Nervio. La criatura crece de cría a adulta, se desvanece y embosca. Abre conductos de mantenimiento con tarjetas de acceso y acaba con ella: a golpes y con el cañón de plasma, por la esclusa o con la autodestrucción y la lanzadera.
 * **Temática:** Ciencia ficción / Terror
 * **Ruta:** `/Erebus`
 

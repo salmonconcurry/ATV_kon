@@ -177,6 +177,55 @@ details.rules summary{cursor:pointer;padding:12px 14px;font-size:13px;letter-spa
 .end td:last-child{text-align:right;font-variant-numeric:tabular-nums;color:var(--amber)}
 .end tr.total td{border-bottom:none;font-size:17px;padding-top:8px}
 .end .btn{justify-self:start}
+
+/* conductos de mantenimiento */
+.map .shaft{fill:none;stroke:#4a3a63;stroke-width:.55;stroke-dasharray:.5 1.1}
+.map .shaft.open{stroke:#b48cff;stroke-width:.8;stroke-dasharray:none;filter:drop-shadow(0 0 .6px #b48cff)}
+.map .shaft-k{fill:#7b6a95;font-family:var(--mono);font-size:1.9px;font-weight:600}
+.map .shaft-k.open{fill:#d9c6ff}
+
+/* criatura */
+.beastbox{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:13px;color:#cfc8b6}
+.beastbox b{color:var(--alert);font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.sed{display:flex;gap:2px;align-items:center}
+.sed i{width:12px;height:12px;border:1px solid #6b3a33;display:block}
+.sed i.on{background:var(--alert);border-color:var(--alert)}
+.sed i.evo{border-color:var(--amber)}
+.sed i.evo.on{background:var(--amber)}
+
+/* cartas */
+.cards{display:flex;flex-wrap:wrap;gap:8px}
+.card{flex:1 1 170px;max-width:240px;min-width:0;border:1px solid var(--rim);border-top:3px solid var(--tc,#3c4a46);background:#0b0f0f;padding:8px 10px;display:grid;gap:5px;align-content:start}
+.card .ct{display:flex;justify-content:space-between;gap:6px;align-items:baseline}
+.card .ct b{font-family:var(--display);font-size:22px;line-height:1;color:var(--text);font-weight:400}
+.card .cost{font-family:var(--display);font-size:22px;line-height:1;color:var(--amber);white-space:nowrap}
+.card .ck{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--tc,#8c938b)}
+.card dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:2px 6px;font-size:12px;color:#bdb6a5}
+.card dt{color:var(--muted)}
+.card dt.p{color:var(--cyan)}.card dt.h{color:var(--amber)}.card dt.f{color:#ff9b8e}
+.card dd{margin:0}
+.card .left{font-size:11.5px;color:var(--muted)}
+.card .btn{min-height:34px;padding:5px 8px;font-size:12px}
+.card.react{--tc:#ff7a66}
+.t-mov{--tc:#7fd4d0}.t-atq{--tc:#ff5a4a}.t-rec{--tc:#8fdc8f}.t-reg{--tc:#ffb347}.t-rea{--tc:#ff8a78}.t-pot{--tc:#b48cff}
+.catalog{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.catalog .card{max-width:none}
+.card.na{opacity:.45}
+details.cat summary{cursor:pointer;color:var(--amber);font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:4px 0}
+
+/* tiradas y amenaza */
+.rollbox,.threat,.choice{border:1px solid var(--amber-dim);background:#120f0a;padding:10px 12px;display:grid;gap:8px}
+.threat{border-color:var(--alert);background:#1a0d0b}
+.threat h3,.rollbox h3,.choice h3{font-family:var(--display);font-size:28px;line-height:1;color:var(--amber)}
+.threat h3{color:var(--alert)}
+.dice{display:flex;gap:6px;flex-wrap:wrap}
+.die{width:34px;height:34px;display:grid;place-items:center;border:1px solid #3c4a46;font-family:var(--display);font-size:26px;color:var(--muted);background:#0b0f0f}
+.die.ok{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 8px rgba(127,212,208,.35)}
+.outcome{font-size:14px}
+.outcome b{text-transform:uppercase;letter-spacing:.1em}
+.outcome .pleno{color:var(--cyan)}.outcome .parcial{color:var(--amber)}.outcome .fallo{color:#ff9b8e}
+@media (prefers-reduced-motion:no-preference){.die{animation:dieIn .35s ease-out backwards}.die:nth-child(2){animation-delay:.06s}.die:nth-child(3){animation-delay:.12s}.die:nth-child(4){animation-delay:.18s}}
+@keyframes dieIn{from{transform:rotate(-90deg) scale(.4);opacity:0}}
 </style>
 
 <div id="app"></div>
@@ -204,45 +253,107 @@ const CORR = [['puente','comedor'],['puente','enfermeria'],['comedor','pasilloA'
   ['pasilloA','laboratorio'],['pasilloA','criogenia'],['pasilloA','pasilloB'],['laboratorio','armeria'],['pasilloB','armeria'],['pasilloB','hidroponia'],
   ['pasilloB','ingenieria'],['pasilloB','control'],['ingenieria','reactor'],['control','bodega'],['reactor','lanzadera'],['bodega','lanzadera'],['criogenia','hidroponia']];
 const VENTS = [['comedor','armeria'],['enfermeria','control'],['laboratorio','ingenieria'],['hidroponia','bodega'],['armeria','reactor'],['puente','pasilloB'],['criogenia','lanzadera']];
-const CADJ={},VADJ={};
-for(const k of Object.keys(ROOMS)){CADJ[k]=[];VADJ[k]=[];}
+// conductos de mantenimiento: atajos cerrados hasta que insertas una tarjeta de acceso (la criatura siempre puede usarlos)
+const SHAFTS = [['comedor','hidroponia'],['laboratorio','control'],['criogenia','ingenieria'],['armeria','bodega']];
+const CADJ={},VADJ={},SADJ={};
+for(const k of Object.keys(ROOMS)){CADJ[k]=[];VADJ[k]=[];SADJ[k]=[];}
 for(const [a,b] of CORR){CADJ[a].push(b);CADJ[b].push(a);}
 for(const [a,b] of VENTS){VADJ[a].push(b);VADJ[b].push(a);}
+SHAFTS.forEach(([a,b],i)=>{SADJ[a].push({to:b,i});SADJ[b].push({to:a,i});});
 
 const DIFF = {
-  tripulante:{n:'Tripulante',x:'4 de Salud, 24 turnos de soporte vital. La criatura aguanta 2 disparos y crece en el turno 8.',hp:4,turns:24,chp:2,grow:8,panic:0},
-  superviviente:{n:'Superviviente',x:'3 de Salud, 20 turnos. La criatura aguanta 3 disparos y crece en el turno 6.',hp:3,turns:20,chp:3,grow:6,panic:0},
-  pesadilla:{n:'Pesadilla',x:'3 de Salud, 18 turnos, empiezas con 2 de Pánico. La criatura aguanta 4 disparos y crece en el turno 4.',hp:3,turns:18,chp:4,grow:4,panic:2}
+  tripulante:{n:'Tripulante',x:'7 de Salud y 24 turnos de soporte vital. La cría aguanta 3 de daño y empieza sin Sed.',hp:7,turns:24,chp:3,sed:0,panic:0},
+  superviviente:{n:'Superviviente',x:'6 de Salud y 20 turnos. La cría aguanta 4 de daño y empieza con 1 de Sed.',hp:6,turns:20,chp:4,sed:1,panic:0},
+  pesadilla:{n:'Pesadilla',x:'5 de Salud, 18 turnos y 2 de Pánico. La cría aguanta 5 de daño y empieza con 2 de Sed.',hp:5,turns:18,chp:5,sed:2,panic:2}
 };
+const ALIENTO = 6, HAND = 5, MAXINV = 6, MAXFOLLOW = 2, KEYS_TOTAL = 7, KEYS_DESTRUCT = 4;
+
+// ---------- la criatura: cría → juvenil → adulta ----------
+const STAGES = {
+  cria:{n:'Cría',dmg:1,x:'Pequeña y torpe. Solo lo que caza ella misma le da Sed.'},
+  juvenil:{n:'Juvenil',dmg:2,x:'Puede desvanecerse en las sombras y emboscarte.'},
+  adulta:{n:'Adulta',dmg:3,x:'Se mueve el doble y atraviesa los conductos sellados. Sus emboscadas hacen +1 de daño.'}
+};
+const SED_MAX = 10, SED_EVOLVE = {4:'juvenil',8:'adulta'};
+const INSTINCTS = ['cazar','cazar','cazar','cazar','acechar','acechar','emboscar','rugido','alimentarse','alimentarse','desvanecerse','desvanecerse'];
+// emboscadas: dónde reaparece cuando está oculta (cara joven y cara adulta)
+const AMBUSH = {
+  joven:[
+    {h:'Desde el techo',x:'Cae sobre ti: aparece en tu sala y ataca.',where:'you'},
+    {h:'Respiración en la rejilla',x:'Aparece en una sala unida a la tuya por conducto. +1 Pánico.',where:'vent',panic:1},
+    {h:'Rastro de sangre',x:'Aparece junto al tripulante más cercano y lo ataca.',where:'crew'},
+    {h:'Sombras',x:'Sigue oculta. +1 Pánico.',where:null,panic:1},
+    {h:'Hacia el ruido',x:'Aparece donde se oyó el último ruido.',where:'noise'},
+    {h:'Muy lejos',x:'Aparece en la sala más alejada de ti.',where:'far'}],
+  adulta:[
+    {h:'Desde el techo',x:'Cae sobre ti: aparece en tu sala y ataca.',where:'you'},
+    {h:'Detrás de ti',x:'Aparece en tu sala y ataca. +1 Pánico.',where:'you',panic:1},
+    {h:'Rastro de sangre',x:'Aparece junto al tripulante más cercano y lo ataca.',where:'crew'},
+    {h:'Garras en la rejilla',x:'Aparece en una sala unida a la tuya por conducto. +2 Pánico.',where:'vent',panic:2},
+    {h:'Hacia el ruido',x:'Aparece donde se oyó el último ruido.',where:'noise'},
+    {h:'Sombras',x:'Sigue oculta. +2 Pánico.',where:null,panic:2}]
+};
+
+// ---------- objetos y tripulación ----------
 const ITEMS = {
   detector:{n:'Detector de movimiento',x:'Ves a la criatura si está a 3 salas o menos.'},
-  lanzallamas:{n:'Lanzallamas improvisado',uses:3,x:'Si la criatura te ataca, la repeles. También puedes usarlo si está en tu sala.'},
+  lanzallamas:{n:'Lanzallamas improvisado',uses:3,x:'Cuando te ataque, puedes rechazarla sin daño. También lo usas si está en tu sala (1 Aliento).'},
   bengala:{n:'Bengala de señuelo',x:'Déjala en tu sala: la criatura irá hacia allí durante 3 turnos.'},
-  botiquin:{n:'Botiquín',x:'Recuperas 1 de Salud.'},
-  soldador:{n:'Soldador',uses:2,x:'Sella los conductos de tu sala. La criatura ya no puede usarlos.'},
-  adrenalina:{n:'Adrenalina',x:'+2 acciones este turno.'},
+  botiquin:{n:'Botiquín',x:'Recuperas 2 de Salud.'},
+  soldador:{n:'Soldador',uses:2,x:'Sella los conductos de tu sala. La criatura joven ya no puede usarlos.'},
+  adrenalina:{n:'Adrenalina',x:'+2 de Aliento este turno (gratis).'},
   sedante:{n:'Sedantes',x:'−3 de Pánico.'},
-  tarjeta:{n:'Tarjeta del capitán',x:'Permite activar la autodestrucción en el Reactor.'},
   celula:{n:'Célula de energía',part:true,x:'Pieza del cañón de plasma.'},
   bobina:{n:'Bobina de contención',part:true,x:'Pieza del cañón de plasma.'},
   carcasa:{n:'Carcasa y gatillo',part:true,x:'Pieza del cañón de plasma.'}
 };
 const PARTS=['celula','bobina','carcasa'];
 const CREW = {
-  okoye:{n:'Okoye',r:'Ingeniera',x:'Montar el cañón te cuesta 1 acción en vez de 2.'},
-  brandt:{n:'Brandt',r:'Médico',x:'Cuando descansas, también recuperas 1 de Salud.'},
-  sato:{n:'Sato',r:'Seguridad',x:'+1 a tus disparos con el cañón.'},
+  okoye:{n:'Okoye',r:'Ingeniera',x:'Montar el cañón cuesta 1 Aliento en vez de 3.'},
+  brandt:{n:'Brandt',r:'Médico',x:'Tus cartas de Recuperación con resultado pleno curan +1 de Salud.'},
+  sato:{n:'Sato',r:'Seguridad',x:'+1 de daño en tus ataques que acierten.'},
   vega:{n:'Vega',r:'Piloto',x:'La cuenta atrás de la autodestrucción dura 2 turnos más.'}
 };
-const INSTINCTS = ['cazar','cazar','cazar','cazar','acechar','acechar','emboscar','rugido','alimentarse','alimentarse'];
 const EVENTS = {
   apagon:{h:'Apagón parcial',x:'El detector de movimiento no funciona este turno.',run:()=>{G.flags.blind=true;}},
   vapor:{h:'Fuga de vapor',x:'Una sala queda bloqueada durante 2 turnos.',run:()=>{const opts=Object.keys(ROOMS).filter(r=>r!==G.pos&&r!=='lanzadera'&&r!==G.beast.room);const r=pick(opts);G.blocked={room:r,until:G.turn+1};return ROOMS[r].n;}},
-  radar:{h:'Eco en el radar interno',x:'Ves dónde está la criatura este turno.',run:()=>{G.flags.radar=true;}},
+  radar:{h:'Eco en el radar interno',x:'Ves dónde está la criatura este turno.',run:()=>{if(!G.beast.hidden)G.flags.radar=true;}},
   mensaje:{h:'Mensaje cifrado de la compañía',x:'«Prioridad: recuperar el espécimen. Tripulación prescindible.» +1 de Pánico.',run:()=>{panic(1);}},
   ventilacion:{h:'Reinicio de la ventilación',x:'La criatura se desplaza 2 salas por los conductos.',run:()=>{beastWander(2,true);}}
 };
-const MAXINV = 6, MAXFOLLOW = 2;
+
+// ---------- cartas de protocolo ----------
+// t: mov · atq · rec · reg · rea (reacción, en el turno de la criatura) · pot (potenciador)
+// q: copias · c: coste en Aliento · roll: se resuelve con una tirada de Nervio · o: resultados [pleno, parcial, fallo]
+const KIND = {mov:'Movimiento',atq:'Ataque',rec:'Recuperación',reg:'Registro',rea:'Reacción',pot:'Potenciador'};
+const CARDS = {
+  avanzar:{n:'Avanzar',t:'mov',q:2,c:0,roll:true,o:['2 pasos','1 paso','1 paso y +1 Pánico']},
+  correr:{n:'Correr',t:'mov',q:2,c:2,roll:true,o:['3 pasos','2 pasos','1 paso']},
+  escabullirse:{n:'Escabullirse',t:'mov',q:1,c:3,roll:true,o:['2 pasos sin que te ataque al cruzarte','1 paso sin que te ataque','1 paso']},
+  golpe:{n:'Golpe desesperado',t:'atq',q:1,c:0,roll:true,o:['1 de daño','1 de daño y +1 Pánico','+1 Pánico']},
+  arrojar:{n:'Arrojar objeto',t:'atq',q:1,c:1,roll:true,range:2,o:['Pierdes el objeto: 2 de daño a 2 salas o menos','Pierdes el objeto: 1 de daño a 1 sala o menos','Pierdes el objeto']},
+  plantar:{n:'Plantar cara',t:'atq',q:1,c:2,roll:true,o:['Huye 3 salas y se queda quieta un turno','Huye 2 salas','+1 Pánico']},
+  embestida:{n:'Embestida',t:'atq',q:1,c:4,roll:true,o:['2 de daño','1 de daño','Nada']},
+  certero:{n:'Golpe certero',t:'atq',q:1,c:6,roll:true,o:['3 de daño','2 de daño','1 de daño']},
+  respirar:{n:'Respirar hondo',t:'rec',q:1,c:0,roll:true,o:['−2 Pánico','−1 Pánico','Nada']},
+  calma:{n:'Mantener la calma',t:'rec',q:1,c:2,roll:true,o:['−3 Pánico','−2 Pánico','−1 Pánico']},
+  rescate:{n:'¡Por aquí!',t:'rec',q:1,c:2,roll:false,o:['Un tripulante de una sala contigua corre a la tuya y te sigue. −1 Pánico','','']},
+  descanso:{n:'Descanso profundo',t:'rec',q:1,c:5,roll:true,o:['+2 Salud y −2 Pánico','+1 Salud y −1 Pánico','−1 Pánico'],ends:true},
+  registrar:{n:'Registrar',t:'reg',q:2,c:1,roll:true,o:['Miras 2 objetos y te quedas 1','Coges el de arriba','Coges el de arriba y haces mucho ruido']},
+  rebuscar:{n:'Rebuscar en los restos',t:'reg',q:1,c:3,roll:true,o:['Recuperas uno de 2 objetos gastados','Recuperas un objeto gastado al azar','Nada']},
+  proteger:{n:'Ponerse delante',t:'rea',q:1,c:1,roll:true,crew:true,o:['Recibes tú el ataque con −2 de daño','Recibes tú el ataque con −1 de daño','Recibes tú todo el daño']},
+  esquivar:{n:'Esquivar',t:'rea',q:1,c:2,roll:true,o:['−2 de daño y te apartas 1 sala','−1 de daño y te apartas 1 sala','+1 Pánico']},
+  cubrirse:{n:'Cubrirse',t:'rea',q:2,c:2,roll:true,o:['Ningún daño','−2 de daño','−1 de daño (mínimo 1)']},
+  contra:{n:'Contraataque',t:'rea',q:1,c:4,roll:true,o:['Ningún daño y le haces 2','Ningún daño y le haces 1','Nada']},
+  trampa:{n:'Trampa improvisada',t:'rea',q:1,c:6,roll:false,o:['Ningún daño, le haces 1 y termina su turno','','']},
+  concentrarse:{n:'Concentrarse',t:'pot',q:2,c:0,roll:true,o:['+2 Aliento','+1 Aliento','Nada']},
+  distraccion:{n:'Distracción',t:'pot',q:2,c:3,roll:true,o:['Pierde tu rastro: se aleja 3 salas','Se aleja 2 salas','+1 Pánico']},
+  improvisar:{n:'Improvisar',t:'pot',q:2,c:3,roll:false,o:['Hasta el final del turno, los 4 también son éxitos','','']},
+  planificar:{n:'Planificar',t:'pot',q:1,c:4,roll:false,o:['Tu próxima tirada suma 1 éxito','','']},
+  pelos:{n:'Por los pelos',t:'pot',q:1,c:1,roll:false,o:['Tras cualquier tirada: repite los dados fallados','','']},
+  repetir:{n:'Otra vez',t:'pot',q:1,c:2,roll:false,o:['Tras resolver una carta, paga su coste y vuelve a tu mano','','']}
+};
+const PASSIVE=['pelos','repetir'];
 
 let G=null;
 const UI={diff:'superviviente',sel:null,confirmQuit:false};
@@ -250,40 +361,40 @@ const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 const d6=()=>1+Math.floor(Math.random()*6);
 const esc=s=>String(s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
-function log(m,cls=''){G.log.unshift({m,cls});if(G.log.length>160)G.log.length=160;}
+function log(m,cls=''){G.log.unshift({m,cls});if(G.log.length>180)G.log.length=180;}
 function panic(n){G.panic=Math.max(0,Math.min(10,G.panic+n));}
+function heal(n){G.hp=Math.min(G.maxHp,G.hp+n);}
 const R=r=>ROOMS[r].n;
 
 // ---------- utilidades del plano ----------
-function ventOpen(a,b){return !G.welded.includes(a)&&!G.welded.includes(b);}
-function neighbors(r,mode){ // mode: 'corr' | 'vent' | 'all'
+function ventOpen(a,b,beast){if(beast&&G.beast.stage==='adulta')return true;return !G.welded.includes(a)&&!G.welded.includes(b);}
+function shaftOpen(i){return G.shafts.includes(i);}
+function neighbors(r,mode,beast){ // mode: 'corr' | 'vent' | 'all'
   const out=[];
   if(mode!=='vent')out.push(...CADJ[r]);
-  if(mode!=='corr')out.push(...VADJ[r].filter(v=>ventOpen(r,v)));
-  return out;
+  if(mode!=='corr'){out.push(...VADJ[r].filter(v=>ventOpen(r,v,beast)));out.push(...SADJ[r].filter(s=>beast||shaftOpen(s.i)).map(s=>s.to));}
+  return [...new Set(out)];
 }
-function bfs(from,mode){
+function bfs(from,mode,beast){
   const dist={[from]:0},prev={},q=[from];
-  while(q.length){const r=q.shift();for(const n of neighbors(r,mode))if(!(n in dist)){dist[n]=dist[r]+1;prev[n]=r;q.push(n);}}
+  while(q.length){const r=q.shift();for(const n of neighbors(r,mode,beast))if(!(n in dist)){dist[n]=dist[r]+1;prev[n]=r;q.push(n);}}
   return {dist,prev};
 }
-function pathTo(from,to,mode){
-  const {dist,prev}=bfs(from,mode);if(!(to in dist))return null;
-  const p=[to];while(p[0]!==from)p.unshift(prev[p[0]]);return p;
-}
-function distance(a,b){const d=bfs(a,'all').dist[b];return d===undefined?99:d;}
+function pathTo(from,to,mode,beast){const {dist,prev}=bfs(from,mode,beast);if(!(to in dist))return null;const p=[to];while(p[0]!==from)p.unshift(prev[p[0]]);return p;}
+function distance(a,b){const d=bfs(a,'all',true).dist[b];return d===undefined?99:d;}
+function beastAt(r){return !G.beast.hidden&&G.beast.room===r;}
 function followers(){return G.crew.filter(c=>c.alive&&c.follow);}
 function crewIn(r){return G.crew.filter(c=>c.alive&&c.room===r);}
 function hasCrew(id){return G.crew.some(c=>c.id===id&&c.alive&&c.follow);}
 function has(id){return G.inv.some(i=>i.id===id);}
 function item(id){return G.inv.find(i=>i.id===id);}
 function dropItem(id){const i=G.inv.findIndex(x=>x.id===id);if(i>=0)G.inv.splice(i,1);}
-function beastSpeed(){return G.turn>=DIFF[G.diff].grow?2:1;}
+function spendItem(id){dropItem(id);if(!ITEMS[id].part)G.spent.push(id);}
+function beastSpeed(){return G.beast.stage==='adulta'?2:1;}
 function visible(){
-  if(G.beast.room===G.pos)return true;
-  if(G.flags.radar)return true;
-  if(has('detector')&&!G.flags.blind&&distance(G.pos,G.beast.room)<=3)return true;
-  return false;
+  if(G.beast.hidden)return false;
+  if(G.beast.room===G.pos||G.flags.radar)return true;
+  return has('detector')&&!G.flags.blind&&distance(G.pos,G.beast.room)<=3;
 }
 function markNoise(room,kind){G.noise=G.noise.filter(n=>n.room!==room);G.noise.push({room,kind,turn:G.turn});}
 function seeBeast(){if(visible())G.lastSeen={room:G.beast.room,turn:G.turn};}
@@ -291,13 +402,15 @@ function seeBeast(){if(visible())G.lastSeen={room:G.beast.room,turn:G.turn};}
 // ---------- partida ----------
 function newGame(diff){
   const df=DIFF[diff];
-  G={diff,turn:0,maxTurn:df.turns,ap:0,hp:df.hp,maxHp:df.hp,panic:df.panic,pos:'criogenia',inv:[],cannon:null,
-     crew:[],beast:{room:'laboratorio',hp:df.chp,maxHp:df.chp,stun:0,ambush:false},instincts:[],decoy:null,welded:[],noise:[],
-     decks:{},searched:{},destruct:null,lastSeen:{room:'laboratorio',turn:0},blocked:null,flags:{},events:shuffle(Object.keys(EVENTS)),
-     log:[],phase:'play',result:null,grewLogged:false};
-  // reparte objetos por la nave; las piezas y la tarjeta tienen sala fija
-  const fixed={reactor:['celula'],laboratorio:['bobina'],armeria:['carcasa'],puente:['tarjeta']};
-  const pool=shuffle(['detector','lanzallamas','bengala','bengala','botiquin','botiquin','soldador','adrenalina','sedante','botiquin']);
+  G={diff,turn:0,maxTurn:df.turns,aliento:0,hp:df.hp,maxHp:df.hp,panic:df.panic,pos:'criogenia',inv:[],spent:[],cannon:null,
+     crew:[],beast:{room:'laboratorio',hp:df.chp,maxHp:df.chp,stun:0,ambush:false,stage:'cria',sed:0,hidden:false,lost:0},
+     instincts:[],ambushDeck:[],decoy:null,welded:[],noise:[],decks:{},searched:{},destruct:null,lastSeen:{room:'laboratorio',turn:0},
+     blocked:null,flags:{},events:shuffle(Object.keys(EVENTS)),keys:0,shafts:[],
+     hand:['avanzar','registrar'],used:{},steps:null,roll:null,threat:null,choice:null,lastPlayed:null,
+     log:[],phase:'play',result:null};
+  // objetos por la nave: las piezas del cañón tienen sala fija y las tarjetas de acceso van mezcladas con el resto
+  const fixed={reactor:['celula'],laboratorio:['bobina'],armeria:['carcasa']};
+  const pool=shuffle(['detector','lanzallamas','bengala','bengala','botiquin','botiquin','soldador','adrenalina','sedante','botiquin',...Array(KEYS_TOTAL).fill('acceso')]);
   const rooms=Object.keys(ROOMS).filter(r=>r!=='lanzadera'&&!r.startsWith('pasillo'));
   for(const r of Object.keys(ROOMS))G.decks[r]=[...(fixed[r]||[])];
   pool.forEach((it,i)=>G.decks[rooms[i%rooms.length]].push(it));
@@ -305,284 +418,399 @@ function newGame(diff){
   const startRooms=shuffle(Object.keys(ROOMS).filter(r=>!['criogenia','laboratorio','lanzadera'].includes(r)));
   Object.keys(CREW).forEach((id,i)=>G.crew.push({id,room:startRooms[i],follow:false,alive:true}));
   UI.sel='criogenia';UI.confirmQuit=false;
-  log('Despiertas en Criogenia. Las alarmas llevan horas sonando. Algo salió del Laboratorio.');
-  log('Objetivo: monta el cañón de plasma, expulsa a la criatura por la esclusa o destruye la nave y huye en la lanzadera.');
+  log('Despiertas en Criogenia. Las alarmas llevan horas sonando. Algo salió del Laboratorio, y todavía es pequeño.');
+  log('Objetivo: abátela, expúlsala por la esclusa o reúne 4 tarjetas de acceso, activa la autodestrucción en el Puente y huye en la lanzadera.');
+  if(df.sed)feed(df.sed,true,true);
   startTurn();
 }
 function startTurn(){
-  G.turn++;G.flags={};
+  G.turn++;G.flags={};G.steps=null;G.used={};G.lastPlayed=null;
   if(G.blocked&&G.turn>G.blocked.until)G.blocked=null;
   G.noise=G.noise.filter(n=>G.turn-n.turn<=2);
   log(`Turno ${G.turn} · soporte vital ${G.maxTurn-G.turn+1}`,'turn');
   if(G.turn>G.maxTurn){lose('oxigeno');return;}
-  if(G.turn===DIFF[G.diff].grow){log('Encuentras una muda de piel enorme en el suelo. La criatura ha crecido: ahora se mueve el doble de rápido.','bad');panic(1);}
+  // el hambre: desde juvenil, la Sed sube sola cada 3 turnos
+  if(G.turn%3===0)feed(1,false);
   if(G.turn>1&&G.turn%4===0){
     if(!G.events.length)G.events=shuffle(Object.keys(EVENTS));
     const id=G.events.pop();const r=EVENTS[id].run();
     log(`Aviso de a bordo · ${EVENTS[id].h}${r?': '+r:''}. ${EVENTS[id].x}`,'bad');
   }
-  G.ap=G.panic>=7?2:3;
-  if(G.panic>=7)log('El pánico te paraliza: solo tienes 2 acciones.','bad');
-  seeBeast();
-  check();
+  G.aliento=G.panic>=7?ALIENTO-2:ALIENTO;
+  if(G.panic>=7)log('El pánico te atenaza: solo tienes 4 de Aliento.','bad');
+  seeBeast();check();
 }
 function check(){
   if(!G||G.phase==='over')return;
   if(G.hp<=0)lose('muerte');
   else if(G.panic>=10)lose('panico');
 }
-function lose(reason){G.phase='over';G.result={win:false,reason};}
+function lose(reason){G.phase='over';G.result={win:false,reason};G.threat=null;G.roll=null;G.choice=null;}
 function win(kind){
-  G.phase='over';
-  const base={canon:12,esclusa:10,huida:6}[kind];
+  G.phase='over';G.threat=null;G.roll=null;G.choice=null;
+  const base={canon:12,abatida:12,esclusa:10,huida:7}[kind];
   const alive=kind==='huida'?followers().length:G.crew.filter(c=>c.alive).length;
-  const rows=[[{canon:'Criatura abatida con el cañón',esclusa:'Criatura expulsada al vacío',huida:'Huida en la lanzadera'}[kind],base],
-    [`Tripulantes que sobreviven (${alive})`,alive*3],[`Salud restante (${G.hp})`,G.hp*2],
+  const rows=[[{canon:'Criatura abatida',abatida:'Criatura abatida',esclusa:'Criatura expulsada al vacío',huida:'Huida en la lanzadera'}[kind],base],
+    [`Fase de la criatura (${STAGES[G.beast.stage].n})`,{cria:0,juvenil:2,adulta:5}[G.beast.stage]],
+    [`Tripulantes que sobreviven (${alive})`,alive*3],[`Salud restante (${G.hp})`,G.hp],
     ['Soporte vital sobrante',Math.floor((G.maxTurn-G.turn)/2)],[`Pánico (${G.panic})`,-Math.floor(G.panic/2)]];
   G.result={win:true,kind,rows,total:rows.reduce((s,r)=>s+r[1],0)};
 }
 
-// ---------- acciones del jugador ----------
-const busy=()=>G.phase!=='play';
-function spend(n){if(G.ap<n)return false;G.ap-=n;return true;}
-function canMove(to){
-  if(busy()||G.ap<1)return null;
+// ---------- Sed y evolución ----------
+// en fase de cría solo cuenta lo que caza ella misma (direct)
+function feed(n,direct,quiet){
+  const B=G.beast;if(B.stage==='cria'&&!direct)return;
+  for(let k=0;k<n&&B.sed<SED_MAX;k++){B.sed++;const next=SED_EVOLVE[B.sed];if(next)evolve(next,quiet);}
+}
+function evolve(stage,quiet){
+  const B=G.beast;B.stage=stage;
+  if(stage==='juvenil'){if(!quiet){log('Encuentras una muda de piel en el suelo. La criatura ya es JUVENIL: ahora puede desvanecerse y emboscarte.','bad');panic(1);}return;}
+  // adulta: más Vida, se cura del todo y la baraja de emboscadas cambia de cara
+  B.maxHp=DIFF[G.diff].chp*2+2;B.hp=B.maxHp;G.ambushDeck=[];
+  if(!quiet){log(`Un rugido hace vibrar el casco. La criatura es ADULTA: ${B.maxHp} de Vida, se mueve el doble y atraviesa los conductos sellados.`,'bad');panic(2);}
+}
+
+// ---------- cartas ----------
+const busy=()=>G.phase!=='play'||!!G.roll||!!G.choice||!!G.threat;
+function inHand(id){return G.hand.filter(h=>h===id).length;}
+function copiesLeft(id){return CARDS[id].q-inHand(id)-(G.used[id]||0);}
+function canPrepare(id){return !busy()&&G.hand.length<HAND&&copiesLeft(id)>0&&G.aliento>=CARDS[id].c;}
+function prepare(id){if(!canPrepare(id))return;G.aliento-=CARDS[id].c;G.hand.push(id);log(`Preparas «${CARDS[id].n}» (${CARDS[id].c} Aliento).`);}
+function discardCard(id){const i=G.hand.indexOf(id);if(i>=0){G.hand.splice(i,1);G.used[id]=(G.used[id]||0)+1;}}
+function attackRange(id){return id==='arrojar'?(G.cannon?2:2):(G.cannon&&G.cannon.charges>0?1:0);}
+function inRange(range){if(!visible())return false;const r=G.beast.room;if(r===G.pos)return true;if(range<1)return false;const d=bfs(G.pos,'corr').dist[r];return d!==undefined&&d<=range;}
+function canPlay(id){
+  if(busy()||!G.hand.includes(id))return false;
+  const d=CARDS[id];
+  if(d.t==='rea'||PASSIVE.includes(id))return false;
+  if(d.t==='atq'){if(!inRange(attackRange(id)))return false;if(id==='arrojar'&&!G.inv.some(i=>!ITEMS[i.id].part))return false;}
+  if(id==='rescate')return CADJ[G.pos].some(r=>crewIn(r).some(c=>!c.follow))&&followers().length<MAXFOLLOW;
+  if(id==='rebuscar')return G.spent.length>0;
+  return true;
+}
+function play(id){
+  if(!canPlay(id))return;
+  if(id==='arrojar'){const opts=[...new Set(G.inv.filter(i=>!ITEMS[i.id].part).map(i=>i.id))];G.choice={title:'¿Qué arrojas?',kind:'arrojar',opts:opts.map(v=>({v,l:ITEMS[v].n}))};return;}
+  startCard(id,{});
+}
+function startCard(id,ctx){
+  discardCard(id);
+  const d=CARDS[id];
+  if(!d.roll){applyCard(id,'pleno',ctx);return;}
+  G.roll={id,ctx,dice:rollDice(),rerolled:false};
+}
+// tirada de Nervio: un dado menos por cada 3 de Pánico; éxito con 5+ (4+ con Improvisar)
+function nerve(){return Math.max(1,4-Math.floor(G.panic/3));}
+function rollDice(){return Array.from({length:nerve()},d6);}
+function target(){return G.flags.improv||G.flags.improvNext?4:5;}
+function successes(r){return r.dice.filter(x=>x>=target()).length+(G.flags.plan||0);}
+function outcomeOf(r){const s=successes(r);return s>=2?'pleno':s===1?'parcial':'fallo';}
+function rerollFailed(){
+  const r=G.roll;if(!r||r.rerolled||!G.hand.includes('pelos'))return;
+  discardCard('pelos');r.dice=r.dice.map(x=>x>=target()?x:d6());r.rerolled=true;log('Por los pelos: repites los dados fallados.','good');
+}
+function acceptRoll(){
+  const r=G.roll;if(!r)return;
+  const out=outcomeOf(r);G.roll=null;
+  G.flags.improvNext=false;G.flags.plan=0;
+  applyCard(r.id,out,r.ctx);
+}
+function applyCard(id,out,ctx){
+  const d=CARDS[id],k=['pleno','parcial','fallo'].indexOf(out);
+  log(`${d.n}: ${out.toUpperCase()}${d.o[k]?' — '+d.o[k]:''}.`,out==='fallo'?'bad':'good');
+  if(d.t==='rea'){resolveReaction(id,out);return;}
+  const fx=EFFECTS[id];if(fx)fx(out,ctx);
+  if(G.phase==='over')return;
+  if(d.c>0&&!d.ends)G.lastPlayed=id;
+  seeBeast();check();
+  if(d.ends&&G.phase==='play'&&!G.choice)endTurn();
+}
+function giveSteps(n,safe){G.steps={n:(G.steps?.n||0)+n,safe:!!safe||!!G.steps?.safe};}
+function hurtBeast(n,how){
+  const B=G.beast;if(n<=0)return;
+  let dmg=n+(hasCrew('sato')?1:0);
+  if(G.cannon&&G.cannon.charges>0&&how!=='arrojar'){G.cannon.charges--;dmg+=2;log(`El cañón de plasma escupe fuego (+2 de daño, quedan ${G.cannon.charges} cargas).`);}
+  B.hp-=dmg;markNoise(B.room,'chillido');
+  log(`Le haces ${dmg} de daño. Le queda ${Math.max(0,B.hp)} de ${B.maxHp} de Vida.`,'good');
+  if(B.hp<=0){log('La criatura se desploma entre espasmos. Se acabó.','good');win('abatida');return;}
+  beastRetreat(2);log('Huye herida.','good');
+}
+const EFFECTS = {
+  avanzar:o=>{giveSteps(o==='pleno'?2:1);if(o==='fallo')panic(1);},
+  correr:o=>giveSteps(o==='pleno'?3:o==='parcial'?2:1),
+  escabullirse:o=>giveSteps(o==='pleno'?2:1,o!=='fallo'),
+  golpe:o=>{if(o!=='fallo')hurtBeast(1);if(o!=='pleno')panic(1);},
+  arrojar:(o,c)=>{spendItem(c.item);const range=o==='pleno'?2:1;if(o!=='fallo'&&inRange(range))hurtBeast(o==='pleno'?2:1,'arrojar');else if(o!=='fallo')log('No llega hasta ella.');},
+  plantar:o=>{if(o==='fallo'){panic(1);return;}beastRetreat(o==='pleno'?3:2);if(o==='pleno')G.beast.stun=1;},
+  embestida:o=>{if(o!=='fallo')hurtBeast(o==='pleno'?2:1);},
+  certero:o=>hurtBeast(o==='pleno'?3:o==='parcial'?2:1),
+  respirar:o=>{if(o==='fallo')return;panic(o==='pleno'?-2:-1);if(o==='pleno'&&hasCrew('brandt'))heal(1);},
+  calma:o=>{panic(o==='pleno'?-3:o==='parcial'?-2:-1);if(o==='pleno'&&hasCrew('brandt'))heal(1);},
+  rescate:()=>{const c=CADJ[G.pos].flatMap(r=>crewIn(r)).find(c=>!c.follow);if(c){c.room=G.pos;c.follow=true;log(`${CREW[c.id].n} corre hasta ti y se une.`,'good');}panic(-1);},
+  descanso:o=>{if(o==='pleno'){heal(2+(hasCrew('brandt')?1:0));panic(-2);}else if(o==='parcial'){heal(1);panic(-1);}else panic(-1);},
+  registrar:o=>doSearch(o),
+  rebuscar:o=>{if(o==='fallo'||!G.spent.length)return;if(o==='parcial'){const i=Math.floor(Math.random()*G.spent.length);takeItem(G.spent.splice(i,1)[0]);return;}
+    const opts=[...new Set(shuffle([...G.spent]).slice(0,2))];if(opts.length===1){G.spent.splice(G.spent.indexOf(opts[0]),1);takeItem(opts[0]);return;}G.choice={title:'Rebuscas entre los restos',kind:'rebuscar',opts:opts.map(v=>({v,l:ITEMS[v].n}))};},
+  concentrarse:o=>{if(o!=='fallo')G.aliento+=o==='pleno'?2:1;},
+  distraccion:o=>{if(o==='fallo'){panic(1);return;}if(G.beast.hidden)return;beastRetreat(o==='pleno'?3:2);G.beast.lost=1;markNoise(G.pos,'tú');},
+  improvisar:()=>{G.flags.improv=true;},
+  planificar:()=>{G.flags.plan=(G.flags.plan||0)+1;}
+};
+// recuperar la última carta pagando su coste (carta «Otra vez»)
+function canRepeat(){return !busy()&&G.hand.includes('repetir')&&G.lastPlayed&&G.aliento>=CARDS[G.lastPlayed].c&&G.hand.length<HAND+1;}
+function repeatCard(){if(!canRepeat())return;const id=G.lastPlayed;discardCard('repetir');G.aliento-=CARDS[id].c;G.used[id]=Math.max(0,(G.used[id]||1)-1);G.hand.push(id);G.lastPlayed=null;log(`Otra vez: «${CARDS[id].n}» vuelve a tu mano.`,'good');}
+
+// ---------- registrar ----------
+function takeItem(id){
+  if(id==='acceso'){G.keys++;log(`Encuentras una tarjeta de acceso (${G.keys}).`,'good');return true;}
+  if(G.inv.length>=MAXINV&&!PARTS.includes(id)){log(`Encuentras ${ITEMS[id].n}, pero no puedes cargar más. Lo dejas aquí.`,'bad');G.decks[G.pos].push(id);return false;}
+  G.inv.push({id,uses:ITEMS[id].uses||0});log(`Encuentras: ${ITEMS[id].n}.`,'good');return true;
+}
+function doSearch(out){
+  markNoise(G.pos,'tú');G.madeNoise=G.pos;G.searched[G.pos]=true;
+  if(out==='fallo')G.loud=G.pos;
+  const deck=G.decks[G.pos];
+  if(!deck.length){log(`En ${R(G.pos)} no queda nada útil.`);return;}
+  if(out==='pleno'&&deck.length>=2){const a=deck.pop(),b=deck.pop();G.choice={title:'¿Con qué te quedas?',kind:'search',opts:[a,b].map(v=>({v,l:v==='acceso'?'Tarjeta de acceso':ITEMS[v].n})),rest:[a,b]};return;}
+  takeItem(deck.pop());
+}
+function choose(v){
+  const c=G.choice;if(!c||!c.opts.some(o=>o.v===v))return;G.choice=null;
+  if(c.kind==='search'){const other=c.rest.find((x,i)=>x!==v||c.rest.indexOf(v)!==i);takeItem(v);if(other)G.decks[G.pos].push(other);}
+  if(c.kind==='rebuscar'){G.spent.splice(G.spent.indexOf(v),1);takeItem(v);}
+  if(c.kind==='arrojar'){startCard('arrojar',{item:v});return;}
+  check();
+}
+
+// ---------- moverse ----------
+function canStep(to){
+  if(busy()||!G.steps||G.steps.n<1)return null;
   if(G.blocked&&G.blocked.room===to)return null;
   if(CADJ[G.pos].includes(to))return 'corr';
+  if(SADJ[G.pos].some(s=>s.to===to&&shaftOpen(s.i)))return 'shaft';
   if(VADJ[G.pos].includes(to)&&ventOpen(G.pos,to))return 'vent';
   return null;
 }
-function move(to){
-  const how=canMove(to);if(!how)return;
-  spend(1);
-  const from=G.pos;G.pos=to;UI.sel=to;
-  if(how==='vent'){
-    panic(1);
-    const left=followers();left.forEach(c=>c.follow=false);
-    log(`Te arrastras por el conducto hasta ${R(to)} (+1 Pánico)${left.length?'. Tus compañeros no caben y se quedan atrás':''}.`);
-  } else {
-    followers().forEach(c=>c.room=to);
-    log(`Vas a ${R(to)}${followers().length?' con '+followers().map(c=>CREW[c.id].n).join(' y '):''}.`);
-  }
-  if(G.beast.room===to){
-    log('¡La criatura está aquí! Te salta encima desde la oscuridad.','bad');
-    attackPlayer(true);
+function step(to){
+  const how=canStep(to);if(!how)return;
+  const safe=G.steps.safe;G.steps.n--;G.prevPos=G.pos;G.pos=to;UI.sel=to;
+  if(how==='vent'){panic(1);const left=followers();left.forEach(c=>c.follow=false);log(`Te arrastras por el conducto hasta ${R(to)} (+1 Pánico)${left.length?'. Tus compañeros no caben y se quedan atrás':''}.`);}
+  else{followers().forEach(c=>c.room=to);log(`${how==='shaft'?'Cruzas el conducto de mantenimiento':'Vas'} hasta ${R(to)}${followers().length?' con '+followers().map(c=>CREW[c.id].n).join(' y '):''}.`);}
+  if(G.steps.n<1)G.steps=null;
+  if(beastAt(to)){
+    if(safe){log('Te cruzas con la criatura, pero consigues pasar sin que te toque.','good');}
+    else{log('¡La criatura está aquí! Se lanza sobre ti.','bad');beginThreat('you',!!G.beast.ambush,'play');}
   }
   seeBeast();check();
 }
-function canSearch(){return !busy()&&G.ap>=1;}
-function search(){
-  if(!canSearch())return;
-  spend(1);markNoise(G.pos,'tú');G.madeNoise=G.pos;G.searched[G.pos]=true;
-  const deck=G.decks[G.pos];
-  if(!deck.length){log(`Registras ${R(G.pos)} a fondo. No queda nada útil.`);return;}
-  if(G.inv.length>=MAXINV&&!PARTS.includes(deck[deck.length-1])){log('Encuentras algo, pero no puedes cargar más. Usa o suelta un objeto.','bad');return;}
-  const id=deck.pop();
-  G.inv.push({id,uses:ITEMS[id].uses||0});
-  log(`Encuentras: ${ITEMS[id].n}.`,'good');
-}
-function recruit(id){
-  const c=G.crew.find(x=>x.id===id);
-  if(busy()||!c||!c.alive||c.room!==G.pos||c.follow||followers().length>=MAXFOLLOW)return;
-  c.follow=true;log(`${CREW[id].n} se une a ti.`,'good');
-}
+function canInsertKey(i){return !busy()&&G.keys>0&&!shaftOpen(i)&&SHAFTS[i].includes(G.pos);}
+function insertKey(i){if(!canInsertKey(i))return;G.keys--;G.shafts.push(i);const [a,b]=SHAFTS[i];log(`Insertas una tarjeta: se abre el conducto de mantenimiento ${R(a)} ↔ ${R(b)}.`,'good');}
+
+// ---------- acciones de sala (cuestan Aliento) ----------
+function spend(n){if(G.aliento<n)return false;G.aliento-=n;return true;}
+function recruit(id){const c=G.crew.find(x=>x.id===id);if(busy()||!c||!c.alive||c.room!==G.pos||c.follow||followers().length>=MAXFOLLOW)return;c.follow=true;log(`${CREW[id].n} se une a ti.`,'good');}
 function dismiss(id){const c=G.crew.find(x=>x.id===id);if(!c||!c.follow)return;c.follow=false;log(`${CREW[id].n} se queda en ${R(c.room)}.`);}
-function assembleCost(){return hasCrew('okoye')?1:2;}
-function canAssemble(){return !busy()&&G.pos==='ingenieria'&&PARTS.every(has)&&G.ap>=assembleCost();}
-function assemble(){
-  if(!canAssemble())return;
-  spend(assembleCost());PARTS.forEach(dropItem);
-  G.cannon={charges:4};markNoise(G.pos,'tú');G.madeNoise=G.pos;
-  log('Sueldas la última pieza. El cañón de plasma zumba con 4 cargas.','good');
-}
-function canFire(){
-  if(busy()||!G.cannon||G.cannon.charges<=0||G.ap<1||!visible())return false;
-  const r=G.beast.room;
-  return r===G.pos||CADJ[G.pos].includes(r);
-}
-function fire(){
-  if(!canFire())return;
-  spend(1);G.cannon.charges--;markNoise(G.pos,'tú');G.madeNoise=G.pos;
-  const bonus=hasCrew('sato')?1:0,roll=d6()+bonus;
-  if(roll>=4){
-    G.beast.hp--;
-    log(`Disparas (${roll}${bonus?' con Sato':''}): ¡impacto! La criatura chilla.`,'good');
-    if(G.beast.hp<=0){log('La criatura se desploma entre espasmos. Se acabó.','good');win('canon');return;}
-    beastRetreat(3);G.beast.stun=1;log('Huye herida hacia los conductos.','good');
-  } else {
-    log(`Disparas (${roll}${bonus?' con Sato':''}) y fallas. Ahora sabe dónde estás.`,'bad');
-  }
-  seeBeast();
-}
-function canRecharge(){return !busy()&&G.cannon&&G.cannon.charges<4&&G.pos==='reactor'&&G.ap>=1;}
-function recharge(){if(!canRecharge())return;spend(1);G.cannon.charges=4;log('Recargas el cañón en el reactor: 4 cargas.','good');}
-function canFlame(){return !busy()&&G.ap>=1&&G.beast.room===G.pos&&(item('lanzallamas')||{}).uses>0;}
-function flame(){
-  if(!canFlame())return;
-  spend(1);const it=item('lanzallamas');it.uses--;if(it.uses<=0){dropItem('lanzallamas');log('El lanzallamas se queda sin combustible.');}
-  beastRetreat(2);log('Una lengua de fuego llena la sala. La criatura retrocede.','good');seeBeast();
+function assembleCost(){return hasCrew('okoye')?1:3;}
+function canAssemble(){return !busy()&&G.pos==='ingenieria'&&PARTS.every(has)&&G.aliento>=assembleCost();}
+function assemble(){if(!canAssemble())return;spend(assembleCost());PARTS.forEach(dropItem);G.cannon={charges:3};markNoise(G.pos,'tú');G.madeNoise=G.pos;log('Sueldas la última pieza. El cañón de plasma añade +2 de daño a tus ataques y te deja golpear desde una sala contigua (3 cargas).','good');}
+function canRecharge(){return !busy()&&G.cannon&&G.cannon.charges<3&&G.pos==='reactor'&&G.aliento>=1;}
+function recharge(){if(!canRecharge())return;spend(1);G.cannon.charges=3;log('Recargas el cañón en el reactor: 3 cargas.','good');}
+function canScan(){return !busy()&&(G.pos==='puente'||G.pos==='control')&&G.aliento>=1;}
+function scan(){
+  if(!canScan())return;spend(1);
+  if(G.beast.hidden){const far=Object.keys(ROOMS).filter(r=>distance(G.pos,r)>=2&&r!=='lanzadera');reappear(pick(far));log(`El escáner la obliga a moverse: aparece en ${R(G.beast.room)}.`,'good');}
+  else log(`El escáner interno la localiza en ${R(G.beast.room)}.`,'good');
+  G.flags.radar=true;seeBeast();
 }
 function canUse(id){
   if(busy()||!has(id))return false;
-  const zero=['adrenalina'];
-  if(!zero.includes(id)&&G.ap<1)return false;
+  if(id!=='adrenalina'&&G.aliento<1)return false;
   if(id==='botiquin')return G.hp<G.maxHp;
   if(id==='sedante')return G.panic>0;
-  if(id==='bengala')return true;
+  if(id==='bengala'||id==='adrenalina')return true;
   if(id==='soldador')return !G.welded.includes(G.pos)&&VADJ[G.pos].length>0;
-  if(id==='adrenalina')return true;
-  if(id==='lanzallamas')return canFlame();
+  if(id==='lanzallamas')return beastAt(G.pos);
   return false;
 }
 function useItem(id){
   if(!canUse(id))return;
-  if(id==='lanzallamas'){flame();return;}
   if(id!=='adrenalina')spend(1);
-  if(id==='botiquin'){G.hp++;dropItem(id);log('Te vendas las heridas: +1 Salud.','good');}
-  if(id==='sedante'){panic(-3);dropItem(id);log('Los sedantes te calman: −3 Pánico.','good');}
-  if(id==='adrenalina'){G.ap+=2;dropItem(id);log('Te inyectas adrenalina: +2 acciones.','good');}
-  if(id==='bengala'){G.decoy={room:G.pos,turns:3};dropItem(id);log(`Dejas una bengala encendida en ${R(G.pos)}.`,'good');}
-  if(id==='soldador'){const it=item('soldador');it.uses--;G.welded.push(G.pos);if(it.uses<=0)dropItem('soldador');log(`Sellas los conductos de ${R(G.pos)}.`,'good');}
+  if(id==='botiquin'){heal(2);spendItem(id);log('Te vendas las heridas: +2 Salud.','good');}
+  if(id==='sedante'){panic(-3);spendItem(id);log('Los sedantes te calman: −3 Pánico.','good');}
+  if(id==='adrenalina'){G.aliento+=2;spendItem(id);log('Te inyectas adrenalina: +2 Aliento.','good');}
+  if(id==='bengala'){G.decoy={room:G.pos,turns:3};spendItem(id);log(`Dejas una bengala encendida en ${R(G.pos)}.`,'good');}
+  if(id==='soldador'){const it=item('soldador');it.uses--;G.welded.push(G.pos);if(it.uses<=0)spendItem('soldador');log(`Sellas los conductos de ${R(G.pos)}.`,'good');}
+  if(id==='lanzallamas'){const it=item('lanzallamas');it.uses--;if(it.uses<=0){spendItem('lanzallamas');log('El lanzallamas se queda sin combustible.');}beastRetreat(2);log('Una lengua de fuego llena la sala. La criatura retrocede.','good');}
+  seeBeast();
 }
-function drop(id){if(busy())return;const i=G.inv.findIndex(x=>x.id===id);if(i<0)return;const [it]=G.inv.splice(i,1);G.decks[G.pos].unshift(it.id);log(`Dejas ${ITEMS[it.id].n} en ${R(G.pos)}.`);}
-function canAirlock(){return !busy()&&G.pos==='control'&&G.ap>=1&&crewIn('bodega').length===0;}
+function drop(id){if(busy())return;const i=G.inv.findIndex(x=>x.id===id);if(i<0)return;const [it]=G.inv.splice(i,1);G.decks[G.pos].push(it.id);log(`Dejas ${ITEMS[it.id].n} en ${R(G.pos)}.`);}
+function canAirlock(){return !busy()&&G.pos==='control'&&G.aliento>=1&&crewIn('bodega').length===0;}
 function airlock(){
-  if(!canAirlock())return;
-  spend(1);
-  if(G.beast.room==='bodega'){log('Pulsas el botón. La compuerta se abre y la criatura sale despedida al vacío.','good');win('esclusa');return;}
-  log('La esclusa se abre al vacío… pero en la bodega no había nada. La criatura ha oído el estruendo.','bad');
-  markNoise('control','tú');G.madeNoise='control';
+  if(!canAirlock())return;spend(1);
+  if(beastAt('bodega')){log('Pulsas el botón. La compuerta se abre y la criatura sale despedida al vacío.','good');win('esclusa');return;}
+  log('La esclusa se abre al vacío… pero en la bodega no había nada. La criatura ha oído el estruendo.','bad');markNoise('control','tú');G.madeNoise='control';
 }
-function destructTime(){return 5+(hasCrew('vega')?2:0);}
-function canDestruct(){return !busy()&&G.pos==='reactor'&&has('tarjeta')&&!G.destruct&&G.ap>=1;}
-function destruct(){
-  if(!canDestruct())return;
-  spend(1);G.destruct=destructTime();
-  log(`Introduces la tarjeta del capitán. Autodestrucción en ${G.destruct} turnos. Corre a la lanzadera.`,'bad');
-  panic(1);
-}
-function canLaunch(){return !busy()&&G.pos==='lanzadera'&&G.destruct!==null&&G.ap>=1&&G.beast.room!=='lanzadera';}
+function destructTime(){return 4+(hasCrew('vega')?2:0);}
+function canDestruct(){return !busy()&&G.pos==='puente'&&G.keys>=KEYS_DESTRUCT&&G.destruct===null&&G.aliento>=1;}
+function destruct(){if(!canDestruct())return;spend(1);G.keys-=KEYS_DESTRUCT;G.destruct=destructTime();log(`Insertas ${KEYS_DESTRUCT} tarjetas de acceso en la consola del Puente. Autodestrucción en ${G.destruct} turnos. Corre a la lanzadera.`,'bad');panic(1);}
+function canLaunch(){return !busy()&&G.pos==='lanzadera'&&G.destruct!==null&&G.aliento>=1&&!beastAt('lanzadera');}
 function launch(){if(!canLaunch())return;spend(1);log('La lanzadera se separa. Detrás de ti, el Erebus se convierte en una estrella.','good');win('huida');}
-function canRest(){return !busy()&&G.ap>=1;}
-function rest(){
-  if(!canRest())return;
-  G.ap=0;panic(-2);
-  let msg='Te obligas a respirar despacio: −2 Pánico';
-  if(hasCrew('brandt')&&G.hp<G.maxHp){G.hp++;msg+=' y Brandt te cura +1 Salud';}
-  log(msg+'.','good');
-  endTurn();
-}
 
 // ---------- la criatura ----------
 function humansAt(r){return (G.pos===r?1:0)+crewIn(r).length;}
 function nearestHuman(onlyCrew){
-  const {dist}=bfs(G.beast.room,'all');
+  const {dist}=bfs(G.beast.room,'all',true);
   let best=null,bd=99;
   const cands=[...(onlyCrew?[]:[G.pos]),...G.crew.filter(c=>c.alive&&!c.follow).map(c=>c.room)];
   for(const r of cands){const d=dist[r]??99;if(d<bd){bd=d;best=r;}}
   return best||G.pos;
 }
 function beastStep(to,how){
-  const from=G.beast.room;G.beast.room=to;
+  G.beast.room=to;
   if(CADJ[G.pos].includes(to)||VADJ[G.pos].includes(to)||to===G.pos)markNoise(to,how==='vent'?'conductos':'pasos');
-  return from;
 }
 function beastWander(steps,ventsOnly){
-  for(let i=0;i<steps;i++){
-    const ns=neighbors(G.beast.room,ventsOnly?'vent':'all');if(!ns.length)return;
-    beastStep(pick(ns),ventsOnly?'vent':'all');
-    if(humansAt(G.beast.room))return;
-  }
+  if(G.beast.hidden)return;
+  for(let i=0;i<steps;i++){const ns=neighbors(G.beast.room,ventsOnly?'vent':'all',true);if(!ns.length)return;beastStep(pick(ns),ventsOnly?'vent':'all');if(humansAt(G.beast.room))return;}
 }
 function beastRetreat(n){
-  for(let i=0;i<n;i++){
-    const ns=neighbors(G.beast.room,'all');if(!ns.length)return;
-    ns.sort((a,b)=>distance(G.pos,b)-distance(G.pos,a));
-    G.beast.room=ns[0];
-  }
+  for(let i=0;i<n;i++){const ns=neighbors(G.beast.room,'all',true);if(!ns.length)return;ns.sort((a,b)=>distance(G.pos,b)-distance(G.pos,a));G.beast.room=ns[0];}
 }
+function reappear(room){G.beast.hidden=false;G.beast.room=room;}
+function drawAmbush(){
+  const side=G.beast.stage==='adulta'?'adulta':'joven';
+  if(!G.ambushDeck.length)G.ambushDeck=shuffle(AMBUSH[side].map((_,i)=>i));
+  const card=AMBUSH[side][G.ambushDeck.pop()];
+  log(`Emboscada · ${card.h}: ${card.x}`,'bad');
+  if(card.panic)panic(card.panic);
+  if(!card.where)return null;
+  let room=G.pos;
+  if(card.where==='vent'){const vs=VADJ[G.pos].filter(v=>ventOpen(G.pos,v,true));room=vs.length?pick(vs):pick(CADJ[G.pos]);}
+  if(card.where==='crew'){const free=G.crew.filter(c=>c.alive&&!c.follow);room=free.length?free.sort((a,b)=>distance(G.pos,a.room)-distance(G.pos,b.room))[0].room:G.pos;}
+  if(card.where==='noise'){const n=[...G.noise].sort((a,b)=>b.turn-a.turn)[0];room=n?n.room:G.pos;}
+  if(card.where==='far'){const {dist}=bfs(G.pos,'all',true);room=Object.keys(dist).sort((a,b)=>dist[b]-dist[a])[0];}
+  reappear(room);log(`La criatura reaparece en ${R(room)}.`,'bad');
+  return card.where==='you'||card.where==='crew'||card.where==='noise'?'attack':null;
+}
+// fase de la criatura. Devuelve true si se detiene esperando la reacción del jugador
 function beastPhase(){
-  const B=G.beast;B.ambush=false;
-  if(B.stun>0){B.stun--;log('La criatura se lame las heridas en algún lugar de la nave.');return;}
+  const B=G.beast;
+  if(B.hidden){const res=drawAmbush();if(res==='attack')return beastAttack(true);seeBeast();return false;}
+  B.ambush=false;
+  if(B.stun>0){B.stun--;log('La criatura se lame las heridas en algún lugar de la nave.');return false;}
   if(!G.instincts.length)G.instincts=shuffle([...INSTINCTS]);
-  const ins=G.instincts.pop();
-  if(ins==='rugido'){panic(1);markNoise(B.room,'chillido');log(`Un chillido recorre la nave desde ${R(B.room)}. +1 Pánico.`,'bad');return;}
-  if(ins==='emboscar'){B.ambush=true;log('Silencio. Demasiado silencio.');return;}
-  let target;
-  if(G.decoy)target=G.decoy.room;
-  else if(G.madeNoise&&distance(B.room,G.madeNoise)<=4)target=G.madeNoise;
-  else target=nearestHuman(ins==='alimentarse');
+  let ins=G.instincts.pop();
+  if(ins==='desvanecerse'&&B.stage==='cria')ins='cazar';
+  if(ins==='desvanecerse'){B.hidden=true;log('La pierdes de vista. Se ha desvanecido en las sombras de la nave.','bad');panic(1);return false;}
+  if(ins==='rugido'){panic(1);markNoise(B.room,'chillido');log(`Un chillido recorre la nave desde ${R(B.room)}. +1 Pánico.`,'bad');return false;}
+  if(ins==='emboscar'){B.ambush=true;log('Silencio. Demasiado silencio.');return false;}
+  let tgt;
+  if(G.decoy)tgt=G.decoy.room;
+  else if(G.loud)tgt=G.loud;
+  else if(G.madeNoise&&!B.lost&&distance(B.room,G.madeNoise)<=4)tgt=G.madeNoise;
+  else tgt=nearestHuman(ins==='alimentarse'||B.lost>0);
+  B.lost=0;
   const mode=ins==='acechar'?'vent':'all';
-  let path=pathTo(B.room,target,mode)||pathTo(B.room,target,'all');
-  const sp=beastSpeed();
-  if(path)for(let i=1;i<path.length&&i<=sp;i++){
+  const path=pathTo(B.room,tgt,mode,true)||pathTo(B.room,tgt,'all',true);
+  if(path)for(let i=1;i<path.length&&i<=beastSpeed();i++){
     if(G.blocked&&G.blocked.room===path[i])break;
     const how=VADJ[path[i-1]].includes(path[i])&&!CADJ[path[i-1]].includes(path[i])?'vent':'corr';
     beastStep(path[i],how);
     if(humansAt(B.room))break;
   }
-  // ataque
-  if(B.room===G.pos){log('La criatura entra en tu sala.','bad');attackPlayer(false);return;}
-  const victims=crewIn(B.room);
-  if(victims.length){
-    const v=pick(victims);v.alive=false;v.follow=false;panic(2);markNoise(B.room,'grito');
-    log(`Un grito desde ${R(B.room)}: ${CREW[v.id].n} ha muerto. +2 Pánico.`,'bad');
-  }
+  return beastAttack(false);
 }
-function attackPlayer(ambush){
+function beastAttack(ambush){
+  const B=G.beast;
+  if(B.room===G.pos){log('La criatura se lanza sobre ti.','bad');return beginThreat('you',ambush,'end');}
+  const victims=crewIn(B.room);
+  if(victims.length){const v=pick(victims);return beginThreat(v.id,ambush,'end');}
+  seeBeast();return false;
+}
+// un ataque pendiente: el jugador puede responder con cartas de Reacción o con el lanzallamas
+function beginThreat(target,ambush,resume){
   const B=G.beast;G.lastSeen={room:B.room,turn:G.turn};
-  const fl=item('lanzallamas');
-  if(fl&&fl.uses>0){
-    fl.uses--;if(fl.uses<=0)dropItem('lanzallamas');
-    beastRetreat(2);log('Disparas el lanzallamas a ciegas. La criatura retrocede entre chillidos.','good');return;
-  }
-  const r=d6()-(ambush||B.ambush?1:0);
-  if(r<=2){G.hp--;panic(1);log(`Te alcanza con la cola (tirada ${r}): −1 Salud, +1 Pánico.`,'bad');}
-  else if(r<=4){
-    const f=followers();
-    if(f.length){const v=pick(f);v.alive=false;v.follow=false;panic(2);log(`Se lleva a ${CREW[v.id].n} (tirada ${r}). +2 Pánico.`,'bad');}
-    else{G.hp--;panic(1);log(`Te alcanza (tirada ${r}): −1 Salud, +1 Pánico.`,'bad');}
+  const dmg=STAGES[B.stage].dmg+(ambush&&B.stage==='adulta'?1:0);
+  G.threat={target,dmg,ambush,resume,reduce:0,ignore:false,minOne:false,counter:0,dodge:false,endPhase:false,shield:false};
+  // si nadie puede ponerse delante del tripulante, el ataque se resuelve sin esperar y el turno sigue su curso
+  if(target!=='you'&&!G.hand.some(h=>CARDS[h].crew)){G.threat.resume=null;resolveThreat();return false;}
+  return true;
+}
+function canReact(id){const T=G.threat;if(!T||G.roll||G.choice||!G.hand.includes(id))return false;const d=CARDS[id];if(d.t!=='rea')return false;if(T.target!=='you')return !!d.crew;return !d.crew;}
+function react(id){if(!canReact(id))return;startCard(id,{});}
+function resolveReaction(id,out){
+  const T=G.threat;if(!T)return;
+  if(id==='proteger'){T.target='you';T.reduce+=out==='pleno'?2:out==='parcial'?1:0;resolveThreat();return;}
+  if(id==='esquivar'){if(out==='fallo')panic(1);else{T.reduce+=out==='pleno'?2:1;T.dodge=true;}}
+  if(id==='cubrirse'){if(out==='pleno')T.ignore=true;else if(out==='parcial')T.reduce+=2;else{T.reduce+=1;T.minOne=true;}}
+  if(id==='contra'){if(out!=='fallo'){T.ignore=true;T.counter=out==='pleno'?2:1;}}
+  if(id==='trampa'){T.ignore=true;T.counter=1;T.endPhase=true;}
+  if(T.ignore)resolveThreat();
+}
+function useFlamer(){const T=G.threat;if(!T||T.target!=='you'||G.roll)return;const it=item('lanzallamas');if(!it||it.uses<=0)return;it.uses--;if(it.uses<=0){spendItem('lanzallamas');log('El lanzallamas se queda sin combustible.');}log('Disparas el lanzallamas a ciegas. La criatura retrocede entre chillidos.','good');T.ignore=true;T.flamed=true;resolveThreat();}
+function resolveThreat(){
+  const T=G.threat;if(!T)return;G.threat=null;
+  const B=G.beast;
+  if(T.target!=='you'){
+    const v=G.crew.find(c=>c.id===T.target);
+    if(v&&v.alive){v.alive=false;v.follow=false;panic(1);markNoise(B.room,'grito');feed(2,true);log(`Un grito desde ${R(B.room)}: ${CREW[v.id].n} ha muerto. +1 Pánico.`,'bad');}
+  } else if(T.ignore){
+    log('El ataque no te alcanza.','good');
   } else {
-    const ns=CADJ[G.pos].filter(n=>n!==B.room&&!(G.blocked&&G.blocked.room===n));
-    if(ns.length){const to=pick(ns);G.pos=to;UI.sel=to;followers().forEach(c=>c.room=to);log(`Te escabulles (tirada ${r}) y corres hasta ${R(to)}.`,'good');}
-    else log(`Esquivas el golpe (tirada ${r}).`,'good');
+    let dmg=Math.max(T.minOne?1:0,T.dmg-T.reduce);
+    if(dmg>0){G.hp-=dmg;panic(1);feed(1,true);log(`Te alcanza: −${dmg} Salud, +1 Pánico.`,'bad');}
+    else log('Absorbes el golpe sin daño.','good');
   }
-  check();
+  if(T.dodge&&G.phase!=='over'){const ns=CADJ[G.pos].filter(n=>n!==B.room&&!(G.blocked&&G.blocked.room===n));if(ns.length){const to=pick(ns);G.pos=to;UI.sel=to;followers().forEach(c=>c.room=to);log(`Te apartas hasta ${R(to)}.`,'good');}}
+  if(T.flamed)beastRetreat(2);
+  check();if(G.phase==='over')return;
+  if(T.counter)hurtBeast(T.counter);
+  if(G.phase==='over')return;
+  if(T.endPhase){B.stun=1;log('La trampa la deja aturdida.','good');}
+  if(T.resume==='end')finishEndTurn();
 }
 function crewWander(){
   for(const c of G.crew){
     if(!c.alive||c.follow)continue;
-    if(Math.random()<0.35){const ns=CADJ[c.room].filter(n=>n!==G.beast.room&&!(G.blocked&&G.blocked.room===n));if(ns.length)c.room=pick(ns);}
+    if(Math.random()<0.35){const ns=CADJ[c.room].filter(n=>!beastAt(n)&&!(G.blocked&&G.blocked.room===n));if(ns.length)c.room=pick(ns);}
   }
 }
 function endTurn(){
   if(busy())return;
-  beastPhase();
+  G.phase='beast';G.steps=null;G.flags.improv=false;
+  const waiting=beastPhase();
+  if(G.phase==='over')return;
+  if(waiting&&G.threat)return;
+  finishEndTurn();
+}
+function finishEndTurn(){
   if(G.phase==='over')return;
   crewWander();
   if(G.decoy){G.decoy.turns--;if(G.decoy.turns<=0){G.decoy=null;log('La bengala se apaga.');}}
-  G.madeNoise=null;
+  G.madeNoise=null;G.loud=null;
   if(G.destruct!==null){
     G.destruct--;
+    // morir junto a la criatura no cuenta como victoria
     if(G.destruct<=0){log('La cuenta atrás llega a cero.','bad');lose('explosion');return;}
     log(`Autodestrucción en ${G.destruct} turnos.`,'bad');
   }
+  G.phase='play';
   startTurn();
 }
 
 // ---------- dibujo ----------
-function shortName(r){return ROOMS[r].n;}
 function mapHTML(){
   const W=26,H=11;
   const corr=CORR.map(([a,b])=>`<line class="corr" x1="${ROOMS[a].x}" y1="${ROOMS[a].y}" x2="${ROOMS[b].x}" y2="${ROOMS[b].y}"/>`).join('');
-  const vents=VENTS.map(([a,b])=>{
-    const A=ROOMS[a],B=ROOMS[b],mx=(A.x+B.x)/2,my=(A.y+B.y)/2,dx=B.x-A.x,dy=B.y-A.y,l=Math.hypot(dx,dy)||1;
-    let ox=-dy/l*9,oy=dx/l*9;if((mx+ox-50)*(mx-50)<0||Math.abs(mx+ox-50)<Math.abs(mx-50)){ox=-ox;oy=-oy;}
-    return `<path class="vent${ventOpen(a,b)?'':' sealed'}" d="M${A.x} ${A.y}Q${(mx+ox).toFixed(1)} ${(my+oy).toFixed(1)} ${B.x} ${B.y}"/>`;}).join('');
+  const curve=(a,b,off)=>{const A=ROOMS[a],B=ROOMS[b],mx=(A.x+B.x)/2,my=(A.y+B.y)/2,dx=B.x-A.x,dy=B.y-A.y,l=Math.hypot(dx,dy)||1;
+    let ox=-dy/l*off,oy=dx/l*off;if((mx+ox-50)*(mx-50)<0||Math.abs(mx+ox-50)<Math.abs(mx-50)){ox=-ox;oy=-oy;}return {d:`M${A.x} ${A.y}Q${(mx+ox).toFixed(1)} ${(my+oy).toFixed(1)} ${B.x} ${B.y}`,cx:mx+ox/2,cy:my+oy/2};};
+  const vents=VENTS.map(([a,b])=>`<path class="vent${ventOpen(a,b)?'':' sealed'}" d="${curve(a,b,9).d}"/>`).join('');
+  const shafts=SHAFTS.map(([a,b],i)=>{const c=curve(a,b,-6),o=shaftOpen(i);return `<path class="shaft${o?' open':''}" d="${c.d}"/><text class="shaft-k${o?' open':''}" x="${c.cx.toFixed(1)}" y="${c.cy.toFixed(1)}" text-anchor="middle">${o?'M'+(i+1):'⌧'+(i+1)}</text>`;}).join('');
   const vis=visible();
   const rooms=Object.entries(ROOMS).map(([id,r])=>{
     const x=r.x-W/2,y=r.y-H/2;
-    const adj=G.phase==='play'&&!!canMove(id);
+    const adj=G.phase==='play'&&!!canStep(id);
     const cls=['room',id===G.pos?'here':'',UI.sel===id?'sel':'',adj?'adj':'',G.blocked&&G.blocked.room===id?'blocked':''].join(' ');
     const tags=[];
     if(G.welded.includes(id))tags.push('SELLADO');
@@ -598,35 +826,32 @@ function mapHTML(){
     const ring=nz?`<rect class="noise" x="${x-1}" y="${y-1}" width="${W+2}" height="${H+2}" rx="1"/>`:'';
     return `<g class="${cls}" data-a="sel" data-u="${id}" tabindex="0" role="button" aria-label="${esc(r.n)}">
       ${ring}<rect class="bg" x="${x}" y="${y}" width="${W}" height="${H}" rx=".5"/>
-      <text class="nm" x="${r.x}" y="${y+3.6}" text-anchor="middle">${esc(shortName(id))}</text>
+      <text class="nm" x="${r.x}" y="${y+3.6}" text-anchor="middle">${esc(r.n)}</text>
       <text class="tag${nz?' warn':''}" x="${r.x}" y="${y+6}" text-anchor="middle">${nz?'RUIDO: '+nz.kind.toUpperCase():tags.join(' · ')}</text>
       ${marks}
     </g>`;}).join('');
   return `<div class="mapwrap"><svg class="map" viewBox="-2 -1 104 112" role="group" aria-label="Plano del Erebus">
-    <path class="hull" d="M50 -0.5L96 14V96L50 111L4 96V14Z"/>${corr}${vents}${rooms}</svg></div>`;
+    <path class="hull" d="M50 -0.5L96 14V96L50 111L4 96V14Z"/>${corr}${vents}${shafts}${rooms}</svg></div>`;
 }
 function roomPanel(){
   const id=UI.sel||G.pos,r=ROOMS[id],here=id===G.pos;
-  const people=crewIn(id);
-  const vis=visible();
-  const beastHere=vis&&G.beast.room===id;
+  const people=crewIn(id),vis=visible(),beastHere=vis&&G.beast.room===id;
   const acts=[];
   if(here){
-    acts.push(`<button class="btn solid" data-a="search" ${canSearch()?'':'disabled'}>Registrar · 1 acción</button>`);
-    for(const c of people)if(!c.follow)acts.push(`<button class="btn cyan" data-a="recruit" data-u="${c.id}" ${followers().length<MAXFOLLOW?'':'disabled'}>Que ${esc(CREW[c.id].n)} te siga</button>`);
-    if(id==='ingenieria'&&!G.cannon)acts.push(`<button class="btn solid" data-a="assemble" ${canAssemble()?'':'disabled'}>Montar cañón · ${assembleCost()} acciones</button>`);
-    if(id==='reactor'&&G.cannon)acts.push(`<button class="btn" data-a="recharge" ${canRecharge()?'':'disabled'}>Recargar cañón · 1 acción</button>`);
-    if(id==='reactor'&&!G.destruct)acts.push(`<button class="btn alert" data-a="destruct" ${canDestruct()?'':'disabled'}>Autodestrucción · 1 acción</button>`);
-    if(id==='control')acts.push(`<button class="btn alert solid" data-a="airlock" ${canAirlock()?'':'disabled'}>Abrir la esclusa de la bodega · 1 acción</button>`);
-    if(id==='lanzadera')acts.push(`<button class="btn alert solid" data-a="launch" ${canLaunch()?'':'disabled'}>Despegar · 1 acción</button>`);
-    if(G.beast.room===id&&has('lanzallamas'))acts.push(`<button class="btn alert" data-a="flame" ${canFlame()?'':'disabled'}>Lanzallamas · 1 acción</button>`);
+    for(const c of people)if(!c.follow)acts.push(`<button class="btn cyan" data-a="recruit" data-u="${c.id}" ${followers().length<MAXFOLLOW&&!busy()?'':'disabled'}>Que ${esc(CREW[c.id].n)} te siga</button>`);
+    SHAFTS.forEach(([a,b],i)=>{if((a===id||b===id)&&!shaftOpen(i))acts.push(`<button class="btn" data-a="key" data-u="${i}" ${canInsertKey(i)?'':'disabled'}>Abrir conducto hacia ${esc(R(a===id?b:a))} · 1 tarjeta</button>`);});
+    if(id==='ingenieria'&&!G.cannon)acts.push(`<button class="btn solid" data-a="assemble" ${canAssemble()?'':'disabled'}>Montar cañón · ${assembleCost()} Aliento</button>`);
+    if(id==='reactor'&&G.cannon)acts.push(`<button class="btn" data-a="recharge" ${canRecharge()?'':'disabled'}>Recargar cañón · 1 Aliento</button>`);
+    if(id==='puente'||id==='control')acts.push(`<button class="btn cyan" data-a="scan" ${canScan()?'':'disabled'}>Escáner interno · 1 Aliento</button>`);
+    if(id==='puente'&&G.destruct===null)acts.push(`<button class="btn alert" data-a="destruct" ${canDestruct()?'':'disabled'}>Autodestrucción · ${KEYS_DESTRUCT} tarjetas y 1 Aliento</button>`);
+    if(id==='control')acts.push(`<button class="btn alert solid" data-a="airlock" ${canAirlock()?'':'disabled'}>Abrir la esclusa de la bodega · 1 Aliento</button>`);
+    if(id==='lanzadera')acts.push(`<button class="btn alert solid" data-a="launch" ${canLaunch()?'':'disabled'}>Despegar · 1 Aliento</button>`);
   } else {
-    const how=CADJ[G.pos].includes(id)?'corr':(VADJ[G.pos].includes(id)?'vent':null);
-    if(how==='corr')acts.push(`<button class="btn solid" data-a="move" data-u="${id}" ${canMove(id)?'':'disabled'}>Ir a ${esc(r.n)} · 1 acción</button>`);
-    if(how==='vent')acts.push(`<button class="btn" data-a="move" data-u="${id}" ${canMove(id)?'':'disabled'}>Por el conducto · 1 acción, +1 Pánico</button>`);
-    if(!how)acts.push(`<span class="empty">No está junto a tu sala.</span>`);
+    const how=canStep(id);
+    const link=CADJ[G.pos].includes(id)?'pasillo':SADJ[G.pos].some(s=>s.to===id&&shaftOpen(s.i))?'conducto de mantenimiento':VADJ[G.pos].includes(id)?'conducto (+1 Pánico)':null;
+    if(link)acts.push(`<button class="btn solid" data-a="step" data-u="${id}" ${how?'':'disabled'}>Ir por ${link} · 1 paso</button>`);
+    else acts.push(`<span class="empty">No está junto a tu sala.</span>`);
   }
-  if(G.cannon&&beastHere&&(here||CADJ[G.pos].includes(id)))acts.push(`<button class="btn alert solid" data-a="fire" ${canFire()?'':'disabled'}>Disparar el cañón · 1 acción</button>`);
   const notes=[];
   if(here)notes.push('Estás aquí.');
   if(beastHere)notes.push('<span class="warn">La criatura está en esta sala.</span>');
@@ -634,50 +859,99 @@ function roomPanel(){
   if(G.searched[id])notes.push(G.decks[id].length?'Aún queda algo por encontrar.':'Ya no queda nada útil.');
   else if(id!=='lanzadera')notes.push('Sin registrar.');
   if(id==='control')notes.push(crewIn('bodega').length?'<span class="warn">Hay tripulantes en la bodega: no puedes abrir la esclusa.</span>':'La esclusa expulsa al espacio todo lo que haya en la Bodega.');
-  if(id==='lanzadera'&&!G.destruct)notes.push('Solo despegarás cuando la nave vaya a estallar: activa antes la autodestrucción en el Reactor.');
-  if(id==='reactor'&&!has('tarjeta')&&!G.destruct)notes.push('La autodestrucción necesita la tarjeta del capitán.');
+  if(id==='puente'&&G.destruct===null)notes.push(`La autodestrucción necesita ${KEYS_DESTRUCT} tarjetas de acceso (tienes ${G.keys}).`);
+  if(id==='lanzadera'&&G.destruct===null)notes.push('Solo despegarás cuando la nave vaya a estallar.');
   if(id==='ingenieria'&&!G.cannon)notes.push(`Piezas del cañón: ${PARTS.filter(has).length}/3.`);
+  if(!here&&!G.steps)notes.push('<span class="warn">Para moverte necesitas pasos: juega una carta de Movimiento.</span>');
   return `<div class="roompanel"><h3>${esc(r.n)}</h3><p class="meta">${notes.join(' ')}</p><div class="controls">${acts.join('')}</div></div>`;
 }
+function cardHTML(id,mode){
+  const d=CARDS[id];
+  let btn='';
+  if(mode==='cat'){const left=copiesLeft(id);btn=`<span class="left">${left}/${d.q} disponibles</span><button class="btn" data-a="prep" data-u="${id}" ${canPrepare(id)?'':'disabled'}>Preparar · ${d.c}</button>`;}
+  if(mode==='hand'){
+    if(d.t==='rea')btn=G.threat?`<button class="btn alert solid" data-a="react" data-u="${id}" ${canReact(id)?'':'disabled'}>Reaccionar</button>`:'<span class="left">Se juega cuando la criatura ataca</span>';
+    else if(id==='pelos')btn=G.roll?`<button class="btn solid" data-a="reroll" ${!G.roll.rerolled?'':'disabled'}>Repetir fallados</button>`:'<span class="left">Se juega tras una tirada</span>';
+    else if(id==='repetir')btn=`<button class="btn" data-a="repeat" ${canRepeat()?'':'disabled'}>${G.lastPlayed?`Recuperar «${esc(CARDS[G.lastPlayed].n)}» · ${CARDS[G.lastPlayed].c}`:'Sin carta que recuperar'}</button>`;
+    else btn=`<button class="btn solid" data-a="play" data-u="${id}" ${canPlay(id)?'':'disabled'}>Jugar</button>`;
+  }
+  const o=d.o;
+  const res=d.roll?`<dl><dt class="p">2+</dt><dd>${esc(o[0])}</dd><dt class="h">1</dt><dd>${esc(o[1])}</dd><dt class="f">0</dt><dd>${esc(o[2])}</dd></dl>`:`<dl><dt class="p">▸</dt><dd>${esc(o[0])}</dd></dl>`;
+  const na=mode==='cat'&&copiesLeft(id)<=0;
+  return `<div class="card t-${d.t}${na?' na':''}"><div class="ct"><b>${esc(d.n)}</b><span class="cost">${d.c}◆</span></div><span class="ck">${KIND[d.t]}${d.roll?' · tirada':''}${d.ends?' · acaba el turno':''}${d.range?' · alcance '+d.range:''}</span>${res}<div class="controls">${btn}</div></div>`;
+}
+function rollHTML(){
+  const r=G.roll;if(!r)return '';
+  const t=target(),out=outcomeOf(r),d=CARDS[r.id],k=['pleno','parcial','fallo'].indexOf(out);
+  return `<div class="rollbox"><h3>Tirada de Nervio · ${esc(d.n)}</h3>
+    <div class="dice">${r.dice.map(x=>`<span class="die${x>=t?' ok':''}">${x}</span>`).join('')}</div>
+    <p class="outcome">${successes(r)} éxito${successes(r)===1?'':'s'} (${t}+${G.flags.plan?`, +${G.flags.plan} por Planificar`:''}): <b class="${out}">${out}</b> — ${esc(d.o[k])}</p>
+    <div class="controls"><button class="btn solid big" data-a="accept">Aceptar</button>${G.hand.includes('pelos')&&!r.rerolled?'<button class="btn" data-a="reroll">Por los pelos: repetir fallados</button>':''}</div></div>`;
+}
+function threatHTML(){
+  const T=G.threat;if(!T||G.roll)return '';
+  const who=T.target==='you'?'ti':CREW[T.target].n;
+  const reacts=G.hand.filter(h=>canReact(h));
+  const fl=T.target==='you'&&item('lanzallamas');
+  return `<div class="threat"><h3>¡Ataque!</h3><p>La criatura (${STAGES[G.beast.stage].n.toLowerCase()}) va a por ${esc(who)}${T.ambush?' por sorpresa':''}: ${T.target==='you'?`${T.dmg} de daño${T.reduce?` (−${T.reduce})`:''}`:'lo matará'}.</p>
+    <div class="controls">${reacts.map(h=>`<button class="btn alert solid" data-a="react" data-u="${h}">${esc(CARDS[h].n)}</button>`).join('')}${fl?'<button class="btn alert" data-a="flamer">Lanzallamas</button>':''}<button class="btn" data-a="take">${T.target==='you'?'Aguantar el golpe':'No puedes hacer nada'}</button></div></div>`;
+}
+function choiceHTML(){const c=G.choice;if(!c)return '';return `<div class="choice"><h3>${esc(c.title)}</h3><div class="controls">${c.opts.map(o=>`<button class="btn solid" data-a="choose" data-u="${o.v}">${esc(o.l)}</button>`).join('')}</div></div>`;}
 function invHTML(){
   const items=G.inv.map(it=>{
-    const d=ITEMS[it.id];
-    const usable=['botiquin','sedante','adrenalina','bengala','soldador','lanzallamas'].includes(it.id);
+    const d=ITEMS[it.id],usable=['botiquin','sedante','adrenalina','bengala','soldador','lanzallamas'].includes(it.id);
     return `<div class="item${d.part?' part':''}"><b>${esc(d.n)}${d.uses?` · ${it.uses}`:''}</b><span>${esc(d.x)}</span>
-      <div class="controls">${usable?`<button class="btn" data-a="use" data-u="${it.id}" ${canUse(it.id)?'':'disabled'}>Usar</button>`:''}<button class="btn cyan" data-a="drop" data-u="${it.id}" ${busy()?'disabled':''}>Soltar</button></div></div>`;
+      <div class="controls">${usable?`<button class="btn" data-a="use" data-u="${it.id}" ${canUse(it.id)?'':'disabled'}>Usar${it.id==='adrenalina'?'':' · 1'}</button>`:''}<button class="btn cyan" data-a="drop" data-u="${it.id}" ${busy()?'disabled':''}>Soltar</button></div></div>`;
   });
-  if(G.cannon)items.unshift(`<div class="item part"><b>Cañón de plasma · ${G.cannon.charges} cargas</b><span>Dispara a la criatura si la ves en tu sala o en una contigua por pasillo. Acierta con 4 o más en un dado.</span></div>`);
-  return items.length?items.join(''):'<p class="empty">No llevas nada. Registra las salas.</p>';
+  if(G.cannon)items.unshift(`<div class="item part"><b>Cañón de plasma · ${G.cannon.charges} cargas</b><span>Cada ataque que acierta gasta 1 carga y hace +2 de daño. Te deja atacar desde una sala contigua por pasillo.</span></div>`);
+  items.unshift(`<div class="item"><b>Tarjetas de acceso · ${G.keys}</b><span>Abren conductos de mantenimiento (gratis). Con ${KEYS_DESTRUCT} activas la autodestrucción en el Puente.</span></div>`);
+  return items.join('');
 }
 function hint(){
-  if(G.destruct)return `La nave estalla en ${G.destruct} turnos. Llega a la Lanzadera y despega.`;
-  if(G.cannon)return visible()?'La ves. Acércate a una sala contigua y dispara.':'Busca a la criatura: los ruidos y el detector te dicen dónde está. O atráela con una bengala.';
-  return 'Toca una sala del plano. Las salas con borde ámbar están a un paso. Busca las piezas del cañón en el Reactor, el Laboratorio y la Armería, y móntalo en Ingeniería.';
+  if(G.threat)return 'La criatura ataca. Responde con una carta de Reacción o aguanta el golpe.';
+  if(G.roll)return 'Mira la tirada y acéptala, o repítela si tienes «Por los pelos».';
+  if(G.choice)return 'Elige una opción.';
+  if(G.destruct!==null)return `La nave estalla en ${G.destruct} turnos. Llega a la Lanzadera y despega.`;
+  if(G.steps)return `Te quedan ${G.steps.n} paso${G.steps.n===1?'':'s'}: toca una sala con borde ámbar y muévete.`;
+  return 'Prepara cartas con tu Aliento y juégalas. Para moverte, juega una carta de Movimiento y gasta los pasos en el plano.';
 }
+function sedHTML(){const B=G.beast;return `<span class="sed" title="Sed">${Array.from({length:SED_MAX},(_,i)=>`<i class="${i<B.sed?'on':''}${SED_EVOLVE[i+1]?' evo':''}"></i>`).join('')}</span>`;}
 function rulesHTML(){
   return `<details class="rules"><summary>Cómo se juega</summary><div class="rules-body">
-    <p>Eres la última persona despierta en el carguero minero Erebus. Algo salió del Laboratorio. Tienes 3 acciones por turno y poco tiempo antes de que falle el soporte vital.</p>
-    <h3>Acciones (1 cada una)</h3>
+    <p>Eres la última persona despierta en el carguero minero Erebus. Algo salió del Laboratorio y todavía es pequeño. No lo será mucho tiempo.</p>
+    <h3>Aliento y cartas</h3>
     <ul>
-      <li><b>Moverte</b> a una sala unida por pasillo. También puedes arrastrarte por un conducto (+1 Pánico), pero tus compañeros no caben y se quedan atrás.</li>
-      <li><b>Registrar</b> la sala: encuentras objetos, pero haces ruido y la criatura puede oírte.</li>
-      <li><b>Usar objetos:</b> botiquín, sedantes, bengala de señuelo, soldador para sellar conductos, lanzallamas, adrenalina…</li>
-      <li><b>Descansar</b> gasta lo que te queda del turno y baja 2 de Pánico.</li>
+      <li>Cada turno tienes <b>6 de Aliento</b> (4 si tu Pánico llega a 7). Con él <b>preparas</b> cartas del catálogo pagando su coste y las llevas en la mano (máximo 5). La mano se conserva entre turnos.</li>
+      <li>Cada carta tiene copias limitadas. Las que juegas vuelven al catálogo al empezar el turno siguiente.</li>
+      <li>El Aliento también paga las acciones de sala (escáner, esclusa, montar el cañón…) y el uso de objetos.</li>
+      <li>Para <b>moverte</b> juega una carta de Movimiento: te da pasos para recorrer el plano.</li>
     </ul>
-    <h3>Tres formas de acabar con ella</h3>
+    <h3>Tirada de Nervio</h3>
     <ul>
-      <li><b>Cañón de plasma:</b> reúne la Célula (Reactor), la Bobina (Laboratorio) y la Carcasa (Armería), monta el cañón en Ingeniería y dispárale hasta abatirla.</li>
-      <li><b>La esclusa:</b> atrae a la criatura a la Bodega (por ejemplo, con una bengala) y abre la esclusa desde el Control.</li>
-      <li><b>Huir:</b> con la tarjeta del capitán (Puente), activa la autodestrucción en el Reactor y despega desde la Lanzadera antes de que acabe la cuenta atrás.</li>
+      <li>Tiras 4 dados, uno menos por cada 3 de Pánico. Cada 5 o 6 es un éxito (con «Improvisar», también el 4).</li>
+      <li>2 éxitos o más: <b>pleno</b>. 1 éxito: <b>parcial</b>. Ninguno: <b>fallo</b>. Cada carta indica qué pasa en cada caso.</li>
+      <li>«Por los pelos» repite los dados fallados y «Otra vez» devuelve a tu mano la carta que acabas de jugar.</li>
     </ul>
     <h3>La criatura</h3>
     <ul>
-      <li>No sabes dónde está salvo que la veas: en tu sala, con el detector de movimiento, o por los ruidos que marca el plano.</li>
-      <li>Cada turno caza, acecha por los conductos, embosca o chilla. Va hacia el ruido y hacia la gente. A partir de cierto turno crece y se mueve el doble.</li>
-      <li>Si te ataca, tiras un dado: puede herirte, llevarse a un compañero o dejarte escapar. Si llevas lanzallamas, la repeles.</li>
+      <li>Crece en tres fases: <b>cría</b>, <b>juvenil</b> y <b>adulta</b>. Avanza con su <b>Sed</b>: al herirte (+1), al matar a un tripulante (+2) y, desde juvenil, por hambre cada 3 turnos. Mientras es cría solo cuenta lo que caza ella misma.</li>
+      <li>De juvenil en adelante puede <b>desvanecerse</b>: desaparece del plano y cada turno se revela una <b>emboscada</b> que decide dónde reaparece. De adulta, la baraja cambia por otra peor.</li>
+      <li>Al hacerse adulta su Vida sube mucho y se cura del todo, se mueve el doble y atraviesa los conductos sellados.</li>
+      <li>Hace 1, 2 o 3 de daño según su fase. Cuando ataca puedes responder con cartas de <b>Reacción</b> preparadas o con el lanzallamas.</li>
+      <li>El <b>escáner interno</b> (Puente o Control) te dice dónde está y la obliga a mostrarse si está oculta.</li>
     </ul>
-    <h3>Tripulación</h3>
-    <ul><li>Cuatro compañeros siguen vivos por la nave. Hasta dos pueden seguirte, y cada uno tiene una habilidad. Si la criatura los encuentra, mueren y tu Pánico sube 2.</li></ul>
+    <h3>La nave</h3>
+    <ul>
+      <li>Al registrar puedes encontrar <b>tarjetas de acceso</b>. Usarlas no cuesta Aliento.</li>
+      <li>Hay cuatro <b>conductos de mantenimiento</b> cerrados (líneas moradas). Insertando una tarjeta en una de sus salas lo abres y puedes cruzarlo con tu tripulación. La criatura siempre puede usarlos.</li>
+      <li>Los conductos de ventilación se pueden cruzar con +1 de Pánico, pero tus compañeros no caben.</li>
+    </ul>
+    <h3>Cómo ganar</h3>
+    <ul>
+      <li><b>Abatirla:</b> quítale toda la Vida con cartas de Ataque. El cañón de plasma (Célula del Reactor, Bobina del Laboratorio y Carcasa de la Armería, montado en Ingeniería) añade +2 de daño y alcance.</li>
+      <li><b>La esclusa:</b> atráela a la Bodega y abre la esclusa desde el Control.</li>
+      <li><b>Autodestrucción:</b> con 4 tarjetas de acceso, actívala en el Puente y despega desde la Lanzadera antes de que acabe la cuenta atrás. Si la nave estalla contigo dentro pierdes, aunque la criatura muera también.</li>
+    </ul>
     <h3>Derrota</h3>
     <ul><li>Pierdes si tu Salud llega a 0, si tu Pánico llega a 10, si se acaba el soporte vital o si la nave estalla contigo dentro.</li></ul>
   </div></details>`;
@@ -685,45 +959,52 @@ function rulesHTML(){
 function titleHTML(){
   return `<div class="title">
     <div class="hero"><p class="eyebrow">Carguero minero · ruta de regreso</p><h1>EREBUS</h1>
-      <p>Despiertas antes de tiempo en la cápsula de criogenia. Las luces de emergencia parpadean y el ordenador repite el mismo aviso: contención fallida en el Laboratorio. Algo se mueve por los conductos.</p></div>
-    <div class="term"><span>&gt; ESTADO DE LA NAVE ........ <b>ALERTA</b></span><span>&gt; TRIPULACIÓN DESPIERTA .... 5</span><span>&gt; FORMA DE VIDA NO IDENTIFICADA ... <b>A BORDO</b></span><span>&gt; SOPORTE VITAL ............ DEGRADÁNDOSE</span></div>
+      <p>Despiertas antes de tiempo en la cápsula de criogenia. Las luces de emergencia parpadean y el ordenador repite el mismo aviso: contención fallida en el Laboratorio. Algo pequeño se mueve por los conductos. Está creciendo.</p></div>
+    <div class="term"><span>&gt; ESTADO DE LA NAVE ........ <b>ALERTA</b></span><span>&gt; TRIPULACIÓN DESPIERTA .... 5</span><span>&gt; FORMA DE VIDA NO IDENTIFICADA ... <b>EN DESARROLLO</b></span><span>&gt; CONDUCTOS DE MANTENIMIENTO ... BLOQUEADOS</span></div>
     <div class="pick"><h2>Dificultad</h2><div class="opt-grid">${Object.entries(DIFF).map(([k,d])=>`<button class="opt" data-a="diff" data-u="${k}" aria-pressed="${UI.diff===k}"><b>${d.n}</b><span>${esc(d.x)}</span></button>`).join('')}</div></div>
     <div><button class="btn solid big" data-a="start">Salir de la cápsula</button></div>
     ${rulesHTML()}
   </div>`;
 }
 function boardHTML(){
-  const vis=visible();
+  const vis=visible(),B=G.beast;
   const crew=G.crew.map(c=>{
-    const d=CREW[c.id];
-    const st=!c.alive?'Muerto':c.follow?'Te sigue':`En ${R(c.room)}`;
+    const d=CREW[c.id],st=!c.alive?'Muerto':c.follow?'Te sigue':`En ${R(c.room)}`;
     return `<div class="crewrow${c.alive?'':' dead'}"><i>${d.n[0]}</i><b>${esc(d.n)} · ${esc(d.r)}</b><span class="st">${st}${c.alive&&c.follow?` · <button class="btn cyan" style="min-height:28px;padding:2px 8px;font-size:11px" data-a="dismiss" data-u="${c.id}">Que se quede</button>`:''}</span><small>${esc(d.x)}</small></div>`;
   }).join('');
+  const where=B.hidden?'<span style="color:var(--alert)">Se ha desvanecido</span>':vis?'<span style="color:var(--alert)">A la vista</span>':G.lastSeen&&G.turn-G.lastSeen.turn<=3?`Vista en ${R(G.lastSeen.room)} (turno ${G.lastSeen.turn})`:'Paradero desconocido';
+  const catalog=Object.keys(CARDS).map(id=>cardHTML(id,'cat')).join('');
   return `<header class="top">
     <div class="brand">EREBUS</div>
     <div class="stats">
       <div class="stat${G.maxTurn-G.turn<=3?' bad':''}"><span class="lbl">Soporte vital</span><span class="val">${Math.max(0,G.maxTurn-G.turn+1)}</span></div>
-      <div class="stat hp${G.hp<=1?' bad':''}"><span class="lbl">Salud</span><span class="val">${G.hp}/${G.maxHp}</span></div>
+      <div class="stat hp${G.hp<=2?' bad':''}"><span class="lbl">Salud</span><span class="val">${G.hp}/${G.maxHp}</span></div>
       <div class="stat${G.panic>=7?' bad':''}"><span class="lbl">Pánico</span><span class="val">${G.panic}/10</span></div>
-      <div class="stat"><span class="lbl">Acciones</span><span class="val">${G.ap}</span></div>
+      <div class="stat"><span class="lbl">Aliento</span><span class="val">${G.aliento}</span></div>
+      <div class="stat"><span class="lbl">Dados</span><span class="val">${nerve()}</span></div>
+      <div class="stat"><span class="lbl">Tarjetas</span><span class="val">${G.keys}</span></div>
       ${G.destruct!==null?`<div class="stat bad"><span class="lbl">Explosión</span><span class="val">${G.destruct}</span></div>`:''}
     </div>
   </header>
   <div class="layout">
     <main class="board">
+      ${threatHTML()}${rollHTML()}${choiceHTML()}
       <section class="zone">
-        <div class="zone-head"><h2>Plano de la nave</h2><span class="sub">${vis?'<span style="color:var(--alert)">La criatura está a la vista</span>':G.lastSeen&&G.turn-G.lastSeen.turn<=3?`Vista por última vez en ${R(G.lastSeen.room)} (turno ${G.lastSeen.turn})`:'Paradero de la criatura: desconocido'} · ${beastSpeed()>1?'ha crecido':'aún es pequeña'}</span></div>
+        <div class="zone-head"><h2>Plano de la nave</h2><span class="sub">${where}</span></div>
+        <div class="beastbox"><b>${STAGES[B.stage].n}</b><span>Sed ${sedHTML()}</span><span>${esc(STAGES[B.stage].x)}</span>${G.lastSeen&&G.turn-G.lastSeen.turn<=3||vis?`<span>Vida ${Math.max(0,B.hp)}/${B.maxHp}</span>`:''}</div>
         <p class="hint">${esc(hint())}</p>
         ${mapHTML()}
         ${roomPanel()}
       </section>
       <section class="zone">
+        <div class="zone-head"><h2>Tu mano</h2><span class="sub">${G.hand.length}/${HAND} cartas · ${G.aliento} de Aliento${G.steps?` · ${G.steps.n} pasos`:''}${G.flags.improv?' · Improvisando (4+)':''}${G.flags.plan?' · +1 éxito planificado':''}</span></div>
+        <div class="cards">${G.hand.length?G.hand.map(h=>cardHTML(h,'hand')).join(''):'<p class="empty">No llevas cartas. Prepara alguna del catálogo.</p>'}</div>
+        <details class="cat" ${G.hand.length<2?'open':''}><summary>Catálogo de protocolos</summary><div class="catalog">${catalog}</div></details>
+        <div class="controls hide-m"><button class="btn solid big" data-a="end" ${busy()?'disabled':''}>Terminar turno</button></div>
+      </section>
+      <section class="zone">
         <div class="zone-head"><h2>Equipo</h2><span class="sub">${G.inv.length}/${MAXINV} objetos · piezas del cañón ${G.cannon?'montadas':PARTS.filter(has).length+'/3'}</span></div>
         <div class="inv">${invHTML()}</div>
-        <div class="controls hide-m">
-          <button class="btn" data-a="rest" ${canRest()?'':'disabled'}>Descansar (−2 Pánico)</button>
-          <button class="btn solid big" data-a="end" ${busy()?'disabled':''}>Terminar turno</button>
-        </div>
       </section>
     </main>
     <aside class="side">
@@ -733,15 +1014,14 @@ function boardHTML(){
       ${rulesHTML()}
     </aside>
   </div>
-  <div id="mbar"><span class="ap">${G.ap}<small> ACC.</small></span>
-    <button class="btn" data-a="rest" ${canRest()?'':'disabled'}>Descansar</button>
+  <div id="mbar"><span class="ap">${G.aliento}<small> ALIENTO</small></span>
     <button class="btn solid" data-a="end" ${busy()?'disabled':''}>Fin de turno</button></div>
   ${G.phase==='over'?endHTML():''}`;
 }
 function endHTML(){
   const r=G.result;
   if(r.win){
-    const v=r.total>=24?'La compañía te ofrece un ascenso a cambio de tu silencio.':r.total>=16?'Sobrevives. Durante años despertarás a oscuras, escuchando los conductos.':'Lo has conseguido, aunque no quieres recordar a qué precio.';
+    const v=r.total>=26?'La compañía te ofrece un ascenso a cambio de tu silencio.':r.total>=17?'Sobrevives. Durante años despertarás a oscuras, escuchando los conductos.':'Lo has conseguido, aunque no quieres recordar a qué precio.';
     return `<div class="overlay"><div class="end" role="dialog" aria-label="Resultado"><div class="mast">Registro final · Erebus</div>
       <h2>Has sobrevivido</h2><p class="verdict">${v}</p>
       <table>${r.rows.map(([k,n])=>`<tr><td>${esc(k)}</td><td>${n>0?'+':''}${n}</td></tr>`).join('')}<tr class="total"><td>Puntuación</td><td>${r.total}</td></tr></table>
@@ -749,15 +1029,15 @@ function endHTML(){
       <button class="btn solid big" data-a="again">Jugar otra vez</button></div></div>`;
   }
   const txt={muerte:'La criatura te arrastra hacia los conductos. Nadie oye nada.',panico:'Te encierras en una taquilla y ya no sales. Cuando abren la puerta, semanas después, no reconoces a nadie.',
-    oxigeno:'El soporte vital se apaga. Lo último que oyes es algo que respira detrás de la pared.',explosion:'El Erebus estalla contigo a bordo. Al menos, la criatura también.'}[r.reason];
+    oxigeno:'El soporte vital se apaga. Lo último que oyes es algo que respira detrás de la pared.',explosion:'El Erebus estalla contigo a bordo. La criatura muere también, pero eso no es sobrevivir.'}[r.reason];
   const head={muerte:'Muerte',panico:'Pánico',oxigeno:'Sin oxígeno',explosion:'Demasiado tarde'}[r.reason];
   return `<div class="overlay"><div class="end lost" role="dialog" aria-label="Resultado"><div class="mast">Registro final · Erebus</div>
-    <h2>${head}</h2><p class="verdict">${esc(txt)}</p><p class="verdict">Aguantaste ${G.turn} turnos. A la criatura le quedaban ${G.beast.hp} de ${G.beast.maxHp} de Vida.</p>
+    <h2>${head}</h2><p class="verdict">${esc(txt)}</p><p class="verdict">Aguantaste ${G.turn} turnos. La criatura era ${STAGES[G.beast.stage].n.toLowerCase()} y le quedaban ${Math.max(0,G.beast.hp)} de ${G.beast.maxHp} de Vida.</p>
     <button class="btn solid big" data-a="again">Intentarlo de nuevo</button></div></div>`;
 }
 
 const HAS_DOM=typeof document!=='undefined';
-const KEY='erebus';
+const KEY='erebus-protocolos';
 function save(){try{if(G)localStorage.setItem(KEY,JSON.stringify(G));else localStorage.removeItem(KEY);}catch(e){}}
 function render(){if(!HAS_DOM)return;document.getElementById('app').innerHTML=G?boardHTML():titleHTML();save();}
 function handle(a,u){
@@ -765,20 +1045,27 @@ function handle(a,u){
     case 'diff':UI.diff=u;break;
     case 'start':newGame(UI.diff);break;
     case 'sel':UI.sel=u;break;
-    case 'move':move(u);break;
-    case 'search':search();break;
+    case 'step':step(u);break;
+    case 'key':insertKey(+u);break;
+    case 'prep':prepare(u);break;
+    case 'play':play(u);break;
+    case 'accept':acceptRoll();break;
+    case 'reroll':rerollFailed();break;
+    case 'repeat':repeatCard();break;
+    case 'choose':choose(u);break;
+    case 'react':react(u);break;
+    case 'flamer':useFlamer();break;
+    case 'take':resolveThreat();break;
     case 'recruit':recruit(u);break;
     case 'dismiss':dismiss(u);break;
     case 'assemble':assemble();break;
-    case 'fire':fire();break;
     case 'recharge':recharge();break;
-    case 'flame':flame();break;
+    case 'scan':scan();break;
     case 'use':useItem(u);break;
     case 'drop':drop(u);break;
     case 'airlock':airlock();break;
     case 'destruct':destruct();break;
     case 'launch':launch();break;
-    case 'rest':rest();break;
     case 'end':endTurn();break;
     case 'askquit':UI.confirmQuit=true;break;
     case 'noquit':UI.confirmQuit=false;break;
@@ -795,7 +1082,7 @@ if(HAS_DOM){
   app.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('g[data-a]')){e.preventDefault();handle('sel',e.target.dataset.u);render();}});
   const boot=data=>{
     if(data&&data.G)G=data.G;
-    else{try{const s=localStorage.getItem(KEY);if(s){const g=JSON.parse(s);if(g&&g.phase==='play'&&g.beast)G=g;}}catch(e){}}
+    else{try{const s=localStorage.getItem(KEY);if(s){const g=JSON.parse(s);if(g&&g.phase!=='over'&&g.hand)G=g;}}catch(e){}}
     if(G&&!UI.sel)UI.sel=G.pos;
     render();
   };
