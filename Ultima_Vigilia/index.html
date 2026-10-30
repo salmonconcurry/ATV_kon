@@ -135,10 +135,8 @@ details.rules summary{cursor:pointer;padding:10px 14px;font-family:var(--label);
                    repeating-linear-gradient(0deg,rgba(0,0,0,.025) 0 1px,transparent 1px 4px);
   border-radius:4px;border:1px solid #8f8a7a;overflow:hidden;
   box-shadow:0 2px 0 rgba(0,0,0,.4),0 8px 16px rgba(0,0,0,.35);
-  animation:rise .3s ease-out both;
+  transition:transform .18s ease,box-shadow .18s ease;
 }
-@keyframes rise{from{transform:translateY(6px);opacity:.5}to{transform:none;opacity:1}}
-@media (prefers-reduced-motion:reduce){.card{animation:none}}
 .card .head{background:var(--tc);color:#f5f1e6;padding:5px 8px 6px;display:grid;gap:1px}
 .card .kind{font-family:var(--label);font-size:10.5px;letter-spacing:.14em;opacity:.85}
 .card .name{font-family:var(--label);font-size:15px;line-height:1.1;font-weight:500;min-height:33px;text-wrap:balance}
@@ -171,7 +169,7 @@ details.rules summary{cursor:pointer;padding:10px 14px;font-family:var(--label);
   background:#101a1c;color:#d3e0dc;border:1px solid #31514f;border-radius:4px;overflow:hidden;
   background-image:radial-gradient(ellipse at 50% 20%,rgba(79,154,142,.22),transparent 65%),
                    radial-gradient(ellipse at 50% 120%,rgba(192,80,63,.22),transparent 70%);
-  box-shadow:0 8px 18px rgba(0,0,0,.45);animation:rise .35s ease-out both;
+  box-shadow:0 8px 18px rgba(0,0,0,.45);position:relative;transition:transform .18s ease;
 }
 .horror.boss{width:clamp(220px,60vw,300px);border-color:var(--blood)}
 .horror .h-top{display:flex;justify-content:space-between;align-items:center;padding:7px 9px 0}
@@ -248,8 +246,181 @@ details.rules summary{cursor:pointer;padding:10px 14px;font-family:var(--label);
 .power{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:8px 10px;border:1px dashed #3d6461;border-radius:2px}
 .power .pw-txt{font-size:14px;color:#cfe6df;flex:1 1 220px;min-width:0}
 .power .pw-txt b{font-family:var(--label);font-weight:500;color:#9fd3c6}
+
+/* ---------- ambiente: el pueblo en vela (las ventanas se apagan con el Pueblo, el cielo se tiñe con cada fase y los tentáculos suben con la Perdición) ---------- */
+.sky{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:linear-gradient(180deg,#0a0e16 0%,#131925 55%,#231f29 100%)}
+.sky::before{content:"";position:absolute;inset:0;opacity:0;transition:opacity 3s;background:linear-gradient(180deg,#120a10 0%,#2c1418 50%,#5c2419 100%)}
+.sky::after{content:"";position:absolute;inset:0;opacity:0;transition:opacity 3s;background:linear-gradient(180deg,#0e0c16 0%,#20172a 55%,#3c2228 100%)}
+[data-phase="2"] .sky::after{opacity:1}
+[data-phase="3"] .sky::before{opacity:1}
+.sky>*{position:absolute;z-index:1}
+.stars{inset:0 0 40% 0;background-image:radial-gradient(circle,rgba(255,240,220,.7) 0 1px,transparent 1.5px),radial-gradient(circle,rgba(255,240,220,.45) 0 1px,transparent 1.5px);
+  background-size:170px 130px,110px 90px;background-position:0 0,50px 40px;-webkit-mask:linear-gradient(#000,transparent);mask:linear-gradient(#000,transparent);animation:twinkle 5s ease-in-out infinite alternate}
+@keyframes twinkle{to{opacity:.45}}
+.moon{top:8vh;right:12vw;width:clamp(60px,11vw,120px);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 30% 70%,rgba(120,70,40,.35) 0 9%,transparent 10%),radial-gradient(circle at 64% 38%,rgba(120,70,40,.3) 0 7%,transparent 8%),radial-gradient(circle at 38% 36%,#fff1dc,#f0c79a 45%,#c98a5a 78%,#8a5534);
+  box-shadow:0 0 60px 18px rgba(240,170,110,.18),0 0 200px 70px rgba(226,131,79,.10);animation:moon 9s ease-in-out infinite alternate}
+.moon::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 60% 60%,#d0402c,#4a0e08);mix-blend-mode:multiply;opacity:calc((var(--doom,0) - .25) * 1.2);transition:opacity 1.5s}
+@media (max-width:640px){.moon{top:24vh;width:56px;opacity:.75}}
+@keyframes moon{to{transform:translateY(10px);box-shadow:0 0 80px 26px rgba(240,170,110,.24),0 0 240px 90px rgba(226,131,79,.14)}}
+.fog{left:0;width:200%;height:40vh;
+  background:radial-gradient(ellipse 14% 38% at 8% 50%,rgba(175,180,195,.12),transparent 70%),radial-gradient(ellipse 20% 30% at 30% 62%,rgba(175,180,195,.09),transparent 70%),
+             radial-gradient(ellipse 14% 38% at 58% 50%,rgba(175,180,195,.12),transparent 70%),radial-gradient(ellipse 20% 30% at 80% 62%,rgba(175,180,195,.09),transparent 70%);
+  animation:fog 80s linear infinite}
+.fog.f1{top:6vh}
+.fog.f2{bottom:4vh;animation-duration:120s;animation-direction:reverse;opacity:calc(.6 + var(--doom,0)*.6)}
+@keyframes fog{to{transform:translateX(-50%)}}
+.blaze{left:-10%;right:-10%;bottom:6vh;height:42vh;background:radial-gradient(ellipse 60% 70% at 50% 100%,rgba(255,120,50,.55),rgba(192,60,30,.25) 45%,transparent 75%);
+  opacity:calc(.12 + (1 - var(--town,1)) * .9);transition:opacity 2s;animation:blaze 1.6s ease-in-out infinite alternate}
+@keyframes blaze{to{transform:scaleY(1.08) translateY(-4px);filter:brightness(1.2)}}
+.town{left:0;right:0;bottom:7vh;width:100%;height:30vh}
+.town .w{fill:#ffc070;filter:drop-shadow(0 0 4px #ff9a40);transition:fill 1.2s,filter 1.2s;animation:candle 3s ease-in-out infinite}
+.town .w:nth-child(2n){animation-duration:4.3s;animation-delay:-1s}.town .w:nth-child(3n){animation-duration:2.4s;animation-delay:-2s}
+.town .w.off{fill:#14161c;filter:none;animation:none}
+@keyframes candle{50%{fill:#ffdc9a;opacity:.8}}
+.embers{inset:0;opacity:calc(.25 + (1 - var(--town,1)) * .75);transition:opacity 2s}
+.ember{position:absolute;bottom:-10px;border-radius:50%;background:#ffb060;box-shadow:0 0 8px 2px rgba(255,120,40,.8);animation:ember var(--d) linear infinite;animation-delay:var(--dl)}
+@keyframes ember{0%{transform:translate(0,0);opacity:0}10%{opacity:1}60%{transform:translate(30px,-50vh);opacity:.8}100%{transform:translate(-10px,-90vh) scale(.3);opacity:0}}
+.tent{bottom:0;width:var(--w);height:var(--h);transform:translateY(calc((1 - var(--doom,0)) * 82% + 6%));transition:transform 2.5s cubic-bezier(.3,.7,.3,1)}
+.tent svg{width:100%;height:100%;transform-origin:50% 100%;animation:writhe var(--s,7s) ease-in-out infinite alternate;overflow:visible}
+.tent.t1{left:4vw;--w:clamp(40px,6vw,80px);--h:48vh;--s:6s}
+.tent.t2{left:38vw;--w:clamp(28px,4vw,54px);--h:32vh;--s:8s}
+.tent.t3{right:6vw;--w:clamp(44px,7vw,90px);--h:54vh;--s:9s}
+.tent.t2 svg{animation-direction:alternate-reverse}
+@keyframes writhe{0%{transform:rotate(-7deg) skewX(4deg)}50%{transform:rotate(3deg) skewX(-3deg)}100%{transform:rotate(8deg) skewX(2deg)}}
+.wave{left:0;right:0;background-repeat:repeat-x;background-size:var(--ww) 100%;animation:wave var(--wd) linear infinite}
+@keyframes wave{to{background-position-x:calc(-1 * var(--ww))}}
+.wave.w1{bottom:2vh;height:80px;--ww:420px;--wd:20s;opacity:.85;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' preserveAspectRatio='none'%3E%3Cpath d='M0 14Q12.5 4 25 14T50 14T75 14T100 14V30H0Z' fill='%23111d22' stroke='%23e2834f' stroke-opacity='.22' stroke-width='.4'/%3E%3C/svg%3E")}
+.wave.w2{bottom:-10px;height:64px;--ww:300px;--wd:12s;animation-direction:reverse;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' preserveAspectRatio='none'%3E%3Cpath d='M0 12Q12.5 3 25 12T50 12T75 12T100 12V30H0Z' fill='%230a1216'/%3E%3C/svg%3E")}
+.doomtint{inset:0;background:radial-gradient(ellipse 120% 70% at 50% 115%,rgba(192,60,45,.42),transparent 65%);opacity:var(--doom,0);transition:opacity 1.5s}
+.vignette{inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 50%,rgba(0,0,0,.65))}
+.mad .sky{animation:madsky 4s ease-in-out infinite}
+.mad .vignette{animation:madvig 1.8s ease-in-out infinite}
+@keyframes madsky{50%{filter:hue-rotate(-25deg) saturate(1.6)}}
+@keyframes madvig{50%{background:radial-gradient(ellipse at 50% 45%,transparent 35%,rgba(110,20,15,.7))}}
+.mad .zone-head h2{animation:madtxt 3s ease-in-out infinite}
+@keyframes madtxt{25%{transform:skewX(-6deg);text-shadow:2px 0 rgba(192,80,63,.7),-2px 0 rgba(79,154,142,.7)}50%{transform:none;text-shadow:none}}
+.fx-flash.fire{background:radial-gradient(ellipse 120% 80% at 50% 110%,rgba(255,120,40,.55),transparent 70%)}
+.fx-banner.phase{border-color:var(--sodium)}
+.fx-banner.phase h2{color:#ffd2b0;text-shadow:0 0 34px rgba(226,131,79,.9)}
+
+/* ---------- vida en la mesa ---------- */
+.hero>*{animation:heroIn 1s cubic-bezier(.2,.8,.2,1) backwards}
+.hero>*:nth-child(2){animation-delay:.15s}.hero>*:nth-child(3){animation-delay:.35s}
+@keyframes heroIn{from{opacity:0;transform:translateY(18px);filter:blur(6px)}}
+.hero h1{text-shadow:0 0 30px rgba(127,195,180,.25)}
+.hero h1 span,.brand span{animation:sodium 6s linear infinite;text-shadow:0 0 18px rgba(226,131,79,.55)}
+@keyframes sodium{0%,88%,92%,100%{opacity:1}89%{opacity:.45}90%{opacity:.9}91%{opacity:.6}}
+.opt{transition:transform .18s,border-color .18s,box-shadow .18s}
+.opt:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,.4)}
+.opt[aria-pressed="true"]{animation:chosen 2.6s ease-in-out infinite}
+@keyframes chosen{50%{box-shadow:inset 0 0 0 1px var(--sodium),0 0 22px rgba(226,131,79,.28)}}
+.btn{transition:background .15s,border-color .15s,transform .12s,box-shadow .2s}
+.btn:active:not(:disabled){transform:scale(.96)}
+.btn.primary.big:not(:disabled){animation:callout 2.4s ease-in-out infinite}
+@keyframes callout{50%{box-shadow:0 0 0 3px rgba(226,131,79,.18),0 0 26px rgba(226,131,79,.35)}}
+.zone{backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+.zone-head h2{text-shadow:0 2px 12px rgba(0,0,0,.6)}
+.card:hover{transform:translateY(-6px) rotate(-.8deg);box-shadow:0 2px 0 rgba(0,0,0,.4),0 18px 30px rgba(0,0,0,.5),0 0 0 1px rgba(226,131,79,.55),0 0 24px rgba(226,131,79,.22)}
+.card .art::before{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,245,220,.35) 50%,transparent 65%);transform:translateX(-120%);transition:transform .6s}
+.card:hover .art::before{transform:translateX(120%)}
+.card .art svg{animation:bob 5s ease-in-out infinite;animation-delay:calc(var(--clk,0s) + var(--off,0s))}
+@keyframes bob{50%{transform:translateY(-3px) rotate(2deg)}}
+.horror:hover{transform:translateY(-4px)}
+.horror .art svg{animation:lurk 4.5s ease-in-out infinite;animation-delay:calc(var(--clk,0s) + var(--off,0s))}
+@keyframes lurk{0%,100%{transform:scale(1) rotate(-4deg)}50%{transform:scale(1.08) rotate(4deg);filter:drop-shadow(0 0 10px rgba(127,195,180,.8))}}
+.horror .art{position:relative;overflow:hidden}
+.horror .art::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 120%,rgba(127,195,180,.25),transparent 60%);animation:murk 3s ease-in-out infinite alternate}
+@keyframes murk{to{opacity:.3;transform:translateY(-6px)}}
+.horror.boss .art svg{animation-duration:3s}
+.horror.boss{animation:bossAura 3.5s ease-in-out infinite;animation-delay:var(--clk,0s)}
+@keyframes bossAura{50%{box-shadow:0 0 0 1px var(--blood),0 0 40px rgba(192,80,63,.55),0 8px 18px rgba(0,0,0,.45)}}
+.horror.warn::after{content:"";position:absolute;inset:-1px;border-radius:4px;pointer-events:none;border:2px solid var(--blood);animation:warn 1.1s ease-in-out infinite;animation-delay:var(--clk,0s)}
+@keyframes warn{50%{opacity:.15;box-shadow:0 0 26px 4px rgba(192,80,63,.6)}}
+.clock.now .tick.on{animation:tick .55s ease-in-out infinite alternate}
+@keyframes tick{to{transform:scale(1.35);box-shadow:0 0 8px var(--blood)}}
+.wound span{transition:width .8s cubic-bezier(.2,.8,.2,1);background:linear-gradient(90deg,#7a1f15,var(--blood),#f08070);background-size:200% 100%;animation:ichor 2s linear infinite}
+@keyframes ichor{to{background-position:-200% 0}}
+.seg{transition:background .4s,border-color .4s}
+.bar.low .seg.on{animation:tick .7s ease-in-out infinite alternate}
+.res b{display:inline-block;transition:transform .2s}
+.meter.full i{animation:tick .8s ease-in-out infinite alternate}
+.power:has(.btn:not(:disabled)){border-color:var(--copper);box-shadow:0 0 18px rgba(79,154,142,.25)}
+.horror.targetable{animation:target 1s ease-in-out infinite}
+@keyframes target{50%{box-shadow:0 0 0 3px var(--sodium),0 0 26px rgba(226,131,79,.5)}}
+.overlay{animation:fadeIn .6s ease backwards}
+@keyframes fadeIn{from{opacity:0}}
+.end{animation:endIn .9s cubic-bezier(.2,.8,.2,1) backwards .15s}
+@keyframes endIn{from{opacity:0;transform:translateY(40px) scale(.92);filter:blur(8px)}}
+.end h2{animation:endGlow 2.5s ease-in-out infinite alternate}
+@keyframes endGlow{to{text-shadow:0 0 24px rgba(226,131,79,.6)}}
+.end.lost{box-shadow:0 0 90px rgba(192,80,63,.35),0 20px 60px rgba(0,0,0,.6)}
+.end.lost h2{color:#f0b9ad;animation-name:endBlood}
+@keyframes endBlood{to{text-shadow:0 0 28px rgba(192,80,63,.9);letter-spacing:.03em}}
+.end tr{animation:heroIn .5s ease backwards}
+.end tr:nth-child(2){animation-delay:.5s}.end tr:nth-child(3){animation-delay:.65s}.end tr:nth-child(4){animation-delay:.8s}.end tr:nth-child(5){animation-delay:.95s}.end tr:nth-child(6){animation-delay:1.1s}.end tr:nth-child(n+7){animation-delay:1.25s}
+.end tr:first-child{animation-delay:.35s}
+
+/* ---------- efectos de jugada ---------- */
+#fx{position:fixed;inset:0;pointer-events:none;z-index:15;overflow:hidden}
+.fx-p{position:absolute;border-radius:50%}
+.fx-t{position:absolute;font-family:var(--label);font-size:21px;font-weight:700;white-space:nowrap;text-shadow:0 2px 6px #000,0 0 14px currentColor}
+.fx-banner{position:fixed;left:0;right:0;top:36%;z-index:16;pointer-events:none;text-align:center;padding:18px 16px 20px;
+  background:linear-gradient(90deg,transparent,rgba(6,9,12,.86) 18%,rgba(6,9,12,.86) 82%,transparent);border-block:1px solid rgba(226,131,79,.25)}
+.fx-banner h2{font-family:var(--display);font-size:clamp(38px,8vw,78px);line-height:1;color:var(--paper);text-shadow:0 0 26px rgba(226,131,79,.5)}
+.fx-banner p{font-family:var(--label);font-size:clamp(14px,3.6vw,19px);color:#c9cdd1;letter-spacing:.05em;margin-top:6px}
+.fx-banner.doom{border-color:rgba(192,80,63,.5)}
+.fx-banner.doom h2{color:#f0b9ad;text-shadow:0 0 30px rgba(192,80,63,.85)}
+.fx-banner.boss{border-color:var(--blood)}
+.fx-banner.boss h2{font-size:clamp(46px,11vw,110px);color:#f6d1c8;text-shadow:0 0 40px rgba(192,80,63,.95),0 0 4px #000}
+.fx-banner.turn h2{font-size:clamp(30px,6vw,54px)}
+.fx-flash{position:fixed;inset:0;pointer-events:none;z-index:14}
+.fx-flash.hurt{background:radial-gradient(ellipse at center,transparent 35%,rgba(192,60,45,.6))}
+.fx-flash.doom{background:radial-gradient(ellipse 120% 80% at 50% 110%,rgba(150,30,25,.55),transparent 70%)}
+.fx-flash.heal{background:radial-gradient(ellipse at center,transparent 45%,rgba(79,154,142,.4))}
+#app .fx-deal{animation:fxDeal .55s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i,0) * 70ms)}
+@keyframes fxDeal{from{opacity:0;transform:translateY(34px) rotate(-7deg) scale(.86)}}
+#app .fx-flip{animation:fxFlip .65s ease-out backwards;animation-delay:calc(var(--i,0) * 90ms)}
+@keyframes fxFlip{from{opacity:0;transform:perspective(700px) rotateY(100deg) scale(.9);filter:brightness(2.2)}60%{opacity:1}}
+#app .fx-emerge{animation:fxEmerge 1s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i,0) * 130ms)}
+@keyframes fxEmerge{0%{opacity:0;transform:translateY(60px) scaleY(.55) skewX(10deg);filter:blur(8px) hue-rotate(70deg)}60%{opacity:1;transform:translateY(-8px) scaleY(1.06);filter:blur(0)}}
+@media (prefers-reduced-motion:reduce){.sky *,.card,.horror,.card *,.horror *,.hero>*,.opt,.btn,.end,.end *,.overlay{animation:none!important;transition:none!important}}
 </style>
 
+<div class="sky" aria-hidden="true">
+  <svg width="0" height="0" style="position:absolute"><defs>
+    <linearGradient id="tentg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2e3a"/><stop offset="1" stop-color="#08090d"/></linearGradient>
+    <symbol id="tentacle" viewBox="0 0 60 300"><path d="M16 300C12 232 2 190 12 142C20 102 40 84 34 44C32 26 22 16 30 3C42 16 48 34 46 56C43 94 31 114 31 152C31 202 44 242 46 300Z" fill="url(#tentg)" stroke="#e2834f" stroke-opacity=".22"/>
+      <g fill="#4a3a3a" opacity=".8"><ellipse cx="26" cy="262" rx="4" ry="3"/><ellipse cx="22" cy="226" rx="3.6" ry="2.8"/><ellipse cx="19" cy="190" rx="3.2" ry="2.5"/><ellipse cx="22" cy="156" rx="2.8" ry="2.2"/><ellipse cx="29" cy="124" rx="2.4" ry="2"/><ellipse cx="36" cy="94" rx="2" ry="1.6"/><ellipse cx="39" cy="66" rx="1.6" ry="1.3"/></g></symbol>
+  </defs></svg>
+  <div class="stars"></div>
+  <div class="moon"></div>
+  <div class="fog f1"></div>
+  <div class="blaze"></div>
+  <svg class="town" viewBox="0 0 1200 260" preserveAspectRatio="xMidYMax slice">
+    <path fill="#07090d" stroke="#e2834f" stroke-opacity=".15" d="M0 260V175L20 170V260ZM20 260V170L60 130L100 170V260ZM100 260V190L130 160L160 190V260ZM160 260V150L200 115L240 150V260ZM260 260V160H300V60L315 18L330 60V160H370V260ZM370 260V180L410 145L450 180V260ZM450 260V200L480 182V200L510 182V200L540 182V200L560 200V260ZM560 260V160L590 120L620 160V260ZM620 260V185L665 150L710 185V260ZM720 260V110L735 88L750 110V260ZM750 260V170L790 135L830 170V260ZM830 260V195L870 165L910 195V260ZM910 260V155L950 120L990 155V260ZM990 260V180L1030 150L1070 180V260ZM1070 260V165L1110 130L1150 165V260ZM1150 260V190L1200 172V260ZM240 260V200H260V260ZM710 260V200H720V260Z"/>
+    <g>
+      <rect class="w" x="40" y="186" width="8" height="10"/><rect class="w" x="70" y="200" width="8" height="10"/><rect class="w" x="122" y="200" width="8" height="10"/>
+      <rect class="w" x="182" y="160" width="8" height="10"/><rect class="w" x="212" y="172" width="8" height="10"/><rect class="w" x="200" y="205" width="8" height="10"/>
+      <rect class="w" x="311" y="84" width="8" height="14"/><rect class="w" x="282" y="182" width="8" height="12"/><rect class="w" x="342" y="182" width="8" height="12"/>
+      <rect class="w" x="400" y="192" width="8" height="10"/><rect class="w" x="478" y="216" width="8" height="10"/><rect class="w" x="520" y="216" width="8" height="10"/>
+      <rect class="w" x="582" y="168" width="8" height="10"/><rect class="w" x="598" y="204" width="8" height="10"/><rect class="w" x="648" y="196" width="8" height="10"/>
+      <rect class="w" x="680" y="196" width="8" height="10"/><rect class="w" x="731" y="122" width="8" height="10"/><rect class="w" x="778" y="178" width="8" height="10"/>
+      <rect class="w" x="804" y="204" width="8" height="10"/><rect class="w" x="862" y="208" width="8" height="10"/><rect class="w" x="934" y="164" width="8" height="10"/>
+      <rect class="w" x="964" y="192" width="8" height="10"/><rect class="w" x="1022" y="196" width="8" height="10"/><rect class="w" x="1100" y="178" width="8" height="10"/>
+      <rect class="w" x="1126" y="204" width="8" height="10"/>
+    </g>
+  </svg>
+  <div class="embers"></div>
+  <div class="tent t1"><svg viewBox="0 0 60 300" preserveAspectRatio="none"><use href="#tentacle"/></svg></div>
+  <div class="tent t2"><svg viewBox="0 0 60 300" preserveAspectRatio="none"><use href="#tentacle"/></svg></div>
+  <div class="tent t3"><svg viewBox="0 0 60 300" preserveAspectRatio="none"><use href="#tentacle"/></svg></div>
+  <div class="wave w1"></div>
+  <div class="fog f2"></div>
+  <div class="wave w2"></div>
+  <div class="doomtint"></div>
+  <div class="vignette"></div>
+</div>
 <div id="app"></div>
 
 <script>
@@ -772,7 +943,7 @@ function cardHTML(c, zone){
   }
   if(c.id==='pesadilla')cls=' pesadilla';
   const cost=zone==='market'||zone==='pile'?`<span class="cost" title="Coste en Saber">${costOf(c)}</span>`:'<span></span>';
-  return `<article class="card${cls}" style="--tc:var(--t-${d.t});--hx:${20+hash(c.id)%60}%">
+  return `<article class="card${cls}"${c.uid?` data-k="c${c.uid}"`:` data-pile="${c.id}"`} style="--tc:var(--t-${d.t});--hx:${20+hash(c.id)%60}%;--off:-${(c.uid||hash(c.id))%9*.6}s">
     <div class="head"><span class="kind">${TYPES[d.t]}</span><h3 class="name">${esc(d.n)}</h3></div>
     <div class="art">${art(c.id,false)}</div>
     <p class="txt">${d.x}</p>
@@ -796,7 +967,7 @@ function horrorHTML(h){
     acts=`<button class="btn primary" data-a="attack" data-u="${h.uid}" ${canAttack(h)?'':'disabled'}>Derrotar · ${v} Voluntad</button>`;
   }
   const base=d.v+(G.boss==='madre'&&h.id==='profundo'?1:0);
-  return `<article class="horror${d.boss?' boss':''}${tgt?' targetable':''}">
+  return `<article class="horror${d.boss?' boss':''}${tgt?' targetable':''}${h.cd===1&&!pk?' warn':''}" data-k="h${h.uid}" style="--off:-${h.uid%7*.7}s">
     <div class="h-top"><span class="vida${!d.boss&&v<base?' down':''}" title="Vida">${d.boss?G.bossV-h.dmg:v}</span>
       <span class="clock${h.cd===1?' now':''}" title="Turnos hasta su ataque">${ticks}</span></div>
     <h3 class="h-name">${esc(d.n)}</h3>
@@ -903,9 +1074,9 @@ function boardHTML(){
   return `<header class="top">
     <div class="brand">Última <span>Vigilia</span></div>
     <div class="stats">
-      <div class="stat"><span class="lbl">CORDURA</span>${bars(G.cordura,G.maxCord,G.cordura<=3?'low':'')}</div>
-      <div class="stat"><span class="lbl">PUEBLO</span>${bars(G.pueblo,G.maxPueblo,G.pueblo<=5?'low':'')}</div>
-      <div class="stat"><span class="lbl">PERDICIÓN</span>${bars(G.perd,MAXP,'doom')}</div>
+      <div class="stat" data-stat="cordura"><span class="lbl">CORDURA</span>${bars(G.cordura,G.maxCord,G.cordura<=3?'low':'')}</div>
+      <div class="stat" data-stat="pueblo"><span class="lbl">PUEBLO</span>${bars(G.pueblo,G.maxPueblo,G.pueblo<=5?'low':'')}</div>
+      <div class="stat" data-stat="perd"><span class="lbl">PERDICIÓN</span>${bars(G.perd,MAXP,'doom')}</div>
       <div class="stat"><span class="lbl">RONDA</span><span class="val">${G.round}</span></div>
       <div class="stat"><span class="lbl">MAREA</span><span class="val">${G.marea.length}</span></div>
     </div>
@@ -923,10 +1094,10 @@ function boardHTML(){
         <div class="row">${G.piles.map(q=>cardHTML({uid:0,id:q.id},'market')).join('')}${piles}</div>
       </section>
       <section class="zone mano">
-        <div class="zone-head"><h2>${G.invs.length>1?`Mano de ${esc(inv.n)}`:'Tu mano'}</h2><span class="sub">Mazo ${p.deck.length} · Descarte ${p.discard.length}</span></div>
+        <div class="zone-head"><h2>${G.invs.length>1?`Mano de ${esc(inv.n)}`:'Tu mano'}</h2><span class="sub" data-fly="discard">Mazo ${p.deck.length} · Descarte ${p.discard.length}</span></div>
         <div class="pool">
-          <span class="res saber"><b>${G.saber}</b><span>SABER</span></span>
-          <span class="res vol"><b>${G.vol}</b><span>VOLUNTAD</span></span>
+          <span class="res saber" data-stat="saber"><b>${G.saber}</b><span>SABER</span></span>
+          <span class="res vol" data-stat="vol"><b>${G.vol}</b><span>VOLUNTAD</span></span>
           ${G.vidaMod?`<span class="hint">Polvo de Ibn-Ghazi activo: −${-G.vidaMod} Vida</span>`:''}
         </div>
         <div class="power"><span class="pw-txt"><b>${esc(inv.pn)}</b> · ${esc(inv.pw)}</span>${meter(p)}<button class="btn sea" data-a="power" ${canPower()?'':'disabled'}>Usar poder</button></div>
@@ -977,6 +1148,170 @@ const HAS_DOM=typeof document!=='undefined';
 const KEY='ultima-vigilia';
 function save(){try{if(G)localStorage.setItem(KEY,JSON.stringify(G));else localStorage.removeItem(KEY);}catch(e){}}
 function render(){if(!HAS_DOM)return;document.getElementById('app').innerHTML=G?boardHTML():titleHTML();save();}
+
+// ---------- efectos: se compara la mesa antes y después de cada acción ----------
+const FX={snap:null,q:0,reduce:HAS_DOM&&matchMedia('(prefers-reduced-motion: reduce)').matches};
+const FX_COL={saber:'#f0b964',vol:'#86c9bc',cordura:'#9fd3c6',pueblo:'#ffb070',perd:'#ff7a66',marea:'#9fd3c6'};
+const FX_NAME={saber:'Saber',vol:'Voluntad',cordura:'Cordura',pueblo:'Pueblo',perd:'Perdición',marea:''};
+const FX_EXIT={
+  slain:{d:950,k:[{transform:'none',opacity:1,filter:'none'},{offset:.2,transform:'scale(1.08) rotate(-2deg)',filter:'brightness(2.2) saturate(0)'},{transform:'scale(.5) translateY(40px) rotate(8deg)',opacity:0,filter:'blur(8px) brightness(.3)'}]},
+  sink:{d:850,k:[{transform:'none',opacity:1,filter:'none'},{transform:'translateY(70px) scaleY(.5)',opacity:0,filter:'blur(6px) hue-rotate(60deg)'}]},
+  burn:{d:900,k:[{opacity:1,filter:'none',transform:'none'},{offset:.35,filter:'sepia(1) saturate(3) brightness(1.5)',transform:'translateY(-6px)'},{opacity:0,filter:'sepia(1) brightness(.2) blur(4px)',transform:'translateY(-40px) scale(.9) rotate(-3deg)'}]},
+  play:{d:650,k:[{opacity:1,transform:'none',filter:'none'},{offset:.4,opacity:1,transform:'translateY(-28px) scale(1.08)',filter:'brightness(1.4)'},{opacity:0,transform:'translateY(-70px) scale(.85)',filter:'brightness(2) blur(3px)'}]},
+  fade:{d:400,k:[{opacity:1},{opacity:0}]}
+};
+function fxLayer(){let l=document.getElementById('fx');if(!l){l=document.createElement('div');l.id='fx';l.setAttribute('aria-hidden','true');document.body.appendChild(l);}return l;}
+function fxStats(){return {saber:G.saber,vol:G.vol,cordura:G.cordura,pueblo:G.pueblo,perd:G.perd,marea:G.marea.length};}
+function fxBefore(){
+  const els={};
+  if(G)document.querySelectorAll('#app [data-k]').forEach(el=>{els[el.dataset.k]={el,r:el.getBoundingClientRect()};});
+  FX.snap={els,stats:G?fxStats():null,top:G?G.log[0]:null,sx:scrollX,sy:scrollY,
+    piles:G?Object.fromEntries(G.piles.map(q=>[q.id,q.left])):{},ph:G?phase():0};
+}
+function fxAmbient(){
+  const r=document.documentElement,town=G?G.pueblo/G.maxPueblo:1;
+  r.style.setProperty('--clk',`-${(performance.now()/1000).toFixed(2)}s`);
+  r.style.setProperty('--doom',G?(G.perd/MAXP).toFixed(2):'.3');
+  r.style.setProperty('--town',town.toFixed(2));
+  r.dataset.phase=G?phase():1;
+  r.classList.toggle('mad',!!G&&G.phase!=='over'&&G.cordura/G.maxCord<=.3);
+  // las ventanas del pueblo se apagan en orden salteado a medida que cae el Pueblo
+  const ws=document.querySelectorAll('.town .w'),lit=Math.round(ws.length*town);
+  ws.forEach((w,i)=>w.classList.toggle('off',(i*7)%ws.length>=lit));
+}
+function fxEmbers(){
+  const b=document.querySelector('.sky .embers');if(!b||FX.reduce)return;
+  for(let i=0;i<22;i++){
+    const s=document.createElement('span'),sz=2+Math.random()*3;s.className='ember';
+    Object.assign(s.style,{left:Math.random()*100+'%',width:sz+'px',height:sz+'px'});
+    s.style.setProperty('--d',(7+Math.random()*9)+'s');s.style.setProperty('--dl',-(Math.random()*16)+'s');
+    b.appendChild(s);
+  }
+}
+function fxAfter(){
+  const s=FX.snap;FX.snap=null;
+  fxAmbient();
+  if(!s||!G||FX.reduce)return;
+  const now={};document.querySelectorAll('#app [data-k]').forEach(el=>now[el.dataset.k]=el);
+  let i=0,fly=0;
+  for(const [k,el] of Object.entries(now)){
+    const o=s.els[k];
+    if(!o){fxEnter(el,Math.min(i++,10));continue;}
+    const r=el.getBoundingClientRect();
+    const dx=o.r.left+s.sx-(r.left+scrollX),dy=o.r.top+s.sy-(r.top+scrollY);
+    if(Math.abs(dx)+Math.abs(dy)>6)el.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:'none'}],{duration:500,easing:'cubic-bezier(.2,.8,.2,1)'});
+  }
+  for(const [k,o] of Object.entries(s.els)){
+    if(now[k])continue;
+    const ex=fxExit(k);if(ex.fly)ex.delay=Math.min(fly++,6)*60;
+    fxGhost(o,ex,s);
+  }
+  // las cartas compradas salen volando de su pila
+  for(const q of G.piles)if(s.piles[q.id]>q.left){
+    const el=document.querySelector(`#app [data-pile="${q.id}"]`);
+    if(el)fxGhost({el:el.cloneNode(true),r:el.getBoundingClientRect()},{fly:'[data-fly="discard"]',delay:0},{sx:scrollX,sy:scrollY});
+  }
+  if(!s.stats){fxBanner('Última Vigilia',`Os acecha ${BOSS().n}`,'boss',2400);return;}
+  if(phase()>s.ph)fxBanner(`Fase ${'I'.repeat(phase())}`,`${BOSS().n} se fortalece`,'phase',2300);
+  const n=fxStats();
+  for(const key in n){const d=n[key]-s.stats[key];if(d)fxDelta(key,d);}
+  const fresh=[];for(const l of G.log){if(l===s.top)break;fresh.push(l);}
+  fxEvents(fresh.reverse());
+}
+function fxEnter(el,i){
+  el.style.setProperty('--i',i);
+  const hor=el.classList.contains('horror');
+  el.classList.add(hor?'fx-emerge':el.closest('[data-flip]')?'fx-flip':'fx-deal');
+  if(hor){const r=el.getBoundingClientRect();setTimeout(()=>fxBurst(r.left+r.width/2,r.bottom-12,'#7fc3b4',16,'up'),i*130+250);}
+}
+function fxExit(k){
+  const uid=+k.slice(1),has=a=>a.some(x=>x&&x.uid===uid);
+  if(k[0]==='h'){
+    if(has(G.trofeos))return {cls:'slain',burst:'#e0604a'};
+    if(has(G.marea))return {cls:'sink',burst:'#7fc3b4'};
+    return {cls:'fade'};
+  }
+  if(has(G.exiled))return {cls:'burn',burst:'#f0a040'};
+  if(G.invs.some(p=>has(p.played)))return {cls:'play',burst:'#f0c070'};
+  if(G.invs.some(p=>has(p.discard)||has(p.deck)))return {fly:'[data-fly="discard"]'};
+  return {cls:'sink'};
+}
+function fxGhost(o,ex,s){
+  const g=o.el,r=o.r,x=r.left+s.sx-scrollX,y=r.top+s.sy-scrollY;
+  g.classList.remove('fx-deal','fx-flip','fx-emerge','warn','targetable');
+  Object.assign(g.style,{position:'absolute',left:x+'px',top:y+'px',width:r.width+'px',height:r.height+'px',margin:'0',animation:'none'});
+  fxLayer().appendChild(g);
+  let a;
+  if(ex.fly){
+    const t=document.querySelector(ex.fly),tr=t?t.getBoundingClientRect():{left:x,top:innerHeight,width:0,height:0};
+    const dx=tr.left+tr.width/2-(x+r.width/2),dy=tr.top+tr.height/2-(y+r.height/2);
+    a=g.animate([{transform:'none',opacity:1},{offset:.25,transform:'translateY(-14px) scale(1.04)',opacity:1},{transform:`translate(${dx}px,${dy}px) scale(.15) rotate(${dx>0?20:-20}deg)`,opacity:.1}],{duration:700,delay:ex.delay,easing:'cubic-bezier(.45,0,.55,1)',fill:'both'});
+  } else {
+    const e=FX_EXIT[ex.cls];a=g.animate(e.k,{duration:e.d,easing:'ease-in',fill:'forwards'});
+  }
+  if(ex.burst)fxBurst(x+r.width/2,y+r.height/2,ex.burst,ex.cls==='slain'?28:16,ex.cls==='burn'||ex.cls==='play'?'up':'out');
+  a.onfinish=()=>g.remove();setTimeout(()=>g.remove(),2500);
+}
+function fxBurst(x,y,color,n,mode){
+  const L=fxLayer();
+  for(let i=0;i<n;i++){
+    const p=document.createElement('span'),sz=3+Math.random()*5,a=Math.random()*Math.PI*2,v=40+Math.random()*100;
+    p.className='fx-p';
+    Object.assign(p.style,{left:x+'px',top:y+'px',width:sz+'px',height:sz+'px',marginLeft:-sz/2+'px',marginTop:-sz/2+'px',background:color,boxShadow:`0 0 ${sz*2}px ${color}`});
+    L.appendChild(p);
+    const dx=mode==='up'?(Math.random()-.5)*90:Math.cos(a)*v,dy=mode==='up'?-(50+Math.random()*120):Math.sin(a)*v;
+    p.animate([{transform:'none',opacity:1},{transform:`translate(${dx}px,${dy}px) scale(.3)`,opacity:0}],{duration:600+Math.random()*700,easing:'cubic-bezier(.2,.7,.3,1)',fill:'forwards'}).onfinish=()=>p.remove();
+  }
+}
+function fxFloat(el,text,color,delay=0){
+  if(!el)return;const r=el.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;
+  const t=document.createElement('span');t.className='fx-t';t.textContent=text;t.style.color=color;
+  t.style.left=(r.left+r.width/2)+'px';t.style.top=(r.top+r.height/2)+'px';
+  fxLayer().appendChild(t);
+  t.animate([{transform:'translate(-50%,-50%) scale(.6)',opacity:0},{offset:.15,transform:'translate(-50%,-90%) scale(1.25)',opacity:1},{transform:'translate(-50%,-260%) scale(1)',opacity:0}],{duration:1400,delay,easing:'ease-out',fill:'both'}).onfinish=()=>t.remove();
+}
+function fxShake(p){
+  const k=[0,-1,1,-1,1,-.5,.5,0].map((v,i)=>({transform:`translate(${v*p*3}px,${(i%2?1:-1)*p}px)`}));
+  document.querySelectorAll('#app>:not(.overlay)').forEach(el=>el.animate(k,{duration:420,easing:'ease-out'}));
+}
+function fxFlash(kind){
+  const f=document.createElement('div');f.className='fx-flash '+kind;document.body.appendChild(f);
+  f.animate([{opacity:0},{opacity:1,offset:.25},{opacity:0}],{duration:kind==='hurt'?650:900,fill:'forwards'}).onfinish=()=>f.remove();
+}
+function fxBanner(h,p,kind='',dur=1700){
+  // si se juega deprisa, los carteles de turno atrasados se descartan
+  const t=performance.now(),delay=Math.max(0,FX.q-t);
+  if((kind==='turn'&&delay>600)||(kind!=='boss'&&delay>2500))return;
+  FX.q=t+delay+dur*.8;
+  const b=document.createElement('div');b.className='fx-banner '+kind;
+  b.innerHTML=`<h2>${esc(h)}</h2>${p?`<p>${esc(p)}</p>`:''}`;
+  document.body.appendChild(b);
+  b.animate([{opacity:0,transform:'scale(1.25)',filter:'blur(10px)'},{offset:.18,opacity:1,transform:'scale(1)',filter:'blur(0)'},{offset:.8,opacity:1,transform:'scale(.98)'},{opacity:0,transform:'scale(.94)',filter:'blur(6px)'}],{duration:dur,delay,fill:'both',easing:'ease-out'}).onfinish=()=>b.remove();
+}
+function fxDelta(key,d){
+  const el=document.querySelector(`[data-stat="${key}"]`);
+  if(key!=='marea')fxFloat(el,`${d>0?'+':'−'}${Math.abs(d)} ${FX_NAME[key]}`,d<0&&key==='cordura'?'#ff8a78':FX_COL[key]);
+  if(el&&(key==='saber'||key==='vol')){const b=el.querySelector('b');b&&b.animate([{transform:'scale(1.6)'},{transform:'none'}],{duration:450,easing:'ease-out'});}
+  if(key==='cordura'&&d<0){fxShake(Math.min(4,1-d));fxFlash('hurt');}
+  if(key==='cordura'&&d>0)fxFlash('heal');
+  if(key==='pueblo'&&d<0){fxShake(Math.min(4,-d));fxFlash('fire');const b=document.querySelector('.blaze');b&&b.animate([{filter:'none'},{filter:'brightness(2.5)'},{filter:'none'}],{duration:1200});}
+  if(key==='perd'&&d>0){fxFlash('doom');const m=document.querySelector('.moon');m&&m.animate([{filter:'none'},{filter:'brightness(1.6) drop-shadow(0 0 30px #c0503f)'},{filter:'none'}],{duration:1200});}
+}
+function fxEvents(list){
+  for(const l of list){
+    const m=l.m;
+    if(l.cls==='turn'&&m.startsWith('Ronda')){const [h,p]=m.split(' · ');fxBanner(h,p,'turn',1400);}
+    else if(l.cls==='turn'&&m.startsWith('Turno de ')){fxBanner(m.slice(9),'toma el relevo','turn',1400);}
+    else if(m.startsWith('Augurio')){const t=m.slice(m.indexOf(' · ')+3),i=t.indexOf(': ');fxBanner('Augurio: '+(i<0?t:t.slice(0,i)),i<0?'':t.slice(i+2),'doom',2300);}
+    else if(m.includes('emerge de las aguas')){fxBanner(BOSS().n,'emerge de las aguas','boss',2800);fxShake(6);fxFlash('doom');}
+    else if(m.includes(' ataca')){
+      const name=m.split(' ataca')[0];
+      const el=[...document.querySelectorAll('#app .horror')].find(h=>h.querySelector('.h-name').textContent===name);
+      el&&el.animate([{transform:'none'},{transform:'scale(1.14) translateY(14px) rotate(-2deg)',filter:'brightness(1.6) drop-shadow(0 0 18px #c0503f)',offset:.3},{transform:'none'}],{duration:650,easing:'ease-out'});
+    }
+  }
+  if(G.phase==='over'){fxShake(G.result.win?2:6);if(G.result.win){const r=innerWidth/2;for(let k=0;k<4;k++)setTimeout(()=>fxBurst(r+(Math.random()-.5)*innerWidth*.6,innerHeight*(.3+Math.random()*.3),k%2?'#f0c070':'#7fc3b4',30,'out'),300+k*250);}}
+}
 function handle(a,u){
   switch(a){
     case 'diff':UI.diff=u;break;
@@ -1003,14 +1338,16 @@ function handle(a,u){
 if(HAS_DOM){
   document.getElementById('app').addEventListener('click',e=>{
     const b=e.target.closest('[data-a]');if(!b||b.disabled)return;
-    const wasTitle=!G;handle(b.dataset.a,b.dataset.u);render();
+    const wasTitle=!G;fxBefore();handle(b.dataset.a,b.dataset.u);render();
     if(wasTitle&&G)window.scrollTo(0,0);
+    fxAfter();
   });
   const boot=data=>{
     if(data&&data.G)G=data.G;
     else{try{const s=localStorage.getItem(KEY);if(s){const g=JSON.parse(s);if(g&&g.phase==='play'&&g.invs)G=g;}}catch(e){}}
-    render();
+    render();fxAfter();
   };
+  fxEmbers();
   try{window.claude?.hot?.snapshot?.(()=>({G}));}catch(e){}
   window.claude?.hot?.ready?window.claude.hot.ready(boot):boot(window.claude?.hot?.data??{});
 }
