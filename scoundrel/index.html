@@ -2,51 +2,124 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scoundrel: Samurai Edition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Shippori+Mincho:wght@500;700;800&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Audio de fondo (Descomentar cuando tengas el archivo) -->
-    <!-- <audio id="bgm" loop><source src="musica.mp3" type="audio/mpeg"></audio> -->
+    <!-- Decorado: sol rojo, montañas y pétalos de sakura -->
+    <div class="backdrop" aria-hidden="true">
+        <div class="sun"></div>
+        <div class="mountains"></div>
+        <div id="petals"></div>
+    </div>
 
     <div class="game-container">
         <header class="header">
-            <div class="stats" id="hp-container">
-                <span class="hp-label">VIDA</span> 
-                <span id="hp" class="hp-value">20</span><span class="hp-max">/20</span>
-            </div>
-            <h1>SCOUNDREL<br><span class="subtitle">Samurai Edition</span></h1>
-            <button id="run-btn" class="btn btn-run" onclick="runAway()">HUIR</button>
+            <a class="back-link" href="../">← Nexo</a>
+            <h1>SCOUNDREL<span class="subtitle">悪党 · Samurai Edition</span></h1>
+            <button class="btn btn-ghost" onclick="openManual()">📜 Manual</button>
         </header>
+
+        <section class="hud">
+            <div class="hp-box" id="hp-container">
+                <div class="hp-top"><span class="hp-label">HONOR</span><span><span id="hp" class="hp-value">20</span><span class="hp-max">/20</span></span></div>
+                <div class="hp-bar"><div class="hp-fill" id="hp-fill"></div></div>
+            </div>
+            <div class="hud-actions">
+                <button id="run-btn" class="btn btn-run" onclick="runAway()">🏃 HUIR</button>
+                <button class="btn btn-ghost" onclick="askRestart()">↻ Nueva</button>
+            </div>
+        </section>
 
         <div id="message-board" class="message-board">La senda del guerrero comienza...</div>
 
         <main class="battlefield">
-            <h2 class="zone-title">SALA ACTUAL</h2>
-            <div class="room" id="room">
-                <!-- Las cartas se inyectan aquí -->
-            </div>
+            <h2 class="zone-title"><span>部屋</span> SALA <small id="room-info"></small></h2>
+            <div class="room" id="room"></div>
 
-            <h2 class="zone-title">EQUIPAMIENTO</h2>
+            <h2 class="zone-title"><span>装備</span> EQUIPAMIENTO</h2>
             <div class="equipment">
                 <div class="deck-area">
-                    <div class="deck-pile" onclick="startAudio()">
+                    <div class="deck-pile" id="deck-pile">
                         <span class="deck-icon">⛩️</span>
                         <div class="deck-count-overlay" id="deck-count">44</div>
                     </div>
-                    <span class="label">MAZO</span>
+                    <span class="label">MAZMORRA</span>
                 </div>
-                
-                <div class="weapon-area" id="weapon-area">
-                    <div id="weapon-slot" class="weapon-slot">
-                        <div class="empty-weapon">Desarmado</div>
-                    </div>
+                <div class="weapon-area">
+                    <div id="weapon-slot" class="weapon-slot"><div class="empty-weapon">Desarmado</div></div>
                     <div class="weapon-stack" id="weapon-stack-info">Sin arma equipada</div>
                     <span class="label">ARMA</span>
                 </div>
             </div>
         </main>
+    </div>
+
+    <!-- Elegir cómo luchar -->
+    <div class="overlay" id="fight-modal" hidden>
+        <div class="dialog">
+            <h3 id="fight-title">¿Cómo luchas?</h3>
+            <div class="fight-options">
+                <button class="btn btn-big" id="fight-weapon"></button>
+                <button class="btn btn-big btn-ghost" id="fight-bare"></button>
+            </div>
+            <button class="link-btn" onclick="closeFight()">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Fin de partida -->
+    <div class="overlay" id="end-modal" hidden>
+        <div class="dialog end-dialog">
+            <div class="end-kanji" id="end-kanji">勝</div>
+            <h3 id="end-title"></h3>
+            <p id="end-text"></p>
+            <div class="end-score"><span>Puntuación</span><b id="end-score">0</b></div>
+            <button class="btn btn-big" onclick="restart()">Jugar otra vez</button>
+        </div>
+    </div>
+
+    <!-- Manual -->
+    <div class="overlay" id="manual" hidden>
+        <div class="dialog manual">
+            <button class="close-x" onclick="closeManual()" aria-label="Cerrar">✕</button>
+            <h3>📜 El camino del Ronin</h3>
+            <p class="lead">Recorre una mazmorra de 44 cartas y sal con vida. Cada sala te obliga a decidir qué enfrentar, qué beber y qué arma empuñar.</p>
+
+            <h4>Las cartas</h4>
+            <div class="legend">
+                <div><span class="chip chip-monster">♣ ♠</span><b>Monstruos</b> (2 a 14). Te quitan tanta vida como su valor. J=11, Q=12, K=13, A=14.</div>
+                <div><span class="chip chip-weapon">♦</span><b>Armas</b> (2 a 10). Al cogerla, sustituye a la que llevabas.</div>
+                <div><span class="chip chip-potion">♥</span><b>Sake</b> (2 a 10). Te cura su valor, sin pasar de 20.</div>
+            </div>
+
+            <h4>Cada sala</h4>
+            <ol>
+                <li>Se reparten cartas hasta tener <b>4</b> en la sala.</li>
+                <li>Juega <b>3</b> de ellas, en el orden que quieras. La que sobra se queda para la siguiente sala.</li>
+                <li>O bien <b>huye</b> antes de tocar ninguna: las 4 cartas van al fondo del mazo. No puedes huir dos salas seguidas.</li>
+            </ol>
+
+            <h4>Luchar</h4>
+            <ul>
+                <li><b>A mano:</b> recibes todo el daño del monstruo.</li>
+                <li><b>Con arma:</b> recibes el valor del monstruo menos el del arma (nunca menos de 0).</li>
+                <li>Después de usarla, el arma solo sirve contra monstruos <b>más débiles</b> que el último que mató. Por eso a veces conviene luchar a mano y guardar el arma para algo grande.</li>
+            </ul>
+
+            <h4>El sake</h4>
+            <ul><li>Solo una botella por sala. Si bebes una segunda, se pierde sin efecto.</li></ul>
+
+            <h4>Final</h4>
+            <ul>
+                <li><b>Ganas</b> si atraviesas toda la mazmorra. Tu puntuación es tu vida; si acabas con 20 y la última carta fue un sake, se suma su valor.</li>
+                <li><b>Pierdes</b> si tu vida llega a 0. Tu puntuación será tu vida menos el valor de los monstruos que quedaban.</li>
+            </ul>
+            <button class="btn btn-big" onclick="closeManual()">¡A luchar!</button>
+        </div>
     </div>
 
     <script src="game.js"></script>

@@ -2,54 +2,107 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Card Capture: Cyber Mech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Share+Tech+Mono&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Efecto visual de monitor de tubo (CRT) -->
-    <div class="crt-overlay"></div>
+    <div class="grid-floor" aria-hidden="true"></div>
+    <div class="crt-overlay" aria-hidden="true"></div>
 
     <header class="header">
-        <h1>Card Capture</h1>
-        <div class="phase-indicator" id="phase-display">INICIALIZANDO SISTEMA...</div>
+        <a class="back-link" href="../">← Nexo</a>
+        <h1 class="glitch" data-text="CARD CAPTURE">CARD CAPTURE</h1>
+        <button class="btn btn-small" onclick="openManual()">? Manual</button>
     </header>
 
+    <ol class="phase-track" id="phase-track">
+        <li data-phase="1">Enemigo</li>
+        <li data-phase="2">Descarte</li>
+        <li data-phase="3">Robo</li>
+        <li data-phase="4">Acción</li>
+    </ol>
+
     <main class="game-board">
-        <!-- SECTOR ENEMIGO -->
         <section class="area enemy-area">
-            <h2 class="zone-title">HUD Enemigo - Fila de Asalto</h2>
-            <div class="row">
-                <div class="slot deck" id="enemy-deck">Deck<br><span id="e-deck-count">0</span></div>
-                <div class="slot" id="pos4"></div>
-                <div class="slot" id="pos3"></div>
-                <div class="slot" id="pos2"></div>
-                <div class="slot" id="pos1"></div>
-                <div class="slot capture-pile" id="enemy-capture">Pila<br>Capt</div>
+            <h2 class="zone-title">◤ Fila de asalto enemiga · avanzan hacia la POS 1 ◢</h2>
+            <div class="row enemy-row">
+                <div class="pile deck" id="enemy-deck"><span class="pile-label">MAZO IA</span><b id="e-deck-count">0</b></div>
+                <div class="pos"><div class="slot-wrap" id="pos4"></div><span class="pos-label">POS 4</span></div>
+                <div class="pos"><div class="slot-wrap" id="pos3"></div><span class="pos-label">POS 3</span></div>
+                <div class="pos"><div class="slot-wrap" id="pos2"></div><span class="pos-label">POS 2</span></div>
+                <div class="pos danger"><div class="slot-wrap" id="pos1"></div><span class="pos-label">POS 1 ⚠</span></div>
+                <div class="pile capture-pile" id="enemy-capture"><span class="pile-label">CAPT. IA</span><b id="e-capt-count">0</b></div>
             </div>
         </section>
 
-        <!-- PANEL DE MENSAJES DEL SISTEMA -->
         <div id="message-board">Cargando protocolo de combate...</div>
-        
-        <!-- PANEL DE CONTROLES -->
-        <nav class="controls" id="control-panel">
-            <!-- Los botones se inyectan dinámicamente mediante JS -->
-        </nav>
+        <div class="power-meter" id="power-meter" hidden>
+            <div class="power-text" id="power-text"></div>
+            <div class="power-bar"><div class="power-fill" id="power-fill"></div></div>
+        </div>
 
-        <!-- SECTOR JUGADOR -->
+        <nav class="controls" id="control-panel"></nav>
+
         <section class="area player-area">
-            <h2 class="zone-title">Tus Bots y Herramientas</h2>
-            <div class="row" id="player-hand">
-                <!-- Cartas de la mano -->
-            </div>
+            <h2 class="zone-title">◤ Tus bots · mano táctica ◢</h2>
+            <div class="row hand-row" id="player-hand"></div>
             <div class="row deck-row">
-                <div class="slot deck" id="player-deck">Reserva<br><span id="p-deck-count">0</span></div>
-                <div class="center-label">MANO TÁCTICA</div>
-                <div class="slot discard-pile" id="player-discard">Tu<br>Desc</div>
+                <div class="pile deck" id="player-deck"><span class="pile-label">RESERVA</span><b id="p-deck-count">0</b></div>
+                <div class="center-label" id="turn-label">TURNO 1</div>
+                <div class="pile discard-pile" id="player-discard"><span class="pile-label">DESCARTE</span><b id="p-disc-count">0</b></div>
             </div>
         </section>
     </main>
+
+    <!-- Fin de partida -->
+    <div class="overlay" id="end-modal" hidden>
+        <div class="dialog">
+            <div class="end-icon" id="end-icon">🏆</div>
+            <h3 id="end-title" class="glitch" data-text=""></h3>
+            <p id="end-text"></p>
+            <button class="btn btn-big action-btn" onclick="restart()">Reiniciar simulación</button>
+        </div>
+    </div>
+
+    <!-- Manual -->
+    <div class="overlay" id="manual" hidden>
+        <div class="dialog manual">
+            <button class="close-x" onclick="closeManual()" aria-label="Cerrar">✕</button>
+            <h3>// MANUAL DE OPERACIONES</h3>
+            <p class="lead">La IA envía Mechas contra tu red. Captúralos con tus bots antes de que una figura enemiga acabe en su pila de captura.</p>
+
+            <h4>Los mazos</h4>
+            <ul>
+                <li><b>Tu reserva:</b> las cartas 2, 3 y 4 de cada palo y 2 comodines 🤖.</li>
+                <li><b>Mazo de la IA:</b> de 5 a As. Las figuras (J, Q, K, A) son los <b>Mechas</b>: valen 11, 12, 13 y 14.</li>
+                <li>Palos: <span class="s-black">♠ Armaduras</span>, <span class="s-black">♣ Blasters</span>, <span class="s-red">♥ Núcleos</span>, <span class="s-red">♦ Escudos</span>.</li>
+            </ul>
+
+            <h4>Cada turno</h4>
+            <ol>
+                <li><b>Fase enemiga:</b> los enemigos avanzan hacia la POS 1 y entran nuevos por la POS 4 hasta llenar la fila.</li>
+                <li><b>Descarte:</b> si quieres, descarta cartas de tu mano.</li>
+                <li><b>Robo:</b> robas hasta tener 4 cartas. Si tu reserva se vacía, barajas tu descarte.</li>
+                <li><b>Acción:</b> haz <b>una</b> de estas tres:</li>
+            </ol>
+            <div class="legend">
+                <div><span class="chip chip-green">HACKEAR</span>Elige un enemigo y cartas de tu mano <b>del mismo palo</b> cuya suma iguale o supere su valor. Un comodín vale lo mismo que tu carta más alta de la selección, pero necesita al menos una carta normal. El enemigo capturado pasa a tu descarte y se une a tu mazo.</div>
+                <div><span class="chip chip-red">RECIBIR DAÑO</span>Entrega 1 carta de tu mano: esa carta y el enemigo de la POS 1 van a la pila de captura de la IA.</div>
+                <div><span class="chip chip-blue">SACRIFICAR</span>Entrega 2 cartas que no sean figuras a la IA para devolver un enemigo al fondo de su mazo.</div>
+            </div>
+
+            <h4>Victoria y derrota</h4>
+            <ul>
+                <li><b>Ganas</b> si vacías el mazo y la fila de la IA.</li>
+                <li><b>Pierdes</b> si cualquier figura (J, Q, K o A) acaba en la pila de captura de la IA, o si no te queda ninguna acción posible.</li>
+            </ul>
+            <button class="btn btn-big action-btn" onclick="closeManual()">Iniciar hackeo</button>
+        </div>
+    </div>
 
     <script src="game.js"></script>
 </body>
