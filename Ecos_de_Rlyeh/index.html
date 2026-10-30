@@ -1,0 +1,902 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Ecos de R'lyeh</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+:root{
+  /* Layout: una mesa de sesión espiritista — el Umbral de los horrores arriba, la Visión en el centro, tu Estudio abajo; el cuaderno de notas a un lado en pantallas anchas */
+  --abyss:#0b1112;
+  --tide:#121b1b;
+  --rim:#26332f;
+  --bone:#d6cfba;
+  --muted:#8d978f;
+  --parch:#d8cba8;
+  --parch-2:#c4b48a;
+  --ink:#2a2116;
+  --ink-soft:#5a4a35;
+  --verd:#6fa892;
+  --verd-deep:#2f5a4c;
+  --ichor:#b04a3e;
+  --brass:#b8924a;
+  --horror:#18211d;
+  --horror-ink:#cdd5c0;
+  --t-tomo:#6b4a2b;
+  --t-aliado:#3d5560;
+  --t-artefacto:#8a6a2c;
+  --t-lugar:#465a34;
+  --t-ritual:#5b3f5c;
+  --t-horror:#7d2f28;
+  --display:'IM Fell English SC',Georgia,'Times New Roman',serif;
+  --label:'IM Fell English',Georgia,'Times New Roman',serif;
+  --body:'Spectral',Georgia,'Times New Roman',serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  background:var(--abyss);
+  background-image:radial-gradient(ellipse 120% 70% at 50% -10%, #17302a 0%, transparent 60%),
+                   radial-gradient(ellipse 80% 50% at 50% 120%, #0f1d22 0%, transparent 70%);
+  background-attachment:fixed;
+  color:var(--bone);
+  font-family:var(--body);
+  font-size:15px;
+  line-height:1.5;
+}
+#app{
+  max-width:1280px;margin:0 auto;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:16px 40px;
+}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--verd);outline-offset:2px}
+
+/* ---------- botones ---------- */
+.btn{
+  font-family:var(--label);font-size:14px;letter-spacing:.02em;
+  border:1px solid var(--rim);background:var(--tide);color:var(--bone);
+  padding:7px 14px;border-radius:3px;cursor:pointer;transition:background .15s,border-color .15s;
+}
+.btn:hover:not(:disabled){border-color:var(--verd);background:#17241f}
+.btn:disabled{opacity:.38;cursor:not-allowed}
+.btn.primary{background:var(--verd-deep);border-color:var(--verd);color:#eef3ea}
+.btn.primary:hover:not(:disabled){background:#376a59}
+.btn.danger{border-color:var(--ichor);color:#f0c9c2}
+.btn.big{font-size:17px;padding:10px 22px}
+
+/* ---------- portada ---------- */
+.title{display:grid;gap:28px;padding-block:24px}
+.hero{display:grid;gap:12px;max-width:62ch}
+.hero .eyebrow{font-family:var(--label);font-style:italic;color:var(--verd);letter-spacing:.04em}
+.hero h1{font-size:clamp(44px,9vw,92px);line-height:.95;color:var(--bone);letter-spacing:.01em}
+.hero h1 span{color:var(--verd)}
+.hero p{color:#bdb7a4;font-size:16px}
+.pick h2{font-size:22px;margin-bottom:10px;color:var(--parch)}
+.inv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.opt{
+  text-align:left;display:grid;gap:4px;padding:14px 16px;cursor:pointer;
+  background:var(--tide);border:1px solid var(--rim);border-radius:3px;
+}
+.opt:hover{border-color:var(--verd)}
+.opt[aria-pressed="true"]{border-color:var(--verd);background:#162a24;box-shadow:inset 0 0 0 1px var(--verd)}
+.opt b{font-family:var(--label);font-weight:400;font-size:17px;color:var(--parch)}
+.opt i{color:var(--muted);font-size:13px}
+.opt span{font-size:14px}
+.start-row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+
+/* ---------- reglas ---------- */
+details.rules{border:1px solid var(--rim);border-radius:3px;background:var(--tide)}
+details.rules summary{cursor:pointer;padding:10px 14px;font-family:var(--label);font-size:16px;color:var(--parch)}
+.rules-body{padding:0 16px 16px;display:grid;gap:10px;max-width:72ch;font-size:14px}
+.rules-body h3{font-family:var(--label);font-size:15px;color:var(--verd);margin-top:6px}
+.rules-body ul{margin:0;padding-left:20px;display:grid;gap:4px}
+
+/* ---------- barra superior ---------- */
+.top{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;
+  padding-bottom:14px;border-bottom:1px solid var(--rim);margin-bottom:16px;
+}
+.brand{font-family:var(--display);font-size:28px;line-height:1}
+.brand span{color:var(--verd)}
+.stats{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center}
+.stat{display:grid;gap:3px}
+.stat .lbl{font-family:var(--label);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.stat .val{font-family:var(--label);font-size:22px;line-height:1;font-variant-numeric:tabular-nums}
+.saber .val{color:var(--brass)}
+.pips,.doom{display:flex;gap:3px;align-items:center}
+.pip{width:11px;height:11px;border-radius:50%;border:1px solid var(--verd);background:transparent}
+.pip.on{background:var(--verd)}
+.pips.low .pip.on{background:var(--ichor);border-color:var(--ichor)}
+.cell{width:14px;height:14px;border:1px solid #4a2d29;background:transparent;transform:rotate(45deg) scale(.78)}
+.cell.on{background:var(--ichor);border-color:var(--ichor)}
+.cell.last{border-color:var(--ichor)}
+.doom-num{font-family:var(--label);font-size:15px;color:#e0a59c;margin-left:6px;font-variant-numeric:tabular-nums}
+
+/* ---------- mesa ---------- */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+@media (max-width:960px){.layout{grid-template-columns:minmax(0,1fr)}}
+.board{display:grid;gap:16px;min-width:0}
+.zone{border:1px solid var(--rim);border-radius:4px;padding:14px;background:rgba(18,27,27,.72);display:grid;gap:10px;min-width:0}
+.zone.umbral{background:linear-gradient(180deg,rgba(60,22,20,.35),rgba(18,27,27,.72));border-color:#3d2a26}
+.zone.vision{border-color:#2f4a41}
+.zone-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px}
+.zone-head h2{font-size:21px;color:var(--parch)}
+.zone.umbral h2{color:#e6b3aa}
+.zone-head .sub{font-size:13px;color:var(--muted);font-style:italic}
+.row{display:flex;flex-wrap:wrap;gap:12px;min-height:40px}
+.empty{color:var(--muted);font-style:italic;font-size:14px;padding:8px 0}
+.hint{font-family:var(--label);font-style:italic;font-size:15px;color:#c7d8cf}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+/* ---------- cartas ---------- */
+.card{
+  width:clamp(140px,42vw,164px);
+  display:flex;flex-direction:column;
+  background:var(--parch);color:var(--ink);
+  background-image:linear-gradient(160deg,rgba(255,255,255,.18),transparent 40%),
+                   radial-gradient(ellipse at 50% 120%,rgba(90,70,40,.35),transparent 70%);
+  border-radius:5px;border:1px solid #8c7a55;
+  box-shadow:0 2px 0 rgba(0,0,0,.35),0 8px 18px rgba(0,0,0,.35);
+  overflow:hidden;position:relative;
+  animation:deal .35s ease-out both;
+}
+@keyframes deal{from{transform:translateY(8px);opacity:.4}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.card{animation:none}}
+.card .band{height:5px;background:var(--tc)}
+.card .c-top{display:flex;justify-content:space-between;align-items:center;padding:6px 8px 0}
+.cost{
+  font-family:var(--label);font-size:15px;min-width:26px;height:26px;border-radius:50%;
+  display:grid;place-items:center;background:var(--ink);color:var(--brass);border:1px solid var(--brass);
+  font-variant-numeric:tabular-nums;
+}
+.cost.cheap{color:#e9d58f}
+.type{font-family:var(--label);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--tc)}
+.c-name{font-family:var(--label);font-size:15.5px;line-height:1.15;padding:4px 8px 0;min-height:38px;text-wrap:balance}
+.c-art{display:grid;place-items:center;margin:6px 8px 4px;height:74px;border-radius:3px;color:#f6eedb;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse 70% 85% at var(--hx,50%) 25%,rgba(255,236,200,.34),transparent 70%),linear-gradient(170deg,var(--tc),#14181a 125%);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.35),inset 0 -14px 22px rgba(0,0,0,.32)}
+.c-art::after{content:"";position:absolute;inset:4px;border:1px solid rgba(246,238,219,.2);border-radius:2px;pointer-events:none}
+.c-art svg{width:56px;height:56px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))}
+.c-text{font-size:12px;line-height:1.35;padding:2px 9px 6px;flex:1;color:var(--ink)}
+.c-foot{display:flex;justify-content:space-between;align-items:center;padding:4px 8px 7px;border-top:1px dashed rgba(42,33,22,.25)}
+.eco{font-family:var(--label);font-size:11.5px;color:var(--ink-soft);font-style:italic}
+.pts{
+  font-family:var(--label);font-size:14px;width:26px;height:26px;display:grid;place-items:center;
+  background:var(--verd-deep);color:#eef3ea;border-radius:50% 45% 50% 40%;
+  font-variant-numeric:tabular-nums;
+}
+.pts.zero{background:transparent;color:var(--ink-soft);border:1px dashed var(--ink-soft)}
+.uses{font-family:var(--label);font-size:11.5px;color:var(--ink-soft)}
+.c-acts{display:grid;gap:5px;padding:0 7px 8px}
+.c-acts .btn{font-size:13px;padding:5px 8px;width:100%}
+.card .btn{background:#efe5c9;border-color:#9c8a62;color:var(--ink)}
+.card .btn:hover:not(:disabled){background:#fff6dc;border-color:var(--ink)}
+.card .btn.primary{background:var(--verd-deep);color:#eef3ea;border-color:#1f3d33}
+.card .btn.primary:hover:not(:disabled){background:#376a59}
+.card.used{filter:saturate(.5) brightness(.85)}
+
+.card.horror{
+  background:var(--horror);color:var(--horror-ink);border-color:#4e3530;
+  background-image:radial-gradient(ellipse at 50% 30%,rgba(120,150,90,.16),transparent 65%),
+                   radial-gradient(ellipse at 50% 110%,rgba(150,40,30,.25),transparent 70%);
+}
+.card.horror .c-text{color:var(--horror-ink)}
+.card.horror .c-art{color:#d4ecc4;background:radial-gradient(ellipse at 50% 62%,rgba(140,190,110,.32),transparent 70%),linear-gradient(180deg,#0c1310,#22301f);box-shadow:inset 0 0 0 1px rgba(160,200,130,.22)}
+.card.horror .c-art svg{width:62px;height:62px;filter:drop-shadow(0 0 5px rgba(150,200,120,.5))}
+.card.horror .type{color:#e08c80}
+.card.horror .c-foot{border-top-color:rgba(205,213,192,.18)}
+.card.horror .eco{color:#a9b39f}
+.res{
+  font-family:var(--label);font-size:15px;min-width:26px;height:26px;display:grid;place-items:center;
+  background:#3a1712;color:#f1c4bc;border:1px solid var(--ichor);
+  clip-path:polygon(50% 0,100% 22%,92% 78%,50% 100%,8% 78%,0 22%);
+  font-variant-numeric:tabular-nums;
+}
+.trophy{font-family:var(--label);font-size:12px;color:#d8c48d}
+.card.horror .btn{background:#2a1a17;border-color:#6b3a33;color:#f1d6cf}
+.card.horror .btn:hover:not(:disabled){background:#3d211c;border-color:#e08c80}
+.card.horror .btn.primary{background:#6b2a22;border-color:#e08c80}
+.card.targetable{box-shadow:0 0 0 2px var(--brass),0 8px 18px rgba(0,0,0,.35)}
+
+/* ---------- lateral ---------- */
+.side{display:grid;gap:14px;min-width:0}
+.panel{border:1px solid var(--rim);border-radius:4px;padding:12px 14px;background:rgba(18,27,27,.72);display:grid;gap:8px;min-width:0}
+.panel h3{font-family:var(--label);font-size:16px;color:var(--parch)}
+.inv-card b{font-family:var(--label);font-weight:400;font-size:16px;color:var(--parch)}
+.inv-card i{color:var(--muted);font-size:13px}
+.kv{display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.kv span:last-child{font-family:var(--label);font-variant-numeric:tabular-nums}
+.peek{font-size:13px;color:#c7d8cf;font-style:italic}
+.tro-list{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--label);font-size:12.5px;padding:2px 8px;border-radius:10px;border:1px solid #5f5333;color:#e3d39f}
+.log{list-style:none;margin:0;padding:0;display:grid;gap:3px;max-height:340px;overflow-y:auto;font-size:13px}
+.log li{padding:2px 0;border-bottom:1px solid rgba(38,51,47,.6)}
+.log li.turn{font-family:var(--label);color:var(--verd);border-bottom:none;padding-top:6px}
+.log li.bad{color:#e4aaa1}
+.log li.good{color:#b9d6c6}
+.confirm{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px}
+
+/* ---------- final ---------- */
+.overlay{
+  position:fixed;inset:0;background:rgba(5,9,9,.82);display:grid;place-items:center;z-index:20;
+  padding:max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+.end{
+  width:min(520px,100%);max-height:100%;overflow-y:auto;
+  background:var(--parch);color:var(--ink);border-radius:5px;border:1px solid #8c7a55;
+  padding:24px;display:grid;gap:14px;box-shadow:0 20px 60px rgba(0,0,0,.6);
+}
+.end.lost{background:var(--horror);color:var(--horror-ink);border-color:#6b3a33}
+.end h2{font-size:34px;line-height:1}
+.end .verdict{font-family:var(--label);font-style:italic;font-size:17px}
+.end table{width:100%;border-collapse:collapse;font-size:14px}
+.end td{padding:4px 0;border-bottom:1px dashed rgba(42,33,22,.25)}
+.end td:last-child{text-align:right;font-family:var(--label);font-variant-numeric:tabular-nums}
+.end tr.total td{border-bottom:none;font-size:18px;padding-top:8px}
+.end .btn{justify-self:start}
+</style>
+
+<div id="app"></div>
+
+<script>
+'use strict';
+const MAXP = 10;
+const MOON = 5;
+
+const INV = {
+  profesora:{n:'Profesora Eleanor Whitcombe', r:'Filóloga de lenguas muertas', x:'Los Tomos te cuestan 1 Saber menos.'},
+  periodista:{n:'Tobías Grell', r:'Periodista sin escrúpulos', x:'La primera carta que quemas cada turno te da +1 Saber extra.'},
+  ocultista:{n:'Hermana Inés Valdés', r:'Ocultista exclaustrada', x:'Enfrentar a un Horror te cuesta 1 Saber menos.'},
+  veterano:{n:'Capitán Silas Rourke', r:'Veterano de la Gran Guerra', x:'Tu Cordura máxima es 9 y empiezas con 9.'}
+};
+const DIFF = {
+  iniciado:{n:'Iniciado', x:'9 Horrores en el mazo.', set:'A', perd:0},
+  investigador:{n:'Investigador', x:'13 Horrores en el mazo.', set:'AB', perd:0},
+  condenado:{n:'Condenado', x:'13 Horrores y empiezas con 2 de Perdición.', set:'AB', perd:2}
+};
+const TYPES = {tomo:'Tomo', aliado:'Aliado', artefacto:'Artefacto', lugar:'Lugar', ritual:'Ritual', horror:'Horror'};
+
+const DEFS = {
+  // ---- Tomos
+  necronomicon:{n:'Necronomicón',t:'tomo',c:4,e:2,p:3,x:'Una vez por turno: pierdes 1 Cordura y ganas 3 Saber.',
+    act:{l:'Leer',kind:'once',run:()=>{cord(-1);sab(3);return '−1 Cordura, +3 Saber';}}},
+  pnakoticos:{n:'Manuscritos Pnakóticos',t:'tomo',c:3,e:1,p:2,x:'Ves siempre la carta superior del mazo.'},
+  cultes:{n:'Cultes des Goules',t:'tomo',c:3,e:1,p:2,x:'Cada vez que destierras un Horror, ganas 1 Saber.'},
+  vermis:{n:'De Vermis Mysteriis',t:'tomo',c:2,e:1,p:1,x:'Al entrar: recuperas 2 Cordura.',
+    enter:()=>{cord(2);return '+2 Cordura';}},
+  kulten:{n:'Unaussprechlichen Kulten',t:'tomo',c:4,e:2,p:4,x:'Al entrar: +1 Perdición.',
+    enter:()=>{perd(1);return '+1 Perdición';}},
+  diario:{n:'Diario de un Profesor',t:'tomo',c:1,e:1,p:1,k:2,x:'Final: +1 PV por cada otro Tomo de tu Estudio.',
+    fin:c=>G.estudio.filter(o=>o!==c&&D(o.id).t==='tomo').length},
+  // ---- Aliados
+  bibliotecaria:{n:'Bibliotecaria Nocturna',t:'aliado',c:2,e:1,p:1,x:'Los Tomos te cuestan 1 Saber menos.'},
+  detective:{n:'Detective Privado',t:'aliado',c:2,e:1,p:1,k:2,x:'Sacrifícalo: destierra un Horror de Resistencia 3 o menos.',
+    act:{l:'Sacrificar',kind:'sac',target:h=>D(h.id).r<=3,run:(c,h)=>{banish(h);return '';}}},
+  pescador:{n:'Pescador Desconfiado',t:'aliado',c:1,e:1,p:0,x:'Sacrifícalo: −2 Perdición.',
+    act:{l:'Sacrificar',kind:'sac',can:()=>G.perd>0,run:()=>{perd(-2);return '−2 Perdición';}}},
+  medico:{n:'Médico Rural',t:'aliado',c:2,e:1,p:1,x:'Una vez por turno: pagas 1 Saber y recuperas 1 Cordura.',
+    act:{l:'Atender',kind:'once',can:()=>G.saber>=1&&G.cordura<G.maxCord,run:()=>{sab(-1);cord(1);return '−1 Saber, +1 Cordura';}}},
+  anticuario:{n:'Anticuario de Providence',t:'aliado',c:3,e:1,p:1,x:'Cada carta que quemas te da +1 Saber extra.'},
+  medium:{n:'Médium Sonámbula',t:'aliado',c:2,e:1,p:1,x:'Revelas 3 cartas por turno en vez de 2.'},
+  marinero:{n:'Marinero Tatuado',t:'aliado',c:2,e:1,p:1,x:'Sacrifícalo: destierra cualquier Horror, pero pierdes 2 Cordura.',
+    act:{l:'Sacrificar',kind:'sac',target:()=>true,run:(c,h)=>{banish(h);cord(-2);return '−2 Cordura';}}},
+  estudiante:{n:'Estudiante Insomne',t:'aliado',c:1,e:1,p:0,k:2,x:'Al inicio de cada turno: +1 Saber.',
+    start:()=>{sab(1);return '+1 Saber';}},
+  // ---- Artefactos
+  daga:{n:'Daga Ceremonial',t:'artefacto',c:2,e:1,p:1,uses:2,x:'Gasta un uso: destierra un Horror de Resistencia 2 o menos.',
+    act:{l:'Usar',kind:'uses',target:h=>D(h.id).r<=2,run:(c,h)=>{banish(h);return '';}}},
+  signo:{n:'Signo Arcano',t:'artefacto',c:3,e:1,p:2,x:'Los Horrores que te quitan Cordura al inicio del turno te quitan 1 menos cada uno.'},
+  lampara:{n:'Lámpara de Aceite de Ballena',t:'artefacto',c:3,e:2,p:1,x:'Una vez por turno: +1 Saber por cada Horror en el Umbral.',
+    act:{l:'Encender',kind:'once',can:()=>G.umbral.length>0,run:()=>{sab(G.umbral.length);return `+${G.umbral.length} Saber`;}}},
+  espejo:{n:'Espejo de Bronce',t:'artefacto',c:2,e:1,p:1,x:'Rómpelo: el próximo Horror que se revele se quema sin efecto.',
+    act:{l:'Romper',kind:'sac',can:()=>!G.mirror,run:()=>{G.mirror=true;return 'el próximo Horror será repelido';}}},
+  jade:{n:'Estatuilla de Jade',t:'artefacto',c:1,e:2,p:3,x:'Al entrar: +1 Perdición y −1 Cordura.',
+    enter:()=>{perd(1);cord(-1);return '+1 Perdición, −1 Cordura';}},
+  revolver:{n:'Revólver de Servicio',t:'artefacto',c:2,e:1,p:0,uses:3,x:'Gasta un uso: tu próximo Enfrentar de este turno cuesta 2 Saber menos.',
+    act:{l:'Cargar',kind:'uses',can:()=>!G.revolver&&G.umbral.length>0,run:()=>{G.revolver=true;return 'Enfrentar cuesta 2 menos este turno';}}},
+  mapa:{n:"Carta Náutica de R'lyeh",t:'artefacto',c:2,e:1,p:0,x:'Final: +5 PV si el Umbral está vacío.',
+    fin:()=>G.umbral.length?0:5},
+  // ---- Lugares
+  faro:{n:'Faro de Kingsport',t:'lugar',c:3,e:1,p:2,x:'Al inicio de cada turno: +1 Saber.',
+    start:()=>{sab(1);return '+1 Saber';}},
+  sanatorio:{n:'Sanatorio de Arkham',t:'lugar',c:3,e:1,p:1,x:'Al inicio de cada turno: recuperas 1 Cordura.',
+    start:()=>{if(G.cordura>=G.maxCord)return '';cord(1);return '+1 Cordura';}},
+  biblioteca:{n:'Biblioteca de Miskatonic',t:'lugar',c:4,e:2,p:2,x:'Final: +1 PV por cada Tomo de tu Estudio.',
+    fin:()=>G.estudio.filter(o=>D(o.id).t==='tomo').length},
+  iglesia:{n:'Iglesia de la Colina',t:'lugar',c:2,e:1,p:1,x:'Cada vez que un Horror cruza el Umbral, ganas 1 Saber.'},
+  circulo:{n:'Círculo de Menhires',t:'lugar',c:4,e:1,p:3,x:'Al entrar: +1 Perdición. Enfrentar te cuesta 1 Saber menos.',
+    enter:()=>{perd(1);return '+1 Perdición';}},
+  // ---- Rituales (se queman tras usarse)
+  sello:{n:'Sello de los Antiguos',t:'ritual',c:3,e:1,p:0,x:'−3 Perdición.',
+    enter:()=>{perd(-3);return '−3 Perdición';}},
+  niebla:{n:'Invocar la Niebla',t:'ritual',c:2,e:1,p:0,x:'Destierra el Horror de menor Resistencia del Umbral.',
+    can:()=>G.umbral.length>0,
+    enter:()=>{const h=[...G.umbral].sort((a,b)=>D(a.id).r-D(b.id).r)[0];banish(h);return '';}},
+  plegaria:{n:'Plegaria a Nodens',t:'ritual',c:2,e:1,p:0,k:2,x:'Recuperas 3 Cordura.',
+    enter:()=>{cord(3);return '+3 Cordura';}},
+  formula:{n:'Fórmula del Destierro',t:'ritual',c:1,e:1,p:0,x:'Devuelve al fondo del mazo el Horror más antiguo del Umbral.',
+    can:()=>G.umbral.length>0,
+    enter:()=>{const h=G.umbral.shift();G.deck.unshift(h);return `${D(h.id).n} vuelve al fondo del mazo`;}},
+  // ---- Horrores
+  sectario:{n:'Sectario de Dagón',t:'horror',r:1,tr:1,set:'A',k:2,x:'Al inicio de cada turno: +1 Perdición.',
+    pres:()=>{perd(1);return '+1 Perdición';}},
+  profundo:{n:'Profundo',t:'horror',r:2,tr:1,set:'A',k:2,x:'Al inicio de cada turno: −1 Cordura.',
+    pres:()=>hcord(1)},
+  necrofago:{n:'Necrófago',t:'horror',r:2,tr:1,set:'A',x:'Al cruzar: devora la última carta que entró en tu Estudio.',
+    enter:()=>{const c=G.estudio.pop();if(!c)return 'no encuentra nada que devorar';G.quemadas.push(c);return `devora ${D(c.id).n}`;}},
+  susurros:{n:'Susurros en la Oscuridad',t:'horror',r:2,tr:1,set:'A',x:'Al inicio de cada turno: −1 Saber.',
+    pres:()=>{if(!G.saber)return 'no queda Saber que robar';sab(-1);return '−1 Saber';}},
+  byakhee:{n:'Byakhee',t:'horror',r:3,tr:2,set:'A',x:'Al inicio de cada turno: +1 Perdición.',
+    pres:()=>{perd(1);return '+1 Perdición';}},
+  perro:{n:'Perro de Tíndalos',t:'horror',r:3,tr:2,set:'A',x:'Al cruzar: −2 Cordura.',
+    enter:()=>{cord(-2);return '−2 Cordura';}},
+  polipo:{n:'Pólipo Volante',t:'horror',r:4,tr:3,set:'A',x:'Al cruzar: −1 Cordura. Al inicio de cada turno: +1 Perdición.',
+    enter:()=>{cord(-1);return '−1 Cordura';},pres:()=>{perd(1);return '+1 Perdición';}},
+  migo:{n:'Mi-Go',t:'horror',r:3,tr:2,set:'B',x:'Al cruzar: se lleva el último Artefacto de tu Estudio.',
+    enter:()=>{const i=G.estudio.map(c=>D(c.id).t).lastIndexOf('artefacto');if(i<0)return 'no encuentra artefactos';const [c]=G.estudio.splice(i,1);G.quemadas.push(c);return `se lleva ${D(c.id).n}`;}},
+  color:{n:'El Color Surgido del Espacio',t:'horror',r:4,tr:3,set:'B',x:'Al inicio de cada turno: −1 Cordura. Final: −3 PV extra si sigue aquí.',
+    pres:()=>hcord(1),fin:()=>-3},
+  shoggoth:{n:'Shoggoth',t:'horror',r:5,tr:4,set:'B',x:'Al inicio de cada turno: −1 Cordura.',
+    pres:()=>hcord(1)},
+  faraon:{n:'El Faraón Negro',t:'horror',r:6,tr:5,set:'B',x:'Al cruzar: +1 Perdición. Al inicio de cada turno: −1 Cordura.',
+    enter:()=>{perd(1);return '+1 Perdición';},pres:()=>hcord(1)}
+};
+
+let G = null;
+const UI = {target:null, inv:'profesora', diff:'iniciado', confirmQuit:false};
+const D = id => DEFS[id];
+const shuffle = a => {for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const isHorror = c => D(c.id).t==='horror';
+
+function log(m, cls=''){G.log.unshift({m,cls});if(G.log.length>80)G.log.length=80;}
+function count(id){return G.estudio.filter(c=>c.id===id).length;}
+function has(id){return count(id)>0;}
+function sab(n){G.saber=Math.max(0,G.saber+n);}
+function cord(n){G.cordura=Math.max(0,Math.min(G.maxCord,G.cordura+n));}
+function perd(n){G.perd=Math.max(0,Math.min(MAXP,G.perd+n));}
+function hcord(n){const l=Math.max(0,n-count('signo'));cord(-l);return l?`−${l} Cordura`:'el Signo Arcano te protege';}
+function mk(id){const d=D(id);return {uid:++G.seq,id,uses:d.uses||0,used:false};}
+
+// ---------- reglas derivadas ----------
+function costOf(c){const d=D(c.id);let v=d.c;if(d.t==='tomo'){v-=count('bibliotecaria');if(G.inv==='profesora')v-=1;}return Math.max(0,v);}
+function burnOf(c){return D(c.id).e+count('anticuario')+(G.inv==='periodista'&&!G.burned?1:0);}
+function faceOf(h){return Math.max(0,D(h.id).r-(G.inv==='ocultista'?1:0)-count('circulo')-(G.revolver?2:0));}
+function revealN(){return has('medium')?3:2;}
+const active = () => G && (G.phase==='prep'||G.phase==='vision');
+
+function canAcquire(c){const d=D(c.id);return G.phase==='vision'&&G.acq<1&&G.saber>=costOf(c)&&(!d.can||d.can());}
+function canAct(c){
+  const a=D(c.id).act; if(!a||!active())return false;
+  if(a.kind==='once'&&c.used)return false;
+  if(a.kind==='uses'&&c.uses<=0)return false;
+  if(a.can&&!a.can(c))return false;
+  if(a.target&&!G.umbral.some(a.target))return false;
+  return true;
+}
+function canFace(h){return active()&&!UI.target&&G.saber>=faceOf(h);}
+
+// ---------- flujo ----------
+function newGame(inv, diff){
+  const df=DIFF[diff];
+  G={seq:0,inv,diff,turn:0,saber:4,maxCord:inv==='veterano'?9:7,cordura:0,perd:df.perd,
+     deck:[],estudio:[],umbral:[],quemadas:[],trofeos:[],vision:[],hold:[],
+     acq:0,burned:false,revolver:false,mirror:false,phase:'setup',log:[],result:null};
+  G.cordura=G.maxCord;
+  const non=[];
+  for(const [id,d] of Object.entries(DEFS)){
+    for(let i=0;i<(d.k||1);i++){
+      if(d.t==='horror'){if(df.set.includes(d.set))G.hold.push(mk(id));}
+      else non.push(mk(id));
+    }
+  }
+  shuffle(non);
+  // el primer hallazgo nunca es un Ritual
+  for(let i=non.length-1;i>=0&&G.vision.length<3;i--)if(D(non[i].id).t!=='ritual')G.vision.push(...non.splice(i,1));
+  G.deck=non;
+  UI.target=null;UI.confirmQuit=false;
+  log(`${INV[inv].n} llega a Innsmouth. Dificultad: ${df.n}.`);
+}
+function place(c, why){
+  const d=D(c.id);
+  if(d.t==='ritual'){G.quemadas.push(c);}
+  else G.estudio.push(c);
+  log(`${why}: ${d.n}`,'good');
+  if(d.enter){const r=d.enter(c);if(r)log(`${d.n}: ${r}`,'good');}
+}
+function keepStart(uid){
+  if(G.phase!=='setup')return;
+  const i=G.vision.findIndex(c=>c.uid===uid);if(i<0)return;
+  const [k]=G.vision.splice(i,1);
+  G.deck.push(...G.vision);G.vision=[];
+  place(k,'Empiezas con');
+  G.deck.push(...G.hold);G.hold=[];
+  shuffle(G.deck);
+  // las primeras 4 cartas nunca son Horrores
+  const n=G.deck.length;
+  for(let k2=0;k2<4;k2++){
+    const idx=n-1-k2;
+    if(isHorror(G.deck[idx])){
+      const pool=[];for(let j=0;j<n-4;j++)if(!isHorror(G.deck[j]))pool.push(j);
+      if(pool.length){const j=pool[Math.floor(Math.random()*pool.length)];[G.deck[idx],G.deck[j]]=[G.deck[j],G.deck[idx]];}
+    }
+  }
+  beginTurn();
+}
+function check(){
+  if(!G||G.phase==='over')return;
+  if(G.cordura<=0)endGame(false,'locura');
+  else if(G.perd>=MAXP)endGame(false,'despertar');
+}
+function beginTurn(){
+  if(G.phase==='over')return;
+  if(G.deck.length===0){endGame(true);return;}
+  G.turn++;G.acq=0;G.burned=false;G.revolver=false;
+  G.estudio.forEach(c=>c.used=false);
+  log(`Turno ${G.turn}`,'turn');
+  if(G.turn%MOON===0){perd(1);log('Luna llena sobre el arrecife: +1 Perdición','bad');}
+  for(const h of [...G.umbral]){const d=D(h.id);if(d.pres){log(`${d.n}: ${d.pres(h)}`,'bad');}}
+  check();if(G.phase==='over')return;
+  for(const c of [...G.estudio]){const d=D(c.id);if(d.start){const r=d.start(c);if(r)log(`${d.n}: ${r}`,'good');}}
+  G.phase='prep';
+  check();
+}
+function reveal(){
+  if(G.phase!=='prep'||UI.target)return;
+  const n=Math.min(revealN(),G.deck.length);
+  G.phase='vision';
+  for(let i=0;i<n;i++){
+    const c=G.deck.pop();
+    if(isHorror(c))arrive(c);else G.vision.push(c);
+    if(G.phase==='over')return;
+  }
+}
+function arrive(h){
+  const d=D(h.id);
+  if(G.mirror){G.mirror=false;G.quemadas.push(h);log(`El Espejo de Bronce devuelve a ${d.n} al vacío`,'good');return;}
+  G.umbral.push(h);
+  log(`¡${d.n} cruza el Umbral!`,'bad');
+  if(d.enter){const r=d.enter(h);if(r)log(`${d.n}: ${r}`,'bad');}
+  const ig=count('iglesia');if(ig){sab(ig);log(`Iglesia de la Colina: +${ig} Saber`,'good');}
+  check();
+}
+function acquire(uid){
+  const i=G.vision.findIndex(c=>c.uid===uid);if(i<0)return;
+  const c=G.vision[i];if(!canAcquire(c))return;
+  sab(-costOf(c));G.acq++;G.vision.splice(i,1);
+  place(c,`Adquieres (${costOf(c)} Saber)`);
+  check();
+}
+function burn(uid){
+  if(G.phase!=='vision')return;
+  const i=G.vision.findIndex(c=>c.uid===uid);if(i<0)return;
+  const c=G.vision[i];const v=burnOf(c);
+  sab(v);G.burned=true;G.vision.splice(i,1);G.quemadas.push(c);
+  log(`Quemas ${D(c.id).n}: +${v} Saber`);
+}
+function endTurn(){if(G.phase!=='vision'||G.vision.length||UI.target)return;beginTurn();}
+function banish(h){
+  const i=G.umbral.indexOf(h);if(i<0)return;
+  G.umbral.splice(i,1);G.trofeos.push(h);
+  log(`${D(h.id).n} es desterrado (trofeo ${D(h.id).tr} PV)`,'good');
+  const cg=count('cultes');if(cg){sab(cg);log(`Cultes des Goules: +${cg} Saber`,'good');}
+}
+function face(uid){
+  const h=G.umbral.find(x=>x.uid===uid);if(!h||!canFace(h))return;
+  const cost=faceOf(h);sab(-cost);
+  if(G.revolver)G.revolver=false;
+  log(`Enfrentas a ${D(h.id).n} (${cost} Saber)`);
+  banish(h);
+}
+function afterAct(c){
+  const a=D(c.id).act;
+  const drop=()=>{const i=G.estudio.indexOf(c);if(i>=0){G.estudio.splice(i,1);G.quemadas.push(c);}};
+  if(a.kind==='once')c.used=true;
+  else if(a.kind==='sac')drop();
+  else if(a.kind==='uses'){c.uses--;if(c.uses<=0){drop();log(`${D(c.id).n} se agota`);}}
+  check();
+}
+function useAct(uid){
+  const c=G.estudio.find(x=>x.uid===uid);if(!c||!canAct(c)||UI.target)return;
+  const a=D(c.id).act;
+  if(a.target){UI.target={uid};return;}
+  const r=a.run(c);log(`${D(c.id).n}${r?': '+r:''}`,'good');
+  afterAct(c);
+}
+function chooseTarget(huid){
+  if(!UI.target)return;
+  const c=G.estudio.find(x=>x.uid===UI.target.uid);const h=G.umbral.find(x=>x.uid===huid);
+  UI.target=null;
+  if(!c||!h)return;
+  const a=D(c.id).act;if(!a.target(h))return;
+  log(`${D(c.id).n} contra ${D(h.id).n}`);
+  const r=a.run(c,h);if(r)log(`${D(c.id).n}: ${r}`,'bad');
+  afterAct(c);
+}
+function scoreRows(){
+  const rows=[];
+  rows.push(['Cartas de tu Estudio',G.estudio.reduce((s,c)=>s+(D(c.id).p||0),0)]);
+  for(const c of G.estudio){const d=D(c.id);if(d.fin){const v=d.fin(c);if(v)rows.push([d.n,v]);}}
+  rows.push([`Trofeos (${G.trofeos.length} Horrores desterrados)`,G.trofeos.reduce((s,h)=>s+D(h.id).tr,0)]);
+  for(const h of G.umbral){const d=D(h.id);rows.push([`${d.n} sigue en el Umbral`,-d.tr+(d.fin?d.fin(h):0)]);}
+  return rows;
+}
+function endGame(win, reason){
+  G.phase='over';UI.target=null;
+  if(win){
+    const rows=scoreRows();const total=rows.reduce((s,r)=>s+r[1],0);
+    G.result={win:true,rows,total};
+    log(`El mazo se agota. Sobrevives con ${total} PV.`,'turn');
+  } else {
+    G.result={win:false,reason};
+    log(reason==='locura'?'Tu Cordura llega a 0.':'La Perdición llega a 10.','bad');
+  }
+}
+function rank(t){
+  if(t<20)return 'Has sobrevivido, pero nadie creerá tu historia.';
+  if(t<30)return 'Tus notas acaban olvidadas en un cajón de la Universidad de Miskatonic.';
+  if(t<40)return 'Tus hallazgos retrasan lo inevitable un siglo más.';
+  if(t<50)return 'Has cartografiado lo que no debía conocerse, y sigues cuerdo.';
+  return "Los sueños de R'lyeh vuelven a callar. Por ahora.";
+}
+
+// ---------- dibujo ----------
+function hash(s){let h=2166136261;for(const ch of s){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+function gcd(a,b){return b?gcd(b,a%b):a;}
+function sigil(id, horror){
+  let h=hash(id)||1;
+  const rnd=()=>{h^=h<<13;h>>>=0;h^=h>>>17;h^=h<<5;h>>>=0;return h/4294967296;};
+  const k=5+Math.floor(rnd()*5);
+  let s=2+Math.floor(rnd()*Math.max(1,Math.floor((k-1)/2)-1));
+  while(gcd(k,s)!==1)s++;
+  if(s>=k)s=1;
+  const R=24,cx=32,cy=32,rot=rnd()*Math.PI;
+  const pt=i=>[cx+R*Math.cos(rot+i*2*Math.PI/k),cy+R*Math.sin(rot+i*2*Math.PI/k)];
+  let star='';for(let i=0;i<=k;i++){const [x,y]=pt((i*s)%k);star+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1);}
+  let out=`<svg viewBox="0 0 64 64" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">`;
+  out+=`<circle cx="32" cy="32" r="29" stroke-width="1" opacity=".55"/>`;
+  out+=`<path d="${star}"/>`;
+  if(horror){
+    for(let i=0;i<3+Math.floor(rnd()*3);i++){
+      const a=rot+rnd()*Math.PI*2,x1=cx+10*Math.cos(a),y1=cy+10*Math.sin(a);
+      const x2=cx+30*Math.cos(a+.6),y2=cy+30*Math.sin(a+.6);
+      out+=`<path d="M${x1.toFixed(1)} ${y1.toFixed(1)}Q${(cx+22*Math.cos(a-.5)).toFixed(1)} ${(cy+22*Math.sin(a-.5)).toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}" opacity=".7"/>`;
+    }
+    out+=`<ellipse cx="32" cy="32" rx="10" ry="5.5" fill="#18211d"/><circle cx="32" cy="32" r="3" fill="currentColor"/>`;
+  } else {
+    const ir=5+rnd()*6;
+    out+=`<circle cx="32" cy="32" r="${ir.toFixed(1)}"/>`;
+    for(let i=0;i<k;i++){const [x,y]=pt(i);out+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.6" fill="currentColor" stroke="none"/>`;}
+  }
+  return out+'</svg>';
+}
+
+// ---------- ilustraciones: un dibujo propio para cada carta (viewBox 64×64, trazo en currentColor)
+const F = 'fill="currentColor"';
+const ICONS = {
+  // básicas
+  nota:`<path d="M18 10h22l8 8v36H18z"/><path d="M40 10v8h8"/><path d="M23 27q4-3 8 0t8 0t5 0M23 35q4-3 8 0t8 0M23 43q4-3 8 0t5 0"/>`,
+  valor:`<path d="M29 56l-3-24h12l-3 24z"/><path d="M23 32h18"/><path d="M32 8c6 7 9 11 6 17-1 3-3 4-6 4s-5-1-6-4c-3-6 2-10 6-17z" ${F} fill-opacity=".35"/><path d="M32 17c3 4 4 7 2 10"/>`,
+  pesadilla:`<path d="M32 32a2 2 0 1 1 4 0a5 5 0 1 1-10 0a8 8 0 1 1 16 0a11 11 0 1 1-22 0a14 14 0 1 1 28 0a17 17 0 1 1-34 0"/>`,
+  cafe:`<path d="M16 26h28v14a12 12 0 0 1-12 12h-4a12 12 0 0 1-12-12z"/><path d="M44 30h4a6 6 0 0 1 0 12h-5"/><path d="M12 57h40"/><path d="M24 20q-3-4 0-8M32 20q-3-4 0-8M40 20q-3-4 0-8"/>`,
+  revolver:`<path d="M8 20h36l3-3h7v9H30l-3 5h-5l-4 22H8l5-22-2-5z" ${F} fill-opacity=".3"/><circle cx="25" cy="29" r="4"/><path d="M21 31q1 7 7 7"/>`,
+  // Tomos
+  diario:`<path d="M32 18c-6-4-14-5-22-4v32c8-1 16 0 22 4 6-4 14-5 22-4V14c-8-1-16 0-22 4z"/><path d="M32 18v32"/><path d="M15 24h11M15 30h11M15 36h8M38 24h11M38 30h8"/><path d="M42 44l11-15 3 2-11 15-4 2z"/>`,
+  pnakoticos:`<path d="M20 12h26a4 4 0 0 1 0 8"/><path d="M20 12a4 4 0 0 0 0 8h4v32h22"/><path d="M46 20v24"/><path d="M46 44a4 4 0 0 1 0 8a4 4 0 0 1-4-4"/><path d="M29 26h11M29 32h9M29 38h11"/>`,
+  rlyehiano:`<path d="M16 10h32l-3 46H19z"/><path d="M24 18l4 6 4-6 4 6M23 31c4 0 4 6 8 6s4-6 8-6M25 45l7-5 7 5"/>`,
+  cultes:`<rect x="14" y="10" width="36" height="44" rx="2"/><path d="M18 10v44"/><circle cx="34" cy="28" r="8"/><path d="M30 34v5h8v-5"/><circle cx="31" cy="27" r="1.8" ${F}/><circle cx="37" cy="27" r="1.8" ${F}/><path d="M24 46h20"/>`,
+  vermis:`<rect x="14" y="10" width="36" height="44" rx="2"/><path d="M18 10v44"/><path d="M24 46c4-8 8 2 12-6s8 2 9-12" stroke-width="3.2"/><circle cx="45" cy="27" r="1.6" ${F}/>`,
+  necronomicon:`<rect x="14" y="10" width="36" height="44" rx="2" ${F} fill-opacity=".22"/><path d="M18 10v44"/><path d="M22 32q12-12 24 0q-12 12-24 0z"/><circle cx="34" cy="32" r="4" ${F}/><path d="M22 15l4 4M46 15l-4 4M22 49l4-4M46 49l-4-4"/>`,
+  // Aliados
+  profesor:`<circle cx="32" cy="25" r="12"/><circle cx="27" cy="24" r="3.5"/><circle cx="37" cy="24" r="3.5"/><path d="M30.5 24h3"/><path d="M25 32q7 10 14 0"/><path d="M13 57q2-14 19-14t19 14"/>`,
+  boxeador:`<path d="M22 48V28a12 12 0 0 1 12-12h4a10 10 0 0 1 10 10v8a8 8 0 0 1-8 8H22"/><path d="M19 48h24v8H19z"/><path d="M30 28h10a4 4 0 0 1 0 8h-8"/>`,
+  monja:`<path d="M18 57V30a14 14 0 0 1 28 0v27"/><circle cx="32" cy="30" r="7"/><path d="M32 42v11M27 47h10"/>`,
+  medico:`<path d="M10 26h44v26H10z"/><path d="M24 26v-6h16v6"/><path d="M32 32v14M25 39h14" stroke-width="3.2"/>`,
+  detective:`<path d="M10 30h44"/><path d="M19 30l2-12q11-5 22 0l2 12"/><path d="M21 24h22"/><circle cx="25" cy="44" r="7"/><path d="M30 49l9 8"/>`,
+  contrabandista:`<path d="M20 10h24q6 22 0 44H20q-6-22 0-44z"/><path d="M17 22h30M17 42h30"/><path d="M32 26v12"/>`,
+  pescador:`<path d="M30 8v28a10 10 0 0 1-20 0v-4l5 4"/><path d="M30 8h16"/><path d="M38 50q7-5 14 0M34 57q9-5 18 0"/>`,
+  carpintero:`<path d="M10 46h44v8H10z"/><path d="M29 41l14-27"/><path d="M37 11l13 6-3 5-13-6z" ${F} fill-opacity=".3"/><path d="M18 46v8M44 46v8"/>`,
+  // Armas
+  cuchillo:`<path d="M46 10L24 38l4 4 22-26z" ${F} fill-opacity=".25"/><path d="M19 37l10 10"/><path d="M22 44l-9 9 2 2 9-9"/>`,
+  escopeta:`<path d="M6 22h38v5H6zM6 27h38v4H6z"/><path d="M44 22h4l9 10v12h-9l-6-9h-6"/><path d="M33 31l-2 6h4"/>`,
+  dinamita:`<rect x="16" y="28" width="8" height="26"/><rect x="24" y="28" width="8" height="26"/><rect x="32" y="28" width="8" height="26"/><path d="M14 37h28M14 47h28"/><path d="M28 28q2-12 14-14"/><path d="M46 8l1 5 5-1-3 4 4 3-5 1 1 5-4-3-3 4-1-5" ${F} fill-opacity=".45"/>`,
+  arpon:`<path d="M10 54L50 14"/><path d="M54 10l-14 4 10 10z" ${F} fill-opacity=".3"/><path d="M42 22l-6 2M46 26l-2 6"/><path d="M10 54q-5-7 3-11"/>`,
+  metralleta:`<path d="M6 25h32v8H6z"/><path d="M38 23h20v6H38z"/><circle cx="26" cy="40" r="7"/><circle cx="26" cy="40" r="2" ${F}/><path d="M13 33l-4 15h7l4-15"/><path d="M45 29v9"/>`,
+  // Hechizos
+  signo:`<path d="M32 8L46 54 10 24h44L18 54z"/><circle cx="32" cy="34" r="5"/><circle cx="32" cy="34" r="1.8" ${F}/>`,
+  polvo:`<path d="M22 28q-8 26 10 26t10-26z"/><path d="M24 28q8-6 16 0"/><path d="M26 22h12"/><path d="M47 10v8M43 14h8M14 14v6M11 17h6M51 33v6M48 36h6"/>`,
+  nodens:`<path d="M32 57V18"/><path d="M19 8v12a13 13 0 0 0 26 0V8"/><path d="M32 6v12"/><path d="M19 8l-3 4M45 8l3 4M32 6l-3 4"/><path d="M25 46h14"/>`,
+  vision:`<path d="M10 32q22-22 44 0q-22 22-44 0z"/><circle cx="32" cy="32" r="7"/><circle cx="32" cy="32" r="2.5" ${F}/><path d="M32 5v6M32 53v6M13 11l4 4M51 11l-4 4M13 53l4-4M51 53l-4-4"/>`,
+  sello:`<path d="M32 9l6 4h7l3 7 5 5-2 7 2 7-5 5-3 7h-7l-6 4-6-4h-7l-3-7-5-5 2-7-2-7 5-5 3-7h7z" ${F} fill-opacity=".2"/><path d="M32 22l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/>`,
+  destierro:`<circle cx="27" cy="37" r="14" stroke-dasharray="4 4"/><circle cx="27" cy="37" r="3" ${F}/><path d="M33 31l19-19M40 12h12v12"/>`,
+  // Objetos
+  amuleto:`<path d="M17 8q15 22 30 0"/><path d="M32 26l11 11-11 18-11-18z" ${F} fill-opacity=".2"/><circle cx="32" cy="38" r="3" ${F}/>`,
+  linterna:`<path d="M24 16h16M26 16v-4h12v4"/><path d="M24 16l-4 8v22l4 6h16l4-6V24l-4-8"/><path d="M32 27q6 7 0 13q-6-6 0-13z" ${F} fill-opacity=".45"/><path d="M28 6h8"/>`,
+  elixir:`<path d="M26 8h12M28 8v12L18 36v18h28V36L36 20V8"/><path d="M18 42h28" /><circle cx="27" cy="48" r="2" ${F}/><circle cx="36" cy="47" r="1.5" ${F}/><path d="M18 42v12h28V42" ${F} fill-opacity=".25" stroke="none"/>`,
+  reliquia:`<path d="M13 22l9 9 10-15 10 15 9-9-4 24H17z" ${F} fill-opacity=".2"/><path d="M17 53h30"/><circle cx="32" cy="36" r="3"/><circle cx="13" cy="21" r="2" ${F}/><circle cx="51" cy="21" r="2" ${F}/><circle cx="32" cy="14" r="2" ${F}/>`,
+  campana:`<path d="M19 44q0-25 13-29q13 4 13 29z"/><path d="M13 44h38"/><circle cx="32" cy="50" r="3"/><path d="M32 9v6"/><path d="M8 32q-3-7 2-12M56 32q3-7-2-12"/>`,
+  barricada:`<path d="M9 25h46M9 41h46"/><path d="M16 17v38M48 17v38"/><path d="M13 21l38 24M13 45l38-24"/>`,
+  // Horrores
+  sectario:`<path d="M15 57q0-31 17-47 17 16 17 47z"/><path d="M24 34q8-10 16 0v7q-8 5-16 0z" ${F} fill-opacity=".55"/><circle cx="28" cy="36" r="1.6" ${F}/><circle cx="36" cy="36" r="1.6" ${F}/><path d="M32 46v11"/>`,
+  profundo:`<path d="M14 36q2-20 18-22 16 2 18 22-4 14-18 16-14-2-18-16z"/><circle cx="24" cy="30" r="4.5"/><circle cx="40" cy="30" r="4.5"/><circle cx="24" cy="30" r="1.8" ${F}/><circle cx="40" cy="30" r="1.8" ${F}/><path d="M22 42q10 6 20 0"/><path d="M14 35l-7-3M14 40l-7 2M50 35l7-3M50 40l7 2"/><path d="M32 14V7l4 4"/>`,
+  necrofago:`<path d="M18 30q0-18 14-18t14 18q0 10-6 14v10H24V44q-6-4-6-14z"/><path d="M23 27l6 4-6 4zM41 27l-6 4 6 4z" ${F}/><path d="M27 46v8M32 46v8M37 46v8"/><path d="M18 22l-6-8M46 22l6-8"/>`,
+  byakhee:`<path d="M32 27q-10-15-26-13 8 6 6 15 8-2 10 6 6-6 10-8z"/><path d="M32 27q10-15 26-13-8 6-6 15-8-2-10 6-6-6-10-8z"/><path d="M32 24v24l-5 9M32 48l5 9"/><circle cx="32" cy="20" r="4"/><circle cx="30.5" cy="19.5" r="1" ${F}/><circle cx="33.5" cy="19.5" r="1" ${F}/>`,
+  perro:`<path d="M8 42l11-14 9 2 10-16 4 11 14 4-9 7-6 12H26l-7-6z"/><path d="M41 26l3 2" stroke-width="3.5"/><path d="M44 37l10 3"/><path d="M14 52l6-8M30 56l2-8"/>`,
+  migo:`<path d="M32 22q-8 0-8 10t8 14q8-4 8-14t-8-10z"/><path d="M26 30L9 19M38 30l17-11M26 38L8 45M38 38l18 7"/><path d="M28 19q4-10 8 0M24 17q-4-8 2-11M40 17q4-8-2-11"/><path d="M28 46l-6 11M36 46l6 11"/>`,
+  color:`<circle cx="22" cy="24" r="7" ${F} fill-opacity=".25"/><circle cx="41" cy="19" r="4"/><circle cx="42" cy="39" r="9" ${F} fill-opacity=".18"/><circle cx="21" cy="45" r="5"/><path d="M28 27q6 4 9 6M40 24v6M26 43q6-2 8-4"/><path d="M10 10l3 3M54 54l-3-3M54 10l-3 3"/>`,
+  shoggoth:`<path d="M7 52q0-27 18-31 4-11 15-7 17 4 17 23 4 7 0 15z"/><circle cx="21" cy="37" r="3.5"/><circle cx="34" cy="28" r="2.5"/><circle cx="43" cy="39" r="4.5"/><circle cx="28" cy="46" r="2"/><circle cx="47" cy="26" r="2"/><circle cx="43" cy="39" r="1.8" ${F}/><circle cx="21" cy="37" r="1.4" ${F}/>`,
+  polipo:`<path d="M14 30q-4-12 8-14 4-8 12-4 10-4 14 6 8 4 2 12z" ${F} fill-opacity=".18"/><path d="M19 30q-2 12 4 23M29 30q2 12-2 25M40 30q4 10-2 21M48 30q4 8 2 15"/>`,
+  faraon:`<path d="M32 7q-16 4-18 22l4 25h28l4-25q-2-18-18-22z"/><path d="M22 25h20v14q-10 8-20 0z" ${F} fill-opacity=".5"/><path d="M14 30l8-4M50 30l-8-4M18 42h6M40 42h6M18 48h6M40 48h6"/><path d="M29 17l3-7 3 7"/>`,
+  // Jefes
+  durmiente:`<path d="M32 9q-12 0-12 14 0 6 4 10l-3 15M32 9q12 0 12 14 0 6-4 10l3 15"/><path d="M27 33q-2 11 0 22M32 33v24M37 33q2 11 0 22"/><circle cx="27" cy="22" r="2.2" ${F}/><circle cx="37" cy="22" r="2.2" ${F}/><path d="M20 21q-14-10-16 8 6-4 10 2 2-6 6-4zM44 21q14-10 16 8-6-4-10 2-2-6-6-4z" ${F} fill-opacity=".25"/>`,
+  madre:`<path d="M19 18l4-9 5 6 4-9 4 9 5-6 4 9" ${F} fill-opacity=".3"/><path d="M19 18h26"/><path d="M19 18q-2 18 13 22 15-4 13-22"/><circle cx="26" cy="27" r="3.2"/><circle cx="38" cy="27" r="3.2"/><circle cx="26" cy="27" r="1.2" ${F}/><circle cx="38" cy="27" r="1.2" ${F}/><path d="M26 34q6 4 12 0"/><path d="M24 40q-9 8-6 17M40 40q9 8 6 17M32 40v17"/>`,
+  mensajero:`<path d="M14 57q0-35 18-49 18 14 18 49z"/><path d="M22 41q0-21 10-23 10 2 10 23-10 6-20 0z" ${F} fill-opacity=".85"/><path d="M7 22l7 4M57 22l-7 4M11 11l6 6M53 11l-6 6M32 2v3"/>`
+};
+function art(id, horror){
+  const body=ICONS[id];
+  if(!body)return sigil(id,horror);
+  return `<svg viewBox="0 0 64 64" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
+}
+
+Object.assign(ICONS,{
+  kulten:`<rect x="14" y="10" width="36" height="44" rx="2"/><path d="M18 10v44"/><path d="M14 24l36 16M14 40l36-16" stroke-dasharray="3 3"/><rect x="28" y="28" width="10" height="9" rx="1" ${F} fill-opacity=".45"/><path d="M30 28v-3a3 3 0 0 1 6 0v3"/>`,
+  bibliotecaria:`<circle cx="27" cy="25" r="10"/><circle cx="27" cy="12" r="4"/><path d="M11 57q2-14 16-14t16 14"/><path d="M49 32v17M45 49h8"/><path d="M49 22q4 5 0 8q-4-3 0-8z" ${F} fill-opacity=".5"/>`,
+  anticuario:`<path d="M20 12h16M22 12q-8 10-4 24t10 16q8-2 10-16t-4-24"/><path d="M18 28h20"/><circle cx="47" cy="42" r="6"/><path d="M51 46l6 7"/>`,
+  medium:`<circle cx="32" cy="27" r="16" ${F} fill-opacity=".14"/><path d="M19 52h26l-4-9H23z"/><path d="M25 21q4-5 9-3"/><path d="M27 31q5 5 10 0" opacity=".7"/><path d="M10 14l3 3M54 14l-3 3"/>`,
+  marinero:`<circle cx="32" cy="11" r="4"/><path d="M32 15v40"/><path d="M22 23h20"/><path d="M12 38q4 17 20 17t20-17"/><path d="M12 38l-2 7M12 38l7 1M52 38l2 7M52 38l-7 1"/>`,
+  estudiante:`<path d="M12 50h40v6H12zM16 44h32v6H16z"/><path d="M29 44V27h6v17"/><path d="M32 12q5 6 0 12q-5-6 0-12z" ${F} fill-opacity=".45"/>`,
+  daga:`<path d="M32 6l5 30H27z" ${F} fill-opacity=".25"/><path d="M32 12v20"/><path d="M21 38h22"/><path d="M29 38v13h6V38"/><circle cx="32" cy="55" r="3"/>`,
+  lampara:`<path d="M14 40q0-10 18-10t18 10q0 6-18 6t-18-6z"/><path d="M50 38q8-2 6 7"/><path d="M26 30v-4h12v4"/><path d="M32 8q6 8 0 16q-6-8 0-16z" ${F} fill-opacity=".45"/><path d="M24 46l-2 9h20l-2-9"/>`,
+  espejo:`<ellipse cx="32" cy="24" rx="14" ry="17"/><ellipse cx="32" cy="24" rx="9" ry="12" ${F} fill-opacity=".18"/><path d="M29 41v15h6V41"/><path d="M27 17l6-4"/>`,
+  jade:`<path d="M21 56h22l-2-8H23z"/><path d="M24 48q-4-14 8-18 12 4 8 18"/><circle cx="32" cy="21" r="9" ${F} fill-opacity=".2"/><path d="M27 29q-1 8-4 11M32 30v11M37 29q1 8 4 11"/><circle cx="29" cy="20" r="1.6" ${F}/><circle cx="35" cy="20" r="1.6" ${F}/>`,
+  mapa:`<path d="M8 16l14-6 20 6 14-6v38l-14 6-20-6-14 6z"/><path d="M22 10v38M42 16v38"/><path d="M28 25l8 8M36 25l-8 8" stroke-width="3"/><path d="M12 42q6-7 13-3" stroke-dasharray="2 3"/>`,
+  faro:`<path d="M26 56l3-34h6l3 34z"/><path d="M24 22h16"/><path d="M27 22v-6h10v6"/><path d="M32 9v7"/><path d="M38 17l16-6M38 20l16 4M26 17l-16-6M26 20l-16 4" opacity=".75"/><path d="M27 34h10M26 46h12"/>`,
+  sanatorio:`<path d="M10 56V28l22-14 22 14v28z"/><path d="M28 56V44h8v12"/><path d="M32 21v11M26.5 26.5h11" stroke-width="3"/><path d="M16 36h6M42 36h6M16 46h6M42 46h6"/>`,
+  biblioteca:`<path d="M10 9h44v47H10z"/><path d="M10 25h44M10 41h44"/><path d="M15 25V14M19 25v-9M23 25V13M30 25l3-11M38 41V30M42 41v-9M17 56V45M21 56V44M46 56V46M50 56l-3-11"/>`,
+  iglesia:`<path d="M14 56V32l18-14 18 14v24z"/><path d="M32 18V5M27 9h10"/><path d="M27 56V45a5 5 0 0 1 10 0v11"/><circle cx="32" cy="32" r="4"/>`,
+  circulo:`<ellipse cx="32" cy="47" rx="25" ry="8" stroke-dasharray="3 3"/><path d="M12 47V28l4-4 4 4v19M28 43V20l4-4 4 4v23M44 47V28l4-4 4 4v19"/><path d="M32 5v5M24 8l2 4M40 8l-2 4"/>`,
+  niebla:`<path d="M8 24q8-6 16 0t16 0t16 0M8 36q8-6 16 0t16 0t16 0M8 48q8-6 16 0t16 0t16 0"/><circle cx="46" cy="13" r="5" ${F} fill-opacity=".3"/>`,
+  plegaria:`<path d="M31 55l-9-10V27q0-6 4-6l5 12z"/><path d="M33 55l9-10V27q0-6-4-6l-5 12z"/><ellipse cx="32" cy="10" rx="12" ry="4"/>`,
+  formula:`<path d="M32 22c-6-4-14-5-22-4v30c8-1 16 0 22 4 6-4 14-5 22-4V18c-8-1-16 0-22 4z"/><path d="M32 22v30"/><circle cx="21" cy="34" r="6"/><path d="M21 28v12M15 34h12" opacity=".7"/><path d="M38 30h10M38 36h8M38 42h10"/><path d="M32 5v8M26 8l3 4M38 8l-3 4"/>`,
+  susurros:`<path d="M20 18q-8 14 0 28M13 12q-12 20 0 40"/><path d="M44 18q8 14 0 28M51 12q12 20 0 40"/><path d="M25 32q7-7 14 0q-7 7-14 0z" ${F} fill-opacity=".4"/>`,
+  faraon:ICONS.faraon
+});
+
+const esc = s => String(s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+
+function cardHTML(c, zone){
+  const d=D(c.id),hor=d.t==='horror';
+  const tc=`var(--t-${d.t})`;
+  let top,foot,acts='';
+  if(hor){
+    const fc=faceOf(c);
+    top=`<span class="res" title="Resistencia">${d.r}</span><span class="type">Horror</span>`;
+    foot=`<span class="eco">Desterrar: ${fc} Saber</span><span class="trophy" title="Trofeo">Trofeo ${d.tr}</span>`;
+    if(zone==='umbral'){
+      if(UI.target){
+        const src=G.estudio.find(x=>x.uid===UI.target.uid);
+        const ok=src&&D(src.id).act.target(c);
+        acts=`<button class="btn primary" data-a="target" data-u="${c.uid}" ${ok?'':'disabled'}>${ok?'Elegir como objetivo':'Fuera de alcance'}</button>`;
+      } else {
+        acts=`<button class="btn" data-a="face" data-u="${c.uid}" ${canFace(c)?'':'disabled'}>Enfrentar · ${fc} Saber</button>`;
+      }
+    }
+  } else {
+    const cost=zone==='vision'||zone==='setup'?costOf(c):d.c;
+    top=`<span class="cost${cost<d.c?' cheap':''}" title="Coste en Saber">${cost}</span><span class="type">${TYPES[d.t]}</span>`;
+    const usesTxt=d.uses?`<span class="uses">${zone==='estudio'?c.uses:d.uses} usos</span>`:'';
+    foot=`<span class="eco">${zone==='estudio'&&d.uses?'':'Quemar +'+(zone==='vision'?burnOf(c):d.e)}</span>${usesTxt}<span class="pts${d.p?'':' zero'}" title="Puntos de Victoria">${d.p||0}</span>`;
+    if(zone==='setup'){
+      acts=`<button class="btn primary" data-a="keep" data-u="${c.uid}">Empezar con esta</button>`;
+    } else if(zone==='vision'){
+      acts=`<button class="btn primary" data-a="buy" data-u="${c.uid}" ${canAcquire(c)&&!UI.target?'':'disabled'}>Adquirir · ${costOf(c)} Saber</button>`+
+           `<button class="btn" data-a="burn" data-u="${c.uid}" ${UI.target?'disabled':''}>Quemar · +${burnOf(c)} Saber</button>`;
+    } else if(zone==='estudio'&&d.act){
+      const sel=UI.target&&UI.target.uid===c.uid;
+      acts=sel?`<button class="btn" data-a="cancel">Cancelar</button>`
+              :`<button class="btn" data-a="act" data-u="${c.uid}" ${canAct(c)&&!UI.target?'':'disabled'}>${d.act.l}${d.act.kind==='once'&&c.used?' (usado)':''}</button>`;
+    }
+  }
+  const used=zone==='estudio'&&d.act&&d.act.kind==='once'&&c.used;
+  const tgt=zone==='umbral'&&UI.target&&!acts.includes('disabled');
+  return `<article class="card${hor?' horror':''}${used?' used':''}${tgt?' targetable':''}" style="--tc:${tc};--hx:${20+hash(c.id)%60}%">
+    <div class="band"></div>
+    <div class="c-top">${top}</div>
+    <h3 class="c-name">${esc(d.n)}</h3>
+    <div class="c-art">${art(c.id,hor)}</div>
+    <p class="c-text">${d.t==='ritual'?'<i>Ritual: se quema al adquirirlo.</i> ':''}${esc(d.x)}</p>
+    <div class="c-foot">${foot}</div>
+    ${acts?`<div class="c-acts">${acts}</div>`:''}
+  </article>`;
+}
+
+function rulesHTML(open){
+  return `<details class="rules"${open?' open':''}>
+  <summary>Cómo se juega</summary>
+  <div class="rules-body">
+    <p>Eres un investigador en un pueblo costero. Reúne Tomos, Aliados, Artefactos y Lugares en tu <b>Estudio</b> mientras los Horrores se acumulan en el <b>Umbral</b>. Si llegas al final del mazo, sobrevives y cuentas tus puntos.</p>
+    <h3>Recursos</h3>
+    <ul>
+      <li><b>Saber</b>: la moneda del juego. Empiezas con 4.</li>
+      <li><b>Cordura</b>: si llega a 0, pierdes.</li>
+      <li><b>Perdición</b>: si llega a 10, el Durmiente despierta y pierdes. Cada 5 turnos sale la luna llena y sube 1.</li>
+    </ul>
+    <h3>Cada turno</h3>
+    <ul>
+      <li><b>Inicio:</b> cada Horror del Umbral aplica su efecto y después se activan tus cartas de «inicio de turno».</li>
+      <li><b>Preparación:</b> usa las habilidades de tus cartas y enfrenta Horrores pagando su coste en Saber. Cada Horror desterrado es un trofeo con puntos.</li>
+      <li><b>Visión:</b> revela 2 cartas. Los Horrores cruzan al Umbral solos. Del resto, puedes <b>adquirir una</b> pagando su coste. Las demás se <b>queman</b> y te dan Saber.</li>
+    </ul>
+    <h3>Final</h3>
+    <ul>
+      <li>Suma los puntos de tu Estudio, los efectos «Final» y tus trofeos. Cada Horror que siga en el Umbral resta su valor de trofeo.</li>
+      <li>Al sacrificar o romper una carta, pierdes también sus puntos.</li>
+    </ul>
+  </div>
+</details>`;
+}
+
+function titleHTML(){
+  const opts=(obj,key,act)=>Object.entries(obj).map(([id,o])=>
+    `<button class="opt" data-a="${act}" data-u="${id}" aria-pressed="${UI[key]===id}"><b>${esc(o.n)}</b>${o.r?`<i>${esc(o.r)}</i>`:''}<span>${esc(o.x)}</span></button>`).join('');
+  return `<div class="title">
+    <div class="hero">
+      <p class="eyebrow">Un solitario de cartas para una sola mente frágil</p>
+      <h1>Ecos de <span>R'lyeh</span></h1>
+      <p>La marea trae sueños que no son tuyos. Reúne libros prohibidos, aliados dudosos y lugares de poder antes de que la ciudad hundida termine de despertar. Cada carta que quemas te da conocimiento. Cada una que conservas te acerca a la victoria, o a la locura.</p>
+    </div>
+    <div class="pick"><h2>Elige investigador</h2><div class="inv-grid">${opts(INV,'inv','inv')}</div></div>
+    <div class="pick"><h2>Dificultad</h2><div class="inv-grid">${opts(DIFF,'diff','diff')}</div></div>
+    <div class="start-row"><button class="btn primary big" data-a="start">Comenzar la investigación</button></div>
+    ${rulesHTML(false)}
+  </div>`;
+}
+
+function hintText(){
+  if(UI.target){const c=G.estudio.find(x=>x.uid===UI.target.uid);return `${D(c.id).n}: elige un Horror del Umbral como objetivo.`;}
+  if(G.phase==='setup')return 'Elige la carta con la que empiezas, gratis. Las otras dos vuelven al mazo.';
+  if(G.phase==='prep')return 'Usa tus cartas o enfrenta a los Horrores. Cuando estés listo, revela la visión.';
+  if(G.phase==='vision'){
+    if(!G.vision.length)return 'Visión resuelta. Termina el turno.';
+    return G.acq?'Ya has adquirido una carta este turno. Quema el resto para ganar Saber.':'Puedes adquirir una carta. Quema el resto para ganar Saber.';
+  }
+  return '';
+}
+
+function boardHTML(){
+  const lowC=G.cordura<=2;
+  const pips=Array.from({length:G.maxCord},(_,i)=>`<span class="pip${i<G.cordura?' on':''}"></span>`).join('');
+  const doom=Array.from({length:MAXP},(_,i)=>`<span class="cell${i<G.perd?' on':''}${i===MAXP-1?' last':''}"></span>`).join('');
+  const nextMoon=MOON-(G.turn%MOON);
+  let controls='';
+  if(G.phase==='prep')controls=`<button class="btn primary big" data-a="reveal" ${UI.target?'disabled':''}>Revelar visión · ${Math.min(revealN(),G.deck.length)} cartas</button>`;
+  if(G.phase==='vision'&&!G.vision.length)controls=`<button class="btn primary big" data-a="end" ${UI.target?'disabled':''}>${G.deck.length?'Terminar turno':'Terminar la partida'}</button>`;
+  if(UI.target)controls+=` <button class="btn" data-a="cancel">Cancelar objetivo</button>`;
+  const visionCards=G.vision.map(c=>cardHTML(c,G.phase==='setup'?'setup':'vision')).join('');
+  const top=G.deck.length?G.deck[G.deck.length-1]:null;
+
+  return `<header class="top">
+    <div class="brand">Ecos de <span>R'lyeh</span></div>
+    <div class="stats">
+      <div class="stat saber"><span class="lbl">Saber</span><span class="val">${G.saber}</span></div>
+      <div class="stat"><span class="lbl">Cordura ${G.cordura}/${G.maxCord}</span><span class="pips${lowC?' low':''}">${pips}</span></div>
+      <div class="stat"><span class="lbl">Perdición</span><span class="doom">${doom}<span class="doom-num">${G.perd}/10</span></span></div>
+      <div class="stat"><span class="lbl">Turno</span><span class="val">${G.turn}</span></div>
+      <div class="stat"><span class="lbl">Mazo</span><span class="val">${G.deck.length}</span></div>
+    </div>
+  </header>
+  <div class="layout">
+    <main class="board">
+      <section class="zone umbral">
+        <div class="zone-head"><h2>El Umbral</h2><span class="sub">Lo que ha cruzado actúa al inicio de cada turno</span></div>
+        <div class="row">${G.umbral.length?G.umbral.map(h=>cardHTML(h,'umbral')).join(''):'<p class="empty">Nada ha cruzado todavía. El agua está quieta.</p>'}</div>
+      </section>
+      <section class="zone vision">
+        <div class="zone-head"><h2>${G.phase==='setup'?'Primer hallazgo':'La Visión'}</h2><span class="sub">${G.phase==='prep'?'Aún no has revelado este turno':''}</span></div>
+        <p class="hint">${esc(hintText())}</p>
+        ${visionCards?`<div class="row">${visionCards}</div>`:''}
+        ${controls?`<div class="controls">${controls}</div>`:''}
+      </section>
+      <section class="zone estudio">
+        <div class="zone-head"><h2>Tu Estudio</h2><span class="sub">${G.estudio.length} cartas · ${G.estudio.reduce((s,c)=>s+(D(c.id).p||0),0)} PV impresos</span></div>
+        <div class="row">${G.estudio.length?G.estudio.map(c=>cardHTML(c,'estudio')).join(''):'<p class="empty">Estanterías vacías, por ahora.</p>'}</div>
+      </section>
+    </main>
+    <aside class="side">
+      <div class="panel inv-card"><b>${esc(INV[G.inv].n)}</b><i>${esc(INV[G.inv].r)} · ${DIFF[G.diff].n}</i><span>${esc(INV[G.inv].x)}</span></div>
+      <div class="panel">
+        <h3>El mazo</h3>
+        <div class="kv"><span>Cartas restantes</span><span>${G.deck.length}</span></div>
+        <div class="kv"><span>Quemadas</span><span>${G.quemadas.length}</span></div>
+        <div class="kv"><span>Luna llena en</span><span>${nextMoon} ${nextMoon===1?'turno':'turnos'}</span></div>
+        ${G.mirror?'<p class="peek">El Espejo de Bronce está preparado.</p>':''}
+        ${G.revolver?'<p class="peek">Revólver cargado: tu próximo Enfrentar cuesta 2 menos.</p>':''}
+        ${has('pnakoticos')&&top&&G.phase!=='setup'?`<p class="peek">Encima del mazo: ${esc(D(top.id).n)}</p>`:''}
+      </div>
+      <div class="panel"><h3>Trofeos</h3>${G.trofeos.length?`<div class="tro-list">${G.trofeos.map(h=>`<span class="chip">${esc(D(h.id).n)} · ${D(h.id).tr}</span>`).join('')}</div>`:'<p class="empty">Ningún Horror desterrado.</p>'}</div>
+      <div class="panel"><h3>Crónica</h3><ul class="log">${G.log.map(l=>`<li class="${l.cls}">${esc(l.m)}</li>`).join('')}</ul></div>
+      <div class="panel">
+        ${UI.confirmQuit?`<div class="confirm"><span>¿Abandonar esta partida?</span><button class="btn danger" data-a="quit">Sí, abandonar</button><button class="btn" data-a="noquit">No</button></div>`
+                       :`<button class="btn" data-a="askquit">Nueva partida</button>`}
+      </div>
+      ${rulesHTML(false)}
+    </aside>
+  </div>
+  ${G.phase==='over'?endHTML():''}`;
+}
+
+function endHTML(){
+  const r=G.result;
+  if(r.win){
+    return `<div class="overlay"><div class="end" role="dialog" aria-label="Resultado">
+      <h2>Sobrevives</h2>
+      <p class="verdict">${esc(rank(r.total))}</p>
+      <table>${r.rows.map(([k,v])=>`<tr><td>${esc(k)}</td><td>${v>0?'+':''}${v}</td></tr>`).join('')}
+      <tr class="total"><td>Total</td><td>${r.total} PV</td></tr></table>
+      <p>${esc(INV[G.inv].n)} · ${DIFF[G.diff].n} · ${G.turn} turnos</p>
+      <button class="btn primary big" data-a="again">Jugar de nuevo</button>
+    </div></div>`;
+  }
+  const txt=r.reason==='locura'
+    ?'Tu mente se quiebra. Te encuentran días después, dibujando el mismo símbolo en las paredes del sanatorio.'
+    :'La Perdición llega a 10. Muy por debajo del mar, en la ciudad muerta, algo abre los ojos.';
+  return `<div class="overlay"><div class="end lost" role="dialog" aria-label="Resultado">
+    <h2>${r.reason==='locura'?'Locura':'El Despertar'}</h2>
+    <p class="verdict">${esc(txt)}</p>
+    <p>Aguantaste ${G.turn} turnos y quedaban ${G.deck.length} cartas en el mazo.</p>
+    <button class="btn primary big" data-a="again">Intentarlo de nuevo</button>
+  </div></div>`;
+}
+
+const HAS_DOM = typeof document!=='undefined';
+function save(){try{if(G)localStorage.setItem('ecos-rlyeh',JSON.stringify(G));else localStorage.removeItem('ecos-rlyeh');}catch(e){}}
+function render(){
+  if(!HAS_DOM)return;
+  const app=document.getElementById('app');
+  app.innerHTML=G?boardHTML():titleHTML();
+  save();
+}
+
+function handle(a,u){
+  switch(a){
+    case 'inv':UI.inv=u;break;
+    case 'diff':UI.diff=u;break;
+    case 'start':newGame(UI.inv,UI.diff);break;
+    case 'keep':keepStart(+u);break;
+    case 'reveal':reveal();break;
+    case 'buy':acquire(+u);break;
+    case 'burn':burn(+u);break;
+    case 'end':endTurn();break;
+    case 'face':face(+u);break;
+    case 'act':useAct(+u);break;
+    case 'target':chooseTarget(+u);break;
+    case 'cancel':UI.target=null;break;
+    case 'askquit':UI.confirmQuit=true;break;
+    case 'noquit':UI.confirmQuit=false;break;
+    case 'quit':case 'again':G=null;UI.target=null;UI.confirmQuit=false;break;
+  }
+}
+
+if(HAS_DOM){
+  document.getElementById('app').addEventListener('click',e=>{
+    const b=e.target.closest('[data-a]');if(!b||b.disabled)return;
+    const wasTitle=!G;
+    handle(b.dataset.a,b.dataset.u);
+    render();
+    if(wasTitle&&G)window.scrollTo(0,0);
+  });
+  const boot=data=>{
+    if(data&&data.G)G=data.G;
+    else{try{const s=localStorage.getItem('ecos-rlyeh');if(s){const g=JSON.parse(s);if(g&&g.phase&&g.phase!=='over')G=g;}}catch(e){}}
+    render();
+  };
+  try{window.claude?.hot?.snapshot?.(()=>({G}));}catch(e){}
+  window.claude?.hot?.ready ? window.claude.hot.ready(boot) : boot(window.claude?.hot?.data ?? {});
+}
+</script>
+
+</body></html>

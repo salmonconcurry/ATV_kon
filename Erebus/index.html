@@ -1,0 +1,807 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Erebus</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+:root{
+  /* Layout: una consola de a bordo — el plano de la nave en el centro, el panel de la sala elegida debajo y la bitácora a un lado (abajo en móvil) */
+  --void:#07090a;
+  --console:#0e1213;
+  --rim:#25302e;
+  --amber:#ffb347;
+  --amber-dim:#8a6328;
+  --cyan:#7fd4d0;
+  --alert:#ff5a4a;
+  --text:#e3dccb;
+  --muted:#8c938b;
+  --display:'VT323','IBM Plex Mono',ui-monospace,monospace;
+  --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--void);color:var(--text);font-family:var(--mono);font-size:14.5px;line-height:1.5;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;
+  background-image:radial-gradient(ellipse 90% 60% at 50% 0%,rgba(255,179,71,.07),transparent 65%)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:40;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px);mix-blend-mode:multiply}
+#app{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 48px}
+h1,h2,h3{margin:0;font-weight:400;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.btn{font-family:var(--mono);font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--amber-dim);
+  background:transparent;color:var(--amber);padding:8px 12px;min-height:40px;cursor:pointer;border-radius:0}
+.btn:hover:not(:disabled){background:rgba(255,179,71,.1);border-color:var(--amber)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.solid{background:var(--amber);color:var(--void);border-color:var(--amber)}
+.btn.solid:hover:not(:disabled){background:#ffc56b}
+.btn.alert{border-color:var(--alert);color:#ffb3aa}
+.btn.alert.solid{background:var(--alert);color:var(--void)}
+.btn.cyan{border-color:#3f6e6b;color:var(--cyan)}
+.btn.big{font-size:15px;padding:10px 18px;min-height:46px}
+
+/* portada */
+.title{display:grid;gap:22px;padding-block:18px}
+.hero{display:grid;gap:10px;max-width:66ch}
+.hero .eyebrow{color:var(--cyan);font-size:12.5px;letter-spacing:.25em;text-transform:uppercase}
+.hero h1{font-family:var(--display);font-size:clamp(84px,22vw,180px);line-height:.8;color:var(--amber);letter-spacing:.06em;text-shadow:0 0 18px rgba(255,179,71,.35)}
+.hero p{font-size:15.5px;color:#cfc8b6}
+.term{border:1px solid var(--rim);background:var(--console);padding:12px 14px;font-size:13.5px;color:var(--cyan);display:grid;gap:2px}
+.term b{color:var(--amber);font-weight:600}
+.pick h2{font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.opt{text-align:left;display:grid;gap:4px;padding:12px 14px;cursor:pointer;background:var(--console);border:1px solid var(--rim)}
+.opt:hover{border-color:var(--amber-dim)}
+.opt[aria-pressed="true"]{border-color:var(--amber);box-shadow:inset 0 0 0 1px var(--amber)}
+.opt b{font-family:var(--display);font-weight:400;font-size:26px;line-height:1;color:var(--amber)}
+.opt span{font-size:13.5px;color:#cfc8b6}
+details.rules{border:1px solid var(--rim);background:var(--console)}
+details.rules summary{cursor:pointer;padding:12px 14px;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:var(--amber)}
+.rules-body{padding:0 14px 14px;display:grid;gap:8px;max-width:76ch;font-size:14px}
+.rules-body h3{font-size:12.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);margin-top:8px}
+.rules-body ul{margin:0;padding-left:20px;display:grid;gap:4px}
+
+/* cabecera */
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 20px;padding-bottom:10px;margin-bottom:12px;border-bottom:1px solid var(--rim)}
+.brand{font-family:var(--display);font-size:40px;line-height:.8;color:var(--amber);letter-spacing:.08em}
+.stats{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:flex-end}
+.stat{display:grid;gap:1px}
+.stat .lbl{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.stat .val{font-family:var(--display);font-size:28px;line-height:.9;color:var(--amber);font-variant-numeric:tabular-nums}
+.stat.hp .val{color:var(--cyan)}
+.stat.bad .val{color:var(--alert);text-shadow:0 0 10px rgba(255,90,74,.5)}
+
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:16px;align-items:start}
+@media (max-width:980px){.layout{grid-template-columns:minmax(0,1fr)}}
+.board{display:grid;gap:14px;min-width:0}
+.zone{border:1px solid var(--rim);background:var(--console);padding:12px 14px;display:grid;gap:10px;min-width:0}
+.zone-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 14px}
+.zone-head h2{font-family:var(--display);font-size:30px;line-height:1;color:var(--amber)}
+.zone-head .sub{font-size:12.5px;color:var(--muted)}
+.hint{color:var(--cyan);font-size:13.5px}
+.empty{color:var(--muted);font-style:italic}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* plano */
+.mapwrap{background:#050707;border:1px solid var(--rim)}
+.map{display:block;width:100%;height:auto;max-height:80vh}
+.map .hull{fill:none;stroke:#1d2725;stroke-width:.6}
+.map .corr{stroke:#3c4a46;stroke-width:1.6}
+.map .vent{fill:none;stroke:#6b3a33;stroke-width:.5;stroke-dasharray:1 .9}
+.map .vent.sealed{stroke:#2b2422;stroke-dasharray:.4 1.2}
+.map .room{cursor:pointer}
+.map .room rect.bg{fill:#0d1312;stroke:#3c4a46;stroke-width:.35}
+.map .room.adj rect.bg{stroke:var(--amber-dim);stroke-width:.5}
+.map .room.here rect.bg{stroke:var(--amber);stroke-width:.7;fill:#16130c}
+.map .room.sel rect.bg{stroke:var(--text);stroke-width:.8}
+.map .room.blocked rect.bg{fill:#1a1210}
+.map .room text.nm{fill:var(--text);font-family:var(--mono);font-weight:600;font-size:2.55px;letter-spacing:0;text-transform:uppercase}
+.map .room text.tag{fill:var(--muted);font-family:var(--mono);font-size:1.9px}
+.map .room text.tag.warn{fill:#ff9b8e}
+.map .me{fill:var(--amber)}
+.map .crew{fill:var(--cyan)}
+.map .crew-l{fill:#07090a;font-family:var(--mono);font-weight:600;font-size:1.7px}
+.map .beast{fill:var(--alert)}
+.map .ghost{fill:none;stroke:var(--alert);stroke-width:.35;stroke-dasharray:.6 .6}
+.map .noise{fill:none;stroke:var(--alert);stroke-width:.35}
+.map .decoy{fill:#ffd36b}
+@media (prefers-reduced-motion:no-preference){
+  .map .noise{animation:ping 1.6s ease-out infinite;transform-box:fill-box;transform-origin:center}
+  .map .beast{animation:throb 1.1s ease-in-out infinite}
+}
+@keyframes ping{0%{opacity:.9;transform:scale(.6)}100%{opacity:0;transform:scale(1.25)}}
+@keyframes throb{50%{opacity:.55}}
+
+.roompanel{border:1px solid var(--rim);background:#0b0f0f;padding:10px 12px;display:grid;gap:8px}
+.roompanel h3{font-family:var(--display);font-size:30px;line-height:1;color:var(--amber)}
+.roompanel .meta{font-size:13.5px;color:#cfc8b6}
+.roompanel .warn{color:#ff9b8e}
+
+.inv{display:flex;flex-wrap:wrap;gap:8px}
+.item{flex:1 1 200px;min-width:0;max-width:320px;border:1px solid var(--rim);background:#0b0f0f;padding:8px 10px;display:grid;gap:4px}
+.item b{color:var(--amber);font-weight:600;font-size:13.5px}
+.item span{font-size:12.5px;color:#bdb6a5}
+.item .btn{min-height:34px;padding:5px 8px;font-size:12px;justify-self:start}
+.item.part b{color:var(--cyan)}
+
+.side{display:grid;gap:12px;min-width:0}
+.panel{border:1px solid var(--rim);background:var(--console);padding:12px 14px;display:grid;gap:8px;min-width:0}
+.panel h3{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan)}
+.crewrow{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;padding:5px 0;border-bottom:1px solid #1a2220}
+.crewrow:last-child{border-bottom:none}
+.crewrow i{width:18px;height:18px;border-radius:50%;background:var(--cyan);color:var(--void);font-style:normal;font-weight:600;font-size:11px;display:grid;place-items:center}
+.crewrow.dead i{background:#3a2a28;color:#8a6a64}
+.crewrow b{font-weight:600}
+.crewrow small{grid-column:2;color:var(--muted);font-size:12.5px}
+.crewrow .st{grid-column:2;font-size:12.5px;color:var(--cyan)}
+.crewrow.dead .st{color:#ff9b8e}
+.log{list-style:none;margin:0;padding:0;display:grid;gap:3px;max-height:320px;overflow-y:auto;font-size:13px}
+.log li{padding:2px 0;border-bottom:1px solid #161d1c}
+.log li.turn{color:var(--amber);border-bottom:none;padding-top:6px;letter-spacing:.1em}
+.log li.bad{color:#ff9b8e}
+.log li.good{color:var(--cyan)}
+.confirm{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13.5px}
+
+#mbar{display:none}
+@media (max-width:720px){
+  body{padding-bottom:calc(74px + env(safe-area-inset-bottom,0px))}
+  #app{padding-block:0 20px}
+  .top{position:sticky;top:0;z-index:15;margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px))) 10px;
+    padding:calc(8px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 8px max(12px,env(safe-area-inset-left,0px));
+    background:rgba(7,9,10,.96);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+  .top .brand{display:none}
+  .stats{width:100%;justify-content:space-between;gap:4px 8px}
+  .stat .val{font-size:25px}
+  .zone{padding:10px 12px}
+  .mapwrap{margin-inline:-12px;border-inline:none}
+  .hide-m{display:none}
+  #mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:18;gap:8px;align-items:center;
+    padding:8px max(12px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));
+    background:rgba(7,9,10,.96);border-top:1px solid var(--amber-dim)}
+  #mbar .ap{font-family:var(--display);font-size:26px;color:var(--amber);white-space:nowrap;line-height:1}
+  #mbar .ap small{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.1em}
+  #mbar .btn{flex:1 1 0;min-width:0;min-height:46px;padding:6px}
+}
+.overlay{position:fixed;inset:0;background:rgba(3,4,5,.9);display:grid;place-items:center;z-index:30;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.end{width:min(560px,100%);max-height:100%;overflow-y:auto;background:var(--console);border:1px solid var(--amber-dim);padding:22px;display:grid;gap:12px;box-shadow:0 0 40px rgba(255,179,71,.12)}
+.end.lost{border-color:var(--alert);box-shadow:0 0 40px rgba(255,90,74,.18)}
+.end .mast{font-size:11.5px;letter-spacing:.25em;text-transform:uppercase;color:var(--cyan)}
+.end h2{font-family:var(--display);font-size:clamp(46px,11vw,64px);line-height:.9;color:var(--amber)}
+.end.lost h2{color:var(--alert)}
+.end .verdict{color:#cfc8b6}
+.end table{width:100%;border-collapse:collapse;font-size:14px}
+.end td{padding:4px 0;border-bottom:1px dashed #25302e}
+.end td:last-child{text-align:right;font-variant-numeric:tabular-nums;color:var(--amber)}
+.end tr.total td{border-bottom:none;font-size:17px;padding-top:8px}
+.end .btn{justify-self:start}
+</style>
+
+<div id="app"></div>
+
+<script>
+'use strict';
+// ---------- la nave ----------
+const ROOMS = {
+  puente:{n:'Puente',x:50,y:7},
+  comedor:{n:'Comedor',x:21,y:20},
+  enfermeria:{n:'Enfermería',x:79,y:20},
+  laboratorio:{n:'Laboratorio',x:16,y:37},
+  pasilloA:{n:'Pasillo A',x:50,y:35},
+  criogenia:{n:'Criogenia',x:84,y:37},
+  armeria:{n:'Armería',x:16,y:54},
+  pasilloB:{n:'Pasillo B',x:50,y:54},
+  hidroponia:{n:'Hidroponía',x:84,y:54},
+  ingenieria:{n:'Ingeniería',x:21,y:71},
+  control:{n:'Control esclusa',x:79,y:71},
+  reactor:{n:'Reactor',x:21,y:88},
+  bodega:{n:'Bodega',x:79,y:88},
+  lanzadera:{n:'Lanzadera',x:50,y:103}
+};
+const CORR = [['puente','comedor'],['puente','enfermeria'],['comedor','pasilloA'],['enfermeria','pasilloA'],['comedor','laboratorio'],['enfermeria','criogenia'],
+  ['pasilloA','laboratorio'],['pasilloA','criogenia'],['pasilloA','pasilloB'],['laboratorio','armeria'],['pasilloB','armeria'],['pasilloB','hidroponia'],
+  ['pasilloB','ingenieria'],['pasilloB','control'],['ingenieria','reactor'],['control','bodega'],['reactor','lanzadera'],['bodega','lanzadera'],['criogenia','hidroponia']];
+const VENTS = [['comedor','armeria'],['enfermeria','control'],['laboratorio','ingenieria'],['hidroponia','bodega'],['armeria','reactor'],['puente','pasilloB'],['criogenia','lanzadera']];
+const CADJ={},VADJ={};
+for(const k of Object.keys(ROOMS)){CADJ[k]=[];VADJ[k]=[];}
+for(const [a,b] of CORR){CADJ[a].push(b);CADJ[b].push(a);}
+for(const [a,b] of VENTS){VADJ[a].push(b);VADJ[b].push(a);}
+
+const DIFF = {
+  tripulante:{n:'Tripulante',x:'4 de Salud, 24 turnos de soporte vital. La criatura aguanta 2 disparos y crece en el turno 8.',hp:4,turns:24,chp:2,grow:8,panic:0},
+  superviviente:{n:'Superviviente',x:'3 de Salud, 20 turnos. La criatura aguanta 3 disparos y crece en el turno 6.',hp:3,turns:20,chp:3,grow:6,panic:0},
+  pesadilla:{n:'Pesadilla',x:'3 de Salud, 18 turnos, empiezas con 2 de Pánico. La criatura aguanta 4 disparos y crece en el turno 4.',hp:3,turns:18,chp:4,grow:4,panic:2}
+};
+const ITEMS = {
+  detector:{n:'Detector de movimiento',x:'Ves a la criatura si está a 3 salas o menos.'},
+  lanzallamas:{n:'Lanzallamas improvisado',uses:3,x:'Si la criatura te ataca, la repeles. También puedes usarlo si está en tu sala.'},
+  bengala:{n:'Bengala de señuelo',x:'Déjala en tu sala: la criatura irá hacia allí durante 3 turnos.'},
+  botiquin:{n:'Botiquín',x:'Recuperas 1 de Salud.'},
+  soldador:{n:'Soldador',uses:2,x:'Sella los conductos de tu sala. La criatura ya no puede usarlos.'},
+  adrenalina:{n:'Adrenalina',x:'+2 acciones este turno.'},
+  sedante:{n:'Sedantes',x:'−3 de Pánico.'},
+  tarjeta:{n:'Tarjeta del capitán',x:'Permite activar la autodestrucción en el Reactor.'},
+  celula:{n:'Célula de energía',part:true,x:'Pieza del cañón de plasma.'},
+  bobina:{n:'Bobina de contención',part:true,x:'Pieza del cañón de plasma.'},
+  carcasa:{n:'Carcasa y gatillo',part:true,x:'Pieza del cañón de plasma.'}
+};
+const PARTS=['celula','bobina','carcasa'];
+const CREW = {
+  okoye:{n:'Okoye',r:'Ingeniera',x:'Montar el cañón te cuesta 1 acción en vez de 2.'},
+  brandt:{n:'Brandt',r:'Médico',x:'Cuando descansas, también recuperas 1 de Salud.'},
+  sato:{n:'Sato',r:'Seguridad',x:'+1 a tus disparos con el cañón.'},
+  vega:{n:'Vega',r:'Piloto',x:'La cuenta atrás de la autodestrucción dura 2 turnos más.'}
+};
+const INSTINCTS = ['cazar','cazar','cazar','cazar','acechar','acechar','emboscar','rugido','alimentarse','alimentarse'];
+const EVENTS = {
+  apagon:{h:'Apagón parcial',x:'El detector de movimiento no funciona este turno.',run:()=>{G.flags.blind=true;}},
+  vapor:{h:'Fuga de vapor',x:'Una sala queda bloqueada durante 2 turnos.',run:()=>{const opts=Object.keys(ROOMS).filter(r=>r!==G.pos&&r!=='lanzadera'&&r!==G.beast.room);const r=pick(opts);G.blocked={room:r,until:G.turn+1};return ROOMS[r].n;}},
+  radar:{h:'Eco en el radar interno',x:'Ves dónde está la criatura este turno.',run:()=>{G.flags.radar=true;}},
+  mensaje:{h:'Mensaje cifrado de la compañía',x:'«Prioridad: recuperar el espécimen. Tripulación prescindible.» +1 de Pánico.',run:()=>{panic(1);}},
+  ventilacion:{h:'Reinicio de la ventilación',x:'La criatura se desplaza 2 salas por los conductos.',run:()=>{beastWander(2,true);}}
+};
+const MAXINV = 6, MAXFOLLOW = 2;
+
+let G=null;
+const UI={diff:'superviviente',sel:null,confirmQuit:false};
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const d6=()=>1+Math.floor(Math.random()*6);
+const esc=s=>String(s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+function log(m,cls=''){G.log.unshift({m,cls});if(G.log.length>160)G.log.length=160;}
+function panic(n){G.panic=Math.max(0,Math.min(10,G.panic+n));}
+const R=r=>ROOMS[r].n;
+
+// ---------- utilidades del plano ----------
+function ventOpen(a,b){return !G.welded.includes(a)&&!G.welded.includes(b);}
+function neighbors(r,mode){ // mode: 'corr' | 'vent' | 'all'
+  const out=[];
+  if(mode!=='vent')out.push(...CADJ[r]);
+  if(mode!=='corr')out.push(...VADJ[r].filter(v=>ventOpen(r,v)));
+  return out;
+}
+function bfs(from,mode){
+  const dist={[from]:0},prev={},q=[from];
+  while(q.length){const r=q.shift();for(const n of neighbors(r,mode))if(!(n in dist)){dist[n]=dist[r]+1;prev[n]=r;q.push(n);}}
+  return {dist,prev};
+}
+function pathTo(from,to,mode){
+  const {dist,prev}=bfs(from,mode);if(!(to in dist))return null;
+  const p=[to];while(p[0]!==from)p.unshift(prev[p[0]]);return p;
+}
+function distance(a,b){const d=bfs(a,'all').dist[b];return d===undefined?99:d;}
+function followers(){return G.crew.filter(c=>c.alive&&c.follow);}
+function crewIn(r){return G.crew.filter(c=>c.alive&&c.room===r);}
+function hasCrew(id){return G.crew.some(c=>c.id===id&&c.alive&&c.follow);}
+function has(id){return G.inv.some(i=>i.id===id);}
+function item(id){return G.inv.find(i=>i.id===id);}
+function dropItem(id){const i=G.inv.findIndex(x=>x.id===id);if(i>=0)G.inv.splice(i,1);}
+function beastSpeed(){return G.turn>=DIFF[G.diff].grow?2:1;}
+function visible(){
+  if(G.beast.room===G.pos)return true;
+  if(G.flags.radar)return true;
+  if(has('detector')&&!G.flags.blind&&distance(G.pos,G.beast.room)<=3)return true;
+  return false;
+}
+function markNoise(room,kind){G.noise=G.noise.filter(n=>n.room!==room);G.noise.push({room,kind,turn:G.turn});}
+function seeBeast(){if(visible())G.lastSeen={room:G.beast.room,turn:G.turn};}
+
+// ---------- partida ----------
+function newGame(diff){
+  const df=DIFF[diff];
+  G={diff,turn:0,maxTurn:df.turns,ap:0,hp:df.hp,maxHp:df.hp,panic:df.panic,pos:'criogenia',inv:[],cannon:null,
+     crew:[],beast:{room:'laboratorio',hp:df.chp,maxHp:df.chp,stun:0,ambush:false},instincts:[],decoy:null,welded:[],noise:[],
+     decks:{},searched:{},destruct:null,lastSeen:{room:'laboratorio',turn:0},blocked:null,flags:{},events:shuffle(Object.keys(EVENTS)),
+     log:[],phase:'play',result:null,grewLogged:false};
+  // reparte objetos por la nave; las piezas y la tarjeta tienen sala fija
+  const fixed={reactor:['celula'],laboratorio:['bobina'],armeria:['carcasa'],puente:['tarjeta']};
+  const pool=shuffle(['detector','lanzallamas','bengala','bengala','botiquin','botiquin','soldador','adrenalina','sedante','botiquin']);
+  const rooms=Object.keys(ROOMS).filter(r=>r!=='lanzadera'&&!r.startsWith('pasillo'));
+  for(const r of Object.keys(ROOMS))G.decks[r]=[...(fixed[r]||[])];
+  pool.forEach((it,i)=>G.decks[rooms[i%rooms.length]].push(it));
+  for(const r of Object.keys(G.decks))shuffle(G.decks[r]);
+  const startRooms=shuffle(Object.keys(ROOMS).filter(r=>!['criogenia','laboratorio','lanzadera'].includes(r)));
+  Object.keys(CREW).forEach((id,i)=>G.crew.push({id,room:startRooms[i],follow:false,alive:true}));
+  UI.sel='criogenia';UI.confirmQuit=false;
+  log('Despiertas en Criogenia. Las alarmas llevan horas sonando. Algo salió del Laboratorio.');
+  log('Objetivo: monta el cañón de plasma, expulsa a la criatura por la esclusa o destruye la nave y huye en la lanzadera.');
+  startTurn();
+}
+function startTurn(){
+  G.turn++;G.flags={};
+  if(G.blocked&&G.turn>G.blocked.until)G.blocked=null;
+  G.noise=G.noise.filter(n=>G.turn-n.turn<=2);
+  log(`Turno ${G.turn} · soporte vital ${G.maxTurn-G.turn+1}`,'turn');
+  if(G.turn>G.maxTurn){lose('oxigeno');return;}
+  if(G.turn===DIFF[G.diff].grow){log('Encuentras una muda de piel enorme en el suelo. La criatura ha crecido: ahora se mueve el doble de rápido.','bad');panic(1);}
+  if(G.turn>1&&G.turn%4===0){
+    if(!G.events.length)G.events=shuffle(Object.keys(EVENTS));
+    const id=G.events.pop();const r=EVENTS[id].run();
+    log(`Aviso de a bordo · ${EVENTS[id].h}${r?': '+r:''}. ${EVENTS[id].x}`,'bad');
+  }
+  G.ap=G.panic>=7?2:3;
+  if(G.panic>=7)log('El pánico te paraliza: solo tienes 2 acciones.','bad');
+  seeBeast();
+  check();
+}
+function check(){
+  if(!G||G.phase==='over')return;
+  if(G.hp<=0)lose('muerte');
+  else if(G.panic>=10)lose('panico');
+}
+function lose(reason){G.phase='over';G.result={win:false,reason};}
+function win(kind){
+  G.phase='over';
+  const base={canon:12,esclusa:10,huida:6}[kind];
+  const alive=kind==='huida'?followers().length:G.crew.filter(c=>c.alive).length;
+  const rows=[[{canon:'Criatura abatida con el cañón',esclusa:'Criatura expulsada al vacío',huida:'Huida en la lanzadera'}[kind],base],
+    [`Tripulantes que sobreviven (${alive})`,alive*3],[`Salud restante (${G.hp})`,G.hp*2],
+    ['Soporte vital sobrante',Math.floor((G.maxTurn-G.turn)/2)],[`Pánico (${G.panic})`,-Math.floor(G.panic/2)]];
+  G.result={win:true,kind,rows,total:rows.reduce((s,r)=>s+r[1],0)};
+}
+
+// ---------- acciones del jugador ----------
+const busy=()=>G.phase!=='play';
+function spend(n){if(G.ap<n)return false;G.ap-=n;return true;}
+function canMove(to){
+  if(busy()||G.ap<1)return null;
+  if(G.blocked&&G.blocked.room===to)return null;
+  if(CADJ[G.pos].includes(to))return 'corr';
+  if(VADJ[G.pos].includes(to)&&ventOpen(G.pos,to))return 'vent';
+  return null;
+}
+function move(to){
+  const how=canMove(to);if(!how)return;
+  spend(1);
+  const from=G.pos;G.pos=to;UI.sel=to;
+  if(how==='vent'){
+    panic(1);
+    const left=followers();left.forEach(c=>c.follow=false);
+    log(`Te arrastras por el conducto hasta ${R(to)} (+1 Pánico)${left.length?'. Tus compañeros no caben y se quedan atrás':''}.`);
+  } else {
+    followers().forEach(c=>c.room=to);
+    log(`Vas a ${R(to)}${followers().length?' con '+followers().map(c=>CREW[c.id].n).join(' y '):''}.`);
+  }
+  if(G.beast.room===to){
+    log('¡La criatura está aquí! Te salta encima desde la oscuridad.','bad');
+    attackPlayer(true);
+  }
+  seeBeast();check();
+}
+function canSearch(){return !busy()&&G.ap>=1;}
+function search(){
+  if(!canSearch())return;
+  spend(1);markNoise(G.pos,'tú');G.madeNoise=G.pos;G.searched[G.pos]=true;
+  const deck=G.decks[G.pos];
+  if(!deck.length){log(`Registras ${R(G.pos)} a fondo. No queda nada útil.`);return;}
+  if(G.inv.length>=MAXINV&&!PARTS.includes(deck[deck.length-1])){log('Encuentras algo, pero no puedes cargar más. Usa o suelta un objeto.','bad');return;}
+  const id=deck.pop();
+  G.inv.push({id,uses:ITEMS[id].uses||0});
+  log(`Encuentras: ${ITEMS[id].n}.`,'good');
+}
+function recruit(id){
+  const c=G.crew.find(x=>x.id===id);
+  if(busy()||!c||!c.alive||c.room!==G.pos||c.follow||followers().length>=MAXFOLLOW)return;
+  c.follow=true;log(`${CREW[id].n} se une a ti.`,'good');
+}
+function dismiss(id){const c=G.crew.find(x=>x.id===id);if(!c||!c.follow)return;c.follow=false;log(`${CREW[id].n} se queda en ${R(c.room)}.`);}
+function assembleCost(){return hasCrew('okoye')?1:2;}
+function canAssemble(){return !busy()&&G.pos==='ingenieria'&&PARTS.every(has)&&G.ap>=assembleCost();}
+function assemble(){
+  if(!canAssemble())return;
+  spend(assembleCost());PARTS.forEach(dropItem);
+  G.cannon={charges:4};markNoise(G.pos,'tú');G.madeNoise=G.pos;
+  log('Sueldas la última pieza. El cañón de plasma zumba con 4 cargas.','good');
+}
+function canFire(){
+  if(busy()||!G.cannon||G.cannon.charges<=0||G.ap<1||!visible())return false;
+  const r=G.beast.room;
+  return r===G.pos||CADJ[G.pos].includes(r);
+}
+function fire(){
+  if(!canFire())return;
+  spend(1);G.cannon.charges--;markNoise(G.pos,'tú');G.madeNoise=G.pos;
+  const bonus=hasCrew('sato')?1:0,roll=d6()+bonus;
+  if(roll>=4){
+    G.beast.hp--;
+    log(`Disparas (${roll}${bonus?' con Sato':''}): ¡impacto! La criatura chilla.`,'good');
+    if(G.beast.hp<=0){log('La criatura se desploma entre espasmos. Se acabó.','good');win('canon');return;}
+    beastRetreat(3);G.beast.stun=1;log('Huye herida hacia los conductos.','good');
+  } else {
+    log(`Disparas (${roll}${bonus?' con Sato':''}) y fallas. Ahora sabe dónde estás.`,'bad');
+  }
+  seeBeast();
+}
+function canRecharge(){return !busy()&&G.cannon&&G.cannon.charges<4&&G.pos==='reactor'&&G.ap>=1;}
+function recharge(){if(!canRecharge())return;spend(1);G.cannon.charges=4;log('Recargas el cañón en el reactor: 4 cargas.','good');}
+function canFlame(){return !busy()&&G.ap>=1&&G.beast.room===G.pos&&(item('lanzallamas')||{}).uses>0;}
+function flame(){
+  if(!canFlame())return;
+  spend(1);const it=item('lanzallamas');it.uses--;if(it.uses<=0){dropItem('lanzallamas');log('El lanzallamas se queda sin combustible.');}
+  beastRetreat(2);log('Una lengua de fuego llena la sala. La criatura retrocede.','good');seeBeast();
+}
+function canUse(id){
+  if(busy()||!has(id))return false;
+  const zero=['adrenalina'];
+  if(!zero.includes(id)&&G.ap<1)return false;
+  if(id==='botiquin')return G.hp<G.maxHp;
+  if(id==='sedante')return G.panic>0;
+  if(id==='bengala')return true;
+  if(id==='soldador')return !G.welded.includes(G.pos)&&VADJ[G.pos].length>0;
+  if(id==='adrenalina')return true;
+  if(id==='lanzallamas')return canFlame();
+  return false;
+}
+function useItem(id){
+  if(!canUse(id))return;
+  if(id==='lanzallamas'){flame();return;}
+  if(id!=='adrenalina')spend(1);
+  if(id==='botiquin'){G.hp++;dropItem(id);log('Te vendas las heridas: +1 Salud.','good');}
+  if(id==='sedante'){panic(-3);dropItem(id);log('Los sedantes te calman: −3 Pánico.','good');}
+  if(id==='adrenalina'){G.ap+=2;dropItem(id);log('Te inyectas adrenalina: +2 acciones.','good');}
+  if(id==='bengala'){G.decoy={room:G.pos,turns:3};dropItem(id);log(`Dejas una bengala encendida en ${R(G.pos)}.`,'good');}
+  if(id==='soldador'){const it=item('soldador');it.uses--;G.welded.push(G.pos);if(it.uses<=0)dropItem('soldador');log(`Sellas los conductos de ${R(G.pos)}.`,'good');}
+}
+function drop(id){if(busy())return;const i=G.inv.findIndex(x=>x.id===id);if(i<0)return;const [it]=G.inv.splice(i,1);G.decks[G.pos].unshift(it.id);log(`Dejas ${ITEMS[it.id].n} en ${R(G.pos)}.`);}
+function canAirlock(){return !busy()&&G.pos==='control'&&G.ap>=1&&crewIn('bodega').length===0;}
+function airlock(){
+  if(!canAirlock())return;
+  spend(1);
+  if(G.beast.room==='bodega'){log('Pulsas el botón. La compuerta se abre y la criatura sale despedida al vacío.','good');win('esclusa');return;}
+  log('La esclusa se abre al vacío… pero en la bodega no había nada. La criatura ha oído el estruendo.','bad');
+  markNoise('control','tú');G.madeNoise='control';
+}
+function destructTime(){return 5+(hasCrew('vega')?2:0);}
+function canDestruct(){return !busy()&&G.pos==='reactor'&&has('tarjeta')&&!G.destruct&&G.ap>=1;}
+function destruct(){
+  if(!canDestruct())return;
+  spend(1);G.destruct=destructTime();
+  log(`Introduces la tarjeta del capitán. Autodestrucción en ${G.destruct} turnos. Corre a la lanzadera.`,'bad');
+  panic(1);
+}
+function canLaunch(){return !busy()&&G.pos==='lanzadera'&&G.destruct!==null&&G.ap>=1&&G.beast.room!=='lanzadera';}
+function launch(){if(!canLaunch())return;spend(1);log('La lanzadera se separa. Detrás de ti, el Erebus se convierte en una estrella.','good');win('huida');}
+function canRest(){return !busy()&&G.ap>=1;}
+function rest(){
+  if(!canRest())return;
+  G.ap=0;panic(-2);
+  let msg='Te obligas a respirar despacio: −2 Pánico';
+  if(hasCrew('brandt')&&G.hp<G.maxHp){G.hp++;msg+=' y Brandt te cura +1 Salud';}
+  log(msg+'.','good');
+  endTurn();
+}
+
+// ---------- la criatura ----------
+function humansAt(r){return (G.pos===r?1:0)+crewIn(r).length;}
+function nearestHuman(onlyCrew){
+  const {dist}=bfs(G.beast.room,'all');
+  let best=null,bd=99;
+  const cands=[...(onlyCrew?[]:[G.pos]),...G.crew.filter(c=>c.alive&&!c.follow).map(c=>c.room)];
+  for(const r of cands){const d=dist[r]??99;if(d<bd){bd=d;best=r;}}
+  return best||G.pos;
+}
+function beastStep(to,how){
+  const from=G.beast.room;G.beast.room=to;
+  if(CADJ[G.pos].includes(to)||VADJ[G.pos].includes(to)||to===G.pos)markNoise(to,how==='vent'?'conductos':'pasos');
+  return from;
+}
+function beastWander(steps,ventsOnly){
+  for(let i=0;i<steps;i++){
+    const ns=neighbors(G.beast.room,ventsOnly?'vent':'all');if(!ns.length)return;
+    beastStep(pick(ns),ventsOnly?'vent':'all');
+    if(humansAt(G.beast.room))return;
+  }
+}
+function beastRetreat(n){
+  for(let i=0;i<n;i++){
+    const ns=neighbors(G.beast.room,'all');if(!ns.length)return;
+    ns.sort((a,b)=>distance(G.pos,b)-distance(G.pos,a));
+    G.beast.room=ns[0];
+  }
+}
+function beastPhase(){
+  const B=G.beast;B.ambush=false;
+  if(B.stun>0){B.stun--;log('La criatura se lame las heridas en algún lugar de la nave.');return;}
+  if(!G.instincts.length)G.instincts=shuffle([...INSTINCTS]);
+  const ins=G.instincts.pop();
+  if(ins==='rugido'){panic(1);markNoise(B.room,'chillido');log(`Un chillido recorre la nave desde ${R(B.room)}. +1 Pánico.`,'bad');return;}
+  if(ins==='emboscar'){B.ambush=true;log('Silencio. Demasiado silencio.');return;}
+  let target;
+  if(G.decoy)target=G.decoy.room;
+  else if(G.madeNoise&&distance(B.room,G.madeNoise)<=4)target=G.madeNoise;
+  else target=nearestHuman(ins==='alimentarse');
+  const mode=ins==='acechar'?'vent':'all';
+  let path=pathTo(B.room,target,mode)||pathTo(B.room,target,'all');
+  const sp=beastSpeed();
+  if(path)for(let i=1;i<path.length&&i<=sp;i++){
+    if(G.blocked&&G.blocked.room===path[i])break;
+    const how=VADJ[path[i-1]].includes(path[i])&&!CADJ[path[i-1]].includes(path[i])?'vent':'corr';
+    beastStep(path[i],how);
+    if(humansAt(B.room))break;
+  }
+  // ataque
+  if(B.room===G.pos){log('La criatura entra en tu sala.','bad');attackPlayer(false);return;}
+  const victims=crewIn(B.room);
+  if(victims.length){
+    const v=pick(victims);v.alive=false;v.follow=false;panic(2);markNoise(B.room,'grito');
+    log(`Un grito desde ${R(B.room)}: ${CREW[v.id].n} ha muerto. +2 Pánico.`,'bad');
+  }
+}
+function attackPlayer(ambush){
+  const B=G.beast;G.lastSeen={room:B.room,turn:G.turn};
+  const fl=item('lanzallamas');
+  if(fl&&fl.uses>0){
+    fl.uses--;if(fl.uses<=0)dropItem('lanzallamas');
+    beastRetreat(2);log('Disparas el lanzallamas a ciegas. La criatura retrocede entre chillidos.','good');return;
+  }
+  const r=d6()-(ambush||B.ambush?1:0);
+  if(r<=2){G.hp--;panic(1);log(`Te alcanza con la cola (tirada ${r}): −1 Salud, +1 Pánico.`,'bad');}
+  else if(r<=4){
+    const f=followers();
+    if(f.length){const v=pick(f);v.alive=false;v.follow=false;panic(2);log(`Se lleva a ${CREW[v.id].n} (tirada ${r}). +2 Pánico.`,'bad');}
+    else{G.hp--;panic(1);log(`Te alcanza (tirada ${r}): −1 Salud, +1 Pánico.`,'bad');}
+  } else {
+    const ns=CADJ[G.pos].filter(n=>n!==B.room&&!(G.blocked&&G.blocked.room===n));
+    if(ns.length){const to=pick(ns);G.pos=to;UI.sel=to;followers().forEach(c=>c.room=to);log(`Te escabulles (tirada ${r}) y corres hasta ${R(to)}.`,'good');}
+    else log(`Esquivas el golpe (tirada ${r}).`,'good');
+  }
+  check();
+}
+function crewWander(){
+  for(const c of G.crew){
+    if(!c.alive||c.follow)continue;
+    if(Math.random()<0.35){const ns=CADJ[c.room].filter(n=>n!==G.beast.room&&!(G.blocked&&G.blocked.room===n));if(ns.length)c.room=pick(ns);}
+  }
+}
+function endTurn(){
+  if(busy())return;
+  beastPhase();
+  if(G.phase==='over')return;
+  crewWander();
+  if(G.decoy){G.decoy.turns--;if(G.decoy.turns<=0){G.decoy=null;log('La bengala se apaga.');}}
+  G.madeNoise=null;
+  if(G.destruct!==null){
+    G.destruct--;
+    if(G.destruct<=0){log('La cuenta atrás llega a cero.','bad');lose('explosion');return;}
+    log(`Autodestrucción en ${G.destruct} turnos.`,'bad');
+  }
+  startTurn();
+}
+
+// ---------- dibujo ----------
+function shortName(r){return ROOMS[r].n;}
+function mapHTML(){
+  const W=26,H=11;
+  const corr=CORR.map(([a,b])=>`<line class="corr" x1="${ROOMS[a].x}" y1="${ROOMS[a].y}" x2="${ROOMS[b].x}" y2="${ROOMS[b].y}"/>`).join('');
+  const vents=VENTS.map(([a,b])=>{
+    const A=ROOMS[a],B=ROOMS[b],mx=(A.x+B.x)/2,my=(A.y+B.y)/2,dx=B.x-A.x,dy=B.y-A.y,l=Math.hypot(dx,dy)||1;
+    let ox=-dy/l*9,oy=dx/l*9;if((mx+ox-50)*(mx-50)<0||Math.abs(mx+ox-50)<Math.abs(mx-50)){ox=-ox;oy=-oy;}
+    return `<path class="vent${ventOpen(a,b)?'':' sealed'}" d="M${A.x} ${A.y}Q${(mx+ox).toFixed(1)} ${(my+oy).toFixed(1)} ${B.x} ${B.y}"/>`;}).join('');
+  const vis=visible();
+  const rooms=Object.entries(ROOMS).map(([id,r])=>{
+    const x=r.x-W/2,y=r.y-H/2;
+    const adj=G.phase==='play'&&!!canMove(id);
+    const cls=['room',id===G.pos?'here':'',UI.sel===id?'sel':'',adj?'adj':'',G.blocked&&G.blocked.room===id?'blocked':''].join(' ');
+    const tags=[];
+    if(G.welded.includes(id))tags.push('SELLADO');
+    if(G.blocked&&G.blocked.room===id)tags.push('VAPOR');
+    if(G.searched[id])tags.push(G.decks[id].length?'REGISTRADA':'VACÍA');
+    let marks='';
+    if(id===G.pos)marks+=`<path class="me" d="M${x+3} ${y+H-1.6}l1.6-3 1.6 3z"/>`;
+    crewIn(id).forEach((c,i)=>{const cx=x+8+i*3.2,cy=y+H-2.5;marks+=`<circle class="crew" cx="${cx}" cy="${cy}" r="1.25"/><text class="crew-l" x="${cx}" y="${cy+.6}" text-anchor="middle">${CREW[c.id].n[0]}</text>`;});
+    if(G.decoy&&G.decoy.room===id)marks+=`<path class="decoy" d="M${x+W-4} ${y+1.6}l.7 1.5 1.6.2-1.2 1.1.3 1.6-1.4-.8-1.4.8.3-1.6-1.2-1.1 1.6-.2z"/>`;
+    if(vis&&G.beast.room===id)marks+=`<path class="beast" d="M${x+W-4.2} ${y+H-1.4}q-1.8-3.2 0-4.6 1 1.2 1.8.2.8 1 1.8-.2 1.8 1.4 0 4.6z"/>`;
+    else if(!vis&&G.lastSeen&&G.lastSeen.room===id&&G.turn-G.lastSeen.turn<=3)marks+=`<rect class="ghost" x="${x+W-5.6}" y="${y+H-5.2}" width="4" height="4" rx="2"/>`;
+    const nz=G.noise.find(n=>n.room===id&&n.kind!=='tú');
+    const ring=nz?`<rect class="noise" x="${x-1}" y="${y-1}" width="${W+2}" height="${H+2}" rx="1"/>`:'';
+    return `<g class="${cls}" data-a="sel" data-u="${id}" tabindex="0" role="button" aria-label="${esc(r.n)}">
+      ${ring}<rect class="bg" x="${x}" y="${y}" width="${W}" height="${H}" rx=".5"/>
+      <text class="nm" x="${r.x}" y="${y+3.6}" text-anchor="middle">${esc(shortName(id))}</text>
+      <text class="tag${nz?' warn':''}" x="${r.x}" y="${y+6}" text-anchor="middle">${nz?'RUIDO: '+nz.kind.toUpperCase():tags.join(' · ')}</text>
+      ${marks}
+    </g>`;}).join('');
+  return `<div class="mapwrap"><svg class="map" viewBox="-2 -1 104 112" role="group" aria-label="Plano del Erebus">
+    <path class="hull" d="M50 -0.5L96 14V96L50 111L4 96V14Z"/>${corr}${vents}${rooms}</svg></div>`;
+}
+function roomPanel(){
+  const id=UI.sel||G.pos,r=ROOMS[id],here=id===G.pos;
+  const people=crewIn(id);
+  const vis=visible();
+  const beastHere=vis&&G.beast.room===id;
+  const acts=[];
+  if(here){
+    acts.push(`<button class="btn solid" data-a="search" ${canSearch()?'':'disabled'}>Registrar · 1 acción</button>`);
+    for(const c of people)if(!c.follow)acts.push(`<button class="btn cyan" data-a="recruit" data-u="${c.id}" ${followers().length<MAXFOLLOW?'':'disabled'}>Que ${esc(CREW[c.id].n)} te siga</button>`);
+    if(id==='ingenieria'&&!G.cannon)acts.push(`<button class="btn solid" data-a="assemble" ${canAssemble()?'':'disabled'}>Montar cañón · ${assembleCost()} acciones</button>`);
+    if(id==='reactor'&&G.cannon)acts.push(`<button class="btn" data-a="recharge" ${canRecharge()?'':'disabled'}>Recargar cañón · 1 acción</button>`);
+    if(id==='reactor'&&!G.destruct)acts.push(`<button class="btn alert" data-a="destruct" ${canDestruct()?'':'disabled'}>Autodestrucción · 1 acción</button>`);
+    if(id==='control')acts.push(`<button class="btn alert solid" data-a="airlock" ${canAirlock()?'':'disabled'}>Abrir la esclusa de la bodega · 1 acción</button>`);
+    if(id==='lanzadera')acts.push(`<button class="btn alert solid" data-a="launch" ${canLaunch()?'':'disabled'}>Despegar · 1 acción</button>`);
+    if(G.beast.room===id&&has('lanzallamas'))acts.push(`<button class="btn alert" data-a="flame" ${canFlame()?'':'disabled'}>Lanzallamas · 1 acción</button>`);
+  } else {
+    const how=CADJ[G.pos].includes(id)?'corr':(VADJ[G.pos].includes(id)?'vent':null);
+    if(how==='corr')acts.push(`<button class="btn solid" data-a="move" data-u="${id}" ${canMove(id)?'':'disabled'}>Ir a ${esc(r.n)} · 1 acción</button>`);
+    if(how==='vent')acts.push(`<button class="btn" data-a="move" data-u="${id}" ${canMove(id)?'':'disabled'}>Por el conducto · 1 acción, +1 Pánico</button>`);
+    if(!how)acts.push(`<span class="empty">No está junto a tu sala.</span>`);
+  }
+  if(G.cannon&&beastHere&&(here||CADJ[G.pos].includes(id)))acts.push(`<button class="btn alert solid" data-a="fire" ${canFire()?'':'disabled'}>Disparar el cañón · 1 acción</button>`);
+  const notes=[];
+  if(here)notes.push('Estás aquí.');
+  if(beastHere)notes.push('<span class="warn">La criatura está en esta sala.</span>');
+  if(people.length)notes.push(`Tripulación: ${people.map(c=>CREW[c.id].n+(c.follow?' (te sigue)':'')).join(', ')}.`);
+  if(G.searched[id])notes.push(G.decks[id].length?'Aún queda algo por encontrar.':'Ya no queda nada útil.');
+  else if(id!=='lanzadera')notes.push('Sin registrar.');
+  if(id==='control')notes.push(crewIn('bodega').length?'<span class="warn">Hay tripulantes en la bodega: no puedes abrir la esclusa.</span>':'La esclusa expulsa al espacio todo lo que haya en la Bodega.');
+  if(id==='lanzadera'&&!G.destruct)notes.push('Solo despegarás cuando la nave vaya a estallar: activa antes la autodestrucción en el Reactor.');
+  if(id==='reactor'&&!has('tarjeta')&&!G.destruct)notes.push('La autodestrucción necesita la tarjeta del capitán.');
+  if(id==='ingenieria'&&!G.cannon)notes.push(`Piezas del cañón: ${PARTS.filter(has).length}/3.`);
+  return `<div class="roompanel"><h3>${esc(r.n)}</h3><p class="meta">${notes.join(' ')}</p><div class="controls">${acts.join('')}</div></div>`;
+}
+function invHTML(){
+  const items=G.inv.map(it=>{
+    const d=ITEMS[it.id];
+    const usable=['botiquin','sedante','adrenalina','bengala','soldador','lanzallamas'].includes(it.id);
+    return `<div class="item${d.part?' part':''}"><b>${esc(d.n)}${d.uses?` · ${it.uses}`:''}</b><span>${esc(d.x)}</span>
+      <div class="controls">${usable?`<button class="btn" data-a="use" data-u="${it.id}" ${canUse(it.id)?'':'disabled'}>Usar</button>`:''}<button class="btn cyan" data-a="drop" data-u="${it.id}" ${busy()?'disabled':''}>Soltar</button></div></div>`;
+  });
+  if(G.cannon)items.unshift(`<div class="item part"><b>Cañón de plasma · ${G.cannon.charges} cargas</b><span>Dispara a la criatura si la ves en tu sala o en una contigua por pasillo. Acierta con 4 o más en un dado.</span></div>`);
+  return items.length?items.join(''):'<p class="empty">No llevas nada. Registra las salas.</p>';
+}
+function hint(){
+  if(G.destruct)return `La nave estalla en ${G.destruct} turnos. Llega a la Lanzadera y despega.`;
+  if(G.cannon)return visible()?'La ves. Acércate a una sala contigua y dispara.':'Busca a la criatura: los ruidos y el detector te dicen dónde está. O atráela con una bengala.';
+  return 'Toca una sala del plano. Las salas con borde ámbar están a un paso. Busca las piezas del cañón en el Reactor, el Laboratorio y la Armería, y móntalo en Ingeniería.';
+}
+function rulesHTML(){
+  return `<details class="rules"><summary>Cómo se juega</summary><div class="rules-body">
+    <p>Eres la última persona despierta en el carguero minero Erebus. Algo salió del Laboratorio. Tienes 3 acciones por turno y poco tiempo antes de que falle el soporte vital.</p>
+    <h3>Acciones (1 cada una)</h3>
+    <ul>
+      <li><b>Moverte</b> a una sala unida por pasillo. También puedes arrastrarte por un conducto (+1 Pánico), pero tus compañeros no caben y se quedan atrás.</li>
+      <li><b>Registrar</b> la sala: encuentras objetos, pero haces ruido y la criatura puede oírte.</li>
+      <li><b>Usar objetos:</b> botiquín, sedantes, bengala de señuelo, soldador para sellar conductos, lanzallamas, adrenalina…</li>
+      <li><b>Descansar</b> gasta lo que te queda del turno y baja 2 de Pánico.</li>
+    </ul>
+    <h3>Tres formas de acabar con ella</h3>
+    <ul>
+      <li><b>Cañón de plasma:</b> reúne la Célula (Reactor), la Bobina (Laboratorio) y la Carcasa (Armería), monta el cañón en Ingeniería y dispárale hasta abatirla.</li>
+      <li><b>La esclusa:</b> atrae a la criatura a la Bodega (por ejemplo, con una bengala) y abre la esclusa desde el Control.</li>
+      <li><b>Huir:</b> con la tarjeta del capitán (Puente), activa la autodestrucción en el Reactor y despega desde la Lanzadera antes de que acabe la cuenta atrás.</li>
+    </ul>
+    <h3>La criatura</h3>
+    <ul>
+      <li>No sabes dónde está salvo que la veas: en tu sala, con el detector de movimiento, o por los ruidos que marca el plano.</li>
+      <li>Cada turno caza, acecha por los conductos, embosca o chilla. Va hacia el ruido y hacia la gente. A partir de cierto turno crece y se mueve el doble.</li>
+      <li>Si te ataca, tiras un dado: puede herirte, llevarse a un compañero o dejarte escapar. Si llevas lanzallamas, la repeles.</li>
+    </ul>
+    <h3>Tripulación</h3>
+    <ul><li>Cuatro compañeros siguen vivos por la nave. Hasta dos pueden seguirte, y cada uno tiene una habilidad. Si la criatura los encuentra, mueren y tu Pánico sube 2.</li></ul>
+    <h3>Derrota</h3>
+    <ul><li>Pierdes si tu Salud llega a 0, si tu Pánico llega a 10, si se acaba el soporte vital o si la nave estalla contigo dentro.</li></ul>
+  </div></details>`;
+}
+function titleHTML(){
+  return `<div class="title">
+    <div class="hero"><p class="eyebrow">Carguero minero · ruta de regreso</p><h1>EREBUS</h1>
+      <p>Despiertas antes de tiempo en la cápsula de criogenia. Las luces de emergencia parpadean y el ordenador repite el mismo aviso: contención fallida en el Laboratorio. Algo se mueve por los conductos.</p></div>
+    <div class="term"><span>&gt; ESTADO DE LA NAVE ........ <b>ALERTA</b></span><span>&gt; TRIPULACIÓN DESPIERTA .... 5</span><span>&gt; FORMA DE VIDA NO IDENTIFICADA ... <b>A BORDO</b></span><span>&gt; SOPORTE VITAL ............ DEGRADÁNDOSE</span></div>
+    <div class="pick"><h2>Dificultad</h2><div class="opt-grid">${Object.entries(DIFF).map(([k,d])=>`<button class="opt" data-a="diff" data-u="${k}" aria-pressed="${UI.diff===k}"><b>${d.n}</b><span>${esc(d.x)}</span></button>`).join('')}</div></div>
+    <div><button class="btn solid big" data-a="start">Salir de la cápsula</button></div>
+    ${rulesHTML()}
+  </div>`;
+}
+function boardHTML(){
+  const vis=visible();
+  const crew=G.crew.map(c=>{
+    const d=CREW[c.id];
+    const st=!c.alive?'Muerto':c.follow?'Te sigue':`En ${R(c.room)}`;
+    return `<div class="crewrow${c.alive?'':' dead'}"><i>${d.n[0]}</i><b>${esc(d.n)} · ${esc(d.r)}</b><span class="st">${st}${c.alive&&c.follow?` · <button class="btn cyan" style="min-height:28px;padding:2px 8px;font-size:11px" data-a="dismiss" data-u="${c.id}">Que se quede</button>`:''}</span><small>${esc(d.x)}</small></div>`;
+  }).join('');
+  return `<header class="top">
+    <div class="brand">EREBUS</div>
+    <div class="stats">
+      <div class="stat${G.maxTurn-G.turn<=3?' bad':''}"><span class="lbl">Soporte vital</span><span class="val">${Math.max(0,G.maxTurn-G.turn+1)}</span></div>
+      <div class="stat hp${G.hp<=1?' bad':''}"><span class="lbl">Salud</span><span class="val">${G.hp}/${G.maxHp}</span></div>
+      <div class="stat${G.panic>=7?' bad':''}"><span class="lbl">Pánico</span><span class="val">${G.panic}/10</span></div>
+      <div class="stat"><span class="lbl">Acciones</span><span class="val">${G.ap}</span></div>
+      ${G.destruct!==null?`<div class="stat bad"><span class="lbl">Explosión</span><span class="val">${G.destruct}</span></div>`:''}
+    </div>
+  </header>
+  <div class="layout">
+    <main class="board">
+      <section class="zone">
+        <div class="zone-head"><h2>Plano de la nave</h2><span class="sub">${vis?'<span style="color:var(--alert)">La criatura está a la vista</span>':G.lastSeen&&G.turn-G.lastSeen.turn<=3?`Vista por última vez en ${R(G.lastSeen.room)} (turno ${G.lastSeen.turn})`:'Paradero de la criatura: desconocido'} · ${beastSpeed()>1?'ha crecido':'aún es pequeña'}</span></div>
+        <p class="hint">${esc(hint())}</p>
+        ${mapHTML()}
+        ${roomPanel()}
+      </section>
+      <section class="zone">
+        <div class="zone-head"><h2>Equipo</h2><span class="sub">${G.inv.length}/${MAXINV} objetos · piezas del cañón ${G.cannon?'montadas':PARTS.filter(has).length+'/3'}</span></div>
+        <div class="inv">${invHTML()}</div>
+        <div class="controls hide-m">
+          <button class="btn" data-a="rest" ${canRest()?'':'disabled'}>Descansar (−2 Pánico)</button>
+          <button class="btn solid big" data-a="end" ${busy()?'disabled':''}>Terminar turno</button>
+        </div>
+      </section>
+    </main>
+    <aside class="side">
+      <div class="panel"><h3>Tripulación</h3>${crew}</div>
+      <div class="panel"><h3>Bitácora</h3><ul class="log">${G.log.map(l=>`<li class="${l.cls}">${esc(l.m)}</li>`).join('')}</ul></div>
+      <div class="panel">${UI.confirmQuit?`<div class="confirm"><span>¿Abandonar esta partida?</span><button class="btn alert" data-a="quit">Sí, abandonar</button><button class="btn" data-a="noquit">No</button></div>`:`<button class="btn" data-a="askquit">Nueva partida</button>`}</div>
+      ${rulesHTML()}
+    </aside>
+  </div>
+  <div id="mbar"><span class="ap">${G.ap}<small> ACC.</small></span>
+    <button class="btn" data-a="rest" ${canRest()?'':'disabled'}>Descansar</button>
+    <button class="btn solid" data-a="end" ${busy()?'disabled':''}>Fin de turno</button></div>
+  ${G.phase==='over'?endHTML():''}`;
+}
+function endHTML(){
+  const r=G.result;
+  if(r.win){
+    const v=r.total>=24?'La compañía te ofrece un ascenso a cambio de tu silencio.':r.total>=16?'Sobrevives. Durante años despertarás a oscuras, escuchando los conductos.':'Lo has conseguido, aunque no quieres recordar a qué precio.';
+    return `<div class="overlay"><div class="end" role="dialog" aria-label="Resultado"><div class="mast">Registro final · Erebus</div>
+      <h2>Has sobrevivido</h2><p class="verdict">${v}</p>
+      <table>${r.rows.map(([k,n])=>`<tr><td>${esc(k)}</td><td>${n>0?'+':''}${n}</td></tr>`).join('')}<tr class="total"><td>Puntuación</td><td>${r.total}</td></tr></table>
+      <p class="verdict">${DIFF[G.diff].n} · ${G.turn} turnos</p>
+      <button class="btn solid big" data-a="again">Jugar otra vez</button></div></div>`;
+  }
+  const txt={muerte:'La criatura te arrastra hacia los conductos. Nadie oye nada.',panico:'Te encierras en una taquilla y ya no sales. Cuando abren la puerta, semanas después, no reconoces a nadie.',
+    oxigeno:'El soporte vital se apaga. Lo último que oyes es algo que respira detrás de la pared.',explosion:'El Erebus estalla contigo a bordo. Al menos, la criatura también.'}[r.reason];
+  const head={muerte:'Muerte',panico:'Pánico',oxigeno:'Sin oxígeno',explosion:'Demasiado tarde'}[r.reason];
+  return `<div class="overlay"><div class="end lost" role="dialog" aria-label="Resultado"><div class="mast">Registro final · Erebus</div>
+    <h2>${head}</h2><p class="verdict">${esc(txt)}</p><p class="verdict">Aguantaste ${G.turn} turnos. A la criatura le quedaban ${G.beast.hp} de ${G.beast.maxHp} de Vida.</p>
+    <button class="btn solid big" data-a="again">Intentarlo de nuevo</button></div></div>`;
+}
+
+const HAS_DOM=typeof document!=='undefined';
+const KEY='erebus';
+function save(){try{if(G)localStorage.setItem(KEY,JSON.stringify(G));else localStorage.removeItem(KEY);}catch(e){}}
+function render(){if(!HAS_DOM)return;document.getElementById('app').innerHTML=G?boardHTML():titleHTML();save();}
+function handle(a,u){
+  switch(a){
+    case 'diff':UI.diff=u;break;
+    case 'start':newGame(UI.diff);break;
+    case 'sel':UI.sel=u;break;
+    case 'move':move(u);break;
+    case 'search':search();break;
+    case 'recruit':recruit(u);break;
+    case 'dismiss':dismiss(u);break;
+    case 'assemble':assemble();break;
+    case 'fire':fire();break;
+    case 'recharge':recharge();break;
+    case 'flame':flame();break;
+    case 'use':useItem(u);break;
+    case 'drop':drop(u);break;
+    case 'airlock':airlock();break;
+    case 'destruct':destruct();break;
+    case 'launch':launch();break;
+    case 'rest':rest();break;
+    case 'end':endTurn();break;
+    case 'askquit':UI.confirmQuit=true;break;
+    case 'noquit':UI.confirmQuit=false;break;
+    case 'quit':case 'again':G=null;UI.confirmQuit=false;break;
+  }
+}
+if(HAS_DOM){
+  const app=document.getElementById('app');
+  app.addEventListener('click',e=>{
+    const b=e.target.closest('[data-a]');if(!b||b.disabled)return;
+    const wasTitle=!G;handle(b.dataset.a,b.dataset.u);render();
+    if(wasTitle&&G)window.scrollTo(0,0);
+  });
+  app.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('g[data-a]')){e.preventDefault();handle('sel',e.target.dataset.u);render();}});
+  const boot=data=>{
+    if(data&&data.G)G=data.G;
+    else{try{const s=localStorage.getItem(KEY);if(s){const g=JSON.parse(s);if(g&&g.phase==='play'&&g.beast)G=g;}}catch(e){}}
+    if(G&&!UI.sel)UI.sel=G.pos;
+    render();
+  };
+  try{window.claude?.hot?.snapshot?.(()=>({G}));}catch(e){}
+  window.claude?.hot?.ready?window.claude.hot.ready(boot):boot(window.claude?.hot?.data??{});
+}
+</script>
+
+</body></html>

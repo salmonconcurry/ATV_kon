@@ -1,0 +1,934 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Ley Seca</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Limelight&family=Josefin+Sans:wght@400;600;700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+:root{
+  /* Layout: un mapa de Chicago en el centro como tablero; panel del barrio elegido y tu mano debajo; marcador de familias y prensa a un lado (abajo en móvil) */
+  --ink:#100f0d;
+  --night:#17150f;
+  --panel:#1e1b14;
+  --rim:#3a3222;
+  --gold:#c9a24a;
+  --gold-soft:#8a7034;
+  --cream:#efe6d2;
+  --muted:#a59a80;
+  --red:#b8463c;
+  --t-basica:#5d5a52;
+  --t-negocio:#9c7a2c;
+  --t-musculo:#9a3a30;
+  --t-politica:#2f5a8a;
+  --t-sucio:#5d3a6b;
+  --display:'Limelight','Josefin Sans',Georgia,serif;
+  --label:'Josefin Sans','Helvetica Neue',Arial,sans-serif;
+  --body:'Old Standard TT',Georgia,'Times New Roman',serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--ink);color:var(--cream);font-family:var(--body);font-size:16px;line-height:1.45;
+  background-image:repeating-linear-gradient(90deg,rgba(201,162,74,.035) 0 1px,transparent 1px 48px),
+                   radial-gradient(ellipse 100% 60% at 50% -10%,rgba(201,162,74,.13),transparent 60%);
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;
+}
+#app{max-width:1320px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 48px}
+h1,h2,h3{margin:0;font-weight:400;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.btn{font-family:var(--label);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;
+  border:1px solid var(--gold-soft);background:var(--panel);color:var(--cream);padding:8px 12px;border-radius:0;cursor:pointer;min-height:38px}
+.btn:hover:not(:disabled){border-color:var(--gold);background:#2a2518}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.gold{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.btn.gold:hover:not(:disabled){background:#dbb763}
+.btn.red{background:#5e231d;border-color:var(--red)}
+.btn.big{font-size:15px;padding:10px 18px;min-height:44px}
+.deco{height:10px;background:linear-gradient(90deg,transparent,var(--gold) 20%,var(--gold) 80%,transparent);
+  -webkit-mask:repeating-linear-gradient(90deg,#000 0 6px,transparent 6px 9px);mask:repeating-linear-gradient(90deg,#000 0 6px,transparent 6px 9px);opacity:.5}
+
+/* ---------- portada ---------- */
+.title{display:grid;gap:24px;padding-block:18px}
+.hero{display:grid;gap:10px;max-width:64ch}
+.hero .eyebrow{font-family:var(--label);font-weight:600;letter-spacing:.3em;text-transform:uppercase;font-size:12px;color:var(--gold)}
+.hero h1{font-family:var(--display);font-size:clamp(60px,15vw,132px);line-height:.9;color:var(--cream);letter-spacing:.02em}
+.hero h1 span{color:var(--gold)}
+.hero p{font-size:18px;color:#d6ccb5}
+.pick h2{font-family:var(--label);font-weight:700;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.opt{text-align:left;display:grid;gap:4px;padding:14px 16px;cursor:pointer;background:var(--panel);border:1px solid var(--rim);border-left:5px solid var(--fc,var(--gold-soft))}
+.opt:hover{border-color:var(--gold)}
+.opt[aria-pressed="true"]{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold);background:#2a2518}
+.opt b{font-family:var(--display);font-weight:400;font-size:21px;color:var(--fc,var(--cream))}
+.opt span{font-size:15px;color:#d6ccb5}
+.opt i{font-size:14px;color:var(--muted)}
+details.rules{border:1px solid var(--rim);background:var(--panel)}
+details.rules summary{cursor:pointer;padding:12px 16px;font-family:var(--label);font-weight:700;letter-spacing:.15em;text-transform:uppercase;font-size:13px;color:var(--gold)}
+.rules-body{padding:0 16px 16px;display:grid;gap:8px;max-width:74ch;font-size:15.5px}
+.rules-body h3{font-family:var(--label);font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-top:8px}
+.rules-body ul{margin:0;padding-left:20px;display:grid;gap:4px}
+
+/* ---------- cabecera ---------- */
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px;padding-bottom:10px;margin-bottom:12px;border-bottom:1px solid var(--rim)}
+.brand{font-family:var(--display);font-size:30px;line-height:1}
+.brand span{color:var(--gold)}
+.stats{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:flex-end}
+.stat{display:grid;gap:2px}
+.stat .lbl{font-family:var(--label);font-weight:600;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.stat .val{font-family:var(--display);font-size:22px;line-height:1;font-variant-numeric:tabular-nums}
+.stat.money .val{color:var(--gold)}
+.stat.muscle .val{color:#e48e80}
+.stat.heat .val{color:#f0b07a}
+.stat.heat.hot .val{color:#ff6a50}
+
+/* ---------- mesa ---------- */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+@media (max-width:980px){.layout{grid-template-columns:minmax(0,1fr)}}
+.board{display:grid;gap:14px;min-width:0}
+.zone{border:1px solid var(--rim);background:rgba(30,27,20,.85);padding:12px 14px;display:grid;gap:10px;min-width:0}
+.zone-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 14px}
+.zone-head h2{font-family:var(--display);font-size:24px;color:var(--cream)}
+.zone-head .sub{font-size:14px;color:var(--muted);font-style:italic}
+.hint{font-style:italic;color:#e3d4ae}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.empty{color:var(--muted);font-style:italic}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* mapa */
+.mapwrap{position:relative;background:#0c0b09;border:1px solid var(--rim)}
+.map{display:block;width:100%;height:auto;max-height:78vh}
+.map .edge{stroke:#5a4a28;stroke-width:.45;stroke-dasharray:1.2 .8}
+.map .lake{fill:#14202a}
+.map .lake-l{fill:#4d6b80;font-family:var(--label);font-size:2.6px;letter-spacing:.4px;text-transform:uppercase}
+.map .river{fill:none;stroke:#1d3140;stroke-width:1.6}
+.map .node{cursor:pointer}
+.map .node rect.bg{fill:#1e1b14;stroke:#6b5a32;stroke-width:.35}
+.map .node.reach rect.bg{stroke:var(--gold);stroke-dasharray:1 .6;stroke-width:.5}
+.map .node.sel rect.bg{stroke:var(--cream);stroke-width:.8;stroke-dasharray:none}
+.map .node .ctrl{opacity:.9}
+.map .node text.nm{fill:var(--cream);font-family:var(--label);font-weight:700;font-size:2.35px;letter-spacing:.15px;text-transform:uppercase}
+.map .node text.val{fill:var(--gold);font-size:2.2px;font-family:var(--label)}
+.map .node .barbadge{font-family:var(--label);font-weight:700;font-size:1.9px}
+.map .node:focus-visible rect.bg{stroke:var(--gold);stroke-width:.9}
+
+/* panel del barrio */
+.barrio{display:grid;gap:8px;border:1px solid var(--rim);background:#191610;padding:10px 12px}
+.barrio h3{font-family:var(--display);font-size:22px}
+.barrio .meta{font-size:14.5px;color:#d6ccb5}
+.men{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14.5px}
+.men span{display:flex;align-items:center;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;background:var(--fc)}
+
+/* recursos y mano */
+.pool{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
+.res{display:flex;align-items:baseline;gap:6px;font-family:var(--label)}
+.res b{font-family:var(--display);font-weight:400;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.res.money b{color:var(--gold)}
+.res.muscle b{color:#e48e80}
+.res span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.played{display:flex;flex-wrap:wrap;gap:6px}
+.mini{font-family:var(--label);font-size:12px;padding:3px 8px;background:#26221a;border-left:3px solid var(--tc);color:#d6ccb5}
+
+.card{
+  width:clamp(140px,40vw,156px);display:flex;flex-direction:column;background:var(--cream);color:#1c1914;
+  border:1px solid #8c7a55;box-shadow:0 2px 0 rgba(0,0,0,.45),0 8px 16px rgba(0,0,0,.4);
+  background-image:linear-gradient(170deg,rgba(255,255,255,.3),transparent 50%);
+}
+.card .head{background:var(--tc);color:#f5ecd8;padding:5px 8px 6px;display:grid;gap:1px;border-bottom:2px solid var(--gold)}
+.card .kind{font-family:var(--label);font-weight:600;font-size:10px;letter-spacing:.18em;text-transform:uppercase;opacity:.85}
+.card .name{font-family:var(--label);font-weight:700;font-size:14.5px;line-height:1.1;min-height:32px;text-wrap:balance}
+.card .art{display:grid;place-items:center;margin:7px 8px 4px;height:72px;color:#f6eedb;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse 70% 85% at var(--hx,50%) 25%,rgba(255,236,200,.32),transparent 70%),linear-gradient(170deg,var(--tc),#141210 125%);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.4)}
+.card .art::after{content:"";position:absolute;inset:4px;border:1px solid rgba(201,162,74,.45);pointer-events:none;
+  clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}
+.card .art svg{width:54px;height:54px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))}
+.card .txt{font-size:13px;line-height:1.3;padding:2px 9px 8px;flex:1}
+.card .txt em{color:#9a3a30;font-style:normal;font-weight:700}
+.card .foot{display:flex;justify-content:space-between;align-items:center;padding:5px 8px 7px;border-top:1px dashed rgba(28,25,20,.25)}
+.cost{font-family:var(--display);font-size:15px;min-width:30px;height:26px;padding:0 6px;display:grid;place-items:center;background:#1c1914;color:var(--gold)}
+.vp{font-family:var(--label);font-weight:700;font-size:12px;color:#5d5a52}
+.card .acts{display:grid;gap:5px;padding:0 7px 8px}
+.card .btn{width:100%;background:#1c1914;color:var(--cream);border-color:#1c1914;font-size:12px;min-height:36px}
+.card .btn.gold{background:var(--gold);color:#1c1914;border-color:#8c7a55}
+
+/* lateral */
+.side{display:grid;gap:12px;min-width:0}
+.panel{border:1px solid var(--rim);background:rgba(30,27,20,.85);padding:12px 14px;display:grid;gap:8px;min-width:0}
+.panel h3{font-family:var(--label);font-weight:700;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold)}
+.fam{display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;align-items:center;padding:6px 0;border-bottom:1px solid rgba(58,50,34,.7)}
+.fam:last-child{border-bottom:none}
+.fam .dot{width:12px;height:12px}
+.fam b{font-family:var(--label);font-weight:700;font-size:14px;color:var(--fc)}
+.fam .pv{font-family:var(--display);font-size:22px;font-variant-numeric:tabular-nums}
+.fam small{grid-column:2 / 4;font-size:13px;color:var(--muted)}
+.fam.you b::after{content:" · tú";color:var(--muted);font-weight:400}
+.news{background:var(--cream);color:#1c1914;padding:10px 12px;display:grid;gap:4px;border:1px solid #8c7a55}
+.news .mast{font-family:var(--display);font-size:18px;border-bottom:2px solid #1c1914;padding-bottom:2px;display:flex;justify-content:space-between;align-items:baseline}
+.news .mast small{font-family:var(--label);font-size:11px;letter-spacing:.1em}
+.news h4{margin:2px 0 0;font-family:var(--body);font-weight:700;font-size:17px;line-height:1.15}
+.news p{font-size:14px}
+.log{list-style:none;margin:0;padding:0;display:grid;gap:3px;max-height:300px;overflow-y:auto;font-size:13.5px}
+.log li{padding:2px 0;border-bottom:1px solid rgba(58,50,34,.6)}
+.log li.turn{font-family:var(--label);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:12px;color:var(--gold);border-bottom:none;padding-top:6px}
+.log li.bad{color:#eba79c}
+.log li.good{color:#d9c98e}
+.confirm{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px}
+
+/* barra inferior en móvil */
+#mbar{display:none}
+@media (max-width:720px){
+  body{padding-bottom:calc(74px + env(safe-area-inset-bottom,0px))}
+  #app{padding-block:0 20px}
+  .top{position:sticky;top:0;z-index:15;margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px))) 10px;
+    padding:calc(8px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 8px max(12px,env(safe-area-inset-left,0px));
+    background:rgba(16,15,13,.96);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+  .top .brand{display:none}
+  .stats{width:100%;justify-content:space-between;gap:4px 10px}
+  .stat .val{font-size:19px}
+  .row{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;margin-inline:-14px;padding:2px 14px 8px}
+  .row>.card{flex:0 0 auto;scroll-snap-align:start}
+  .zone{padding:10px 12px}
+  .mapwrap{margin-inline:-12px;border-inline:none}
+  .hide-m{display:none}
+  #mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:18;gap:8px;align-items:center;
+    padding:8px max(12px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));
+    background:rgba(16,15,13,.96);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-top:1px solid var(--gold-soft)}
+  #mbar .mres{display:flex;gap:10px;font-family:var(--label);font-size:11px;color:var(--muted);white-space:nowrap}
+  #mbar .mres b{font-family:var(--display);font-weight:400;font-size:20px}
+  #mbar .mres .m b{color:var(--gold)} #mbar .mres .u b{color:#e48e80}
+  #mbar .btn{flex:1 1 0;min-width:0;min-height:46px;padding:6px}
+}
+
+/* final */
+.overlay{position:fixed;inset:0;background:rgba(8,7,6,.86);display:grid;place-items:center;z-index:30;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.end{width:min(560px,100%);max-height:100%;overflow-y:auto;background:var(--cream);color:#1c1914;padding:22px;display:grid;gap:12px;border:3px double #1c1914;box-shadow:0 20px 60px rgba(0,0,0,.7)}
+.end .mast{font-family:var(--label);font-weight:700;letter-spacing:.3em;text-transform:uppercase;font-size:12px;border-bottom:2px solid #1c1914;padding-bottom:4px}
+.end h2{font-family:var(--display);font-size:clamp(34px,8vw,48px);line-height:1}
+.end .verdict{font-style:italic;font-size:17px}
+.end table{width:100%;border-collapse:collapse;font-size:15px}
+.end th{font-family:var(--label);font-size:11px;letter-spacing:.1em;text-transform:uppercase;text-align:right;padding:4px 0 4px 8px;border-bottom:1px solid #1c1914}
+.end th:first-child{text-align:left}
+.end td{padding:5px 0 5px 8px;border-bottom:1px dashed rgba(28,25,20,.25);text-align:right;font-variant-numeric:tabular-nums}
+.end td:first-child{text-align:left;padding-left:0}
+.end tr.win td{font-weight:700}
+.end .btn{justify-self:start}
+@media (prefers-reduced-motion:no-preference){.card{animation:rise .25s ease-out both}}
+@keyframes rise{from{transform:translateY(5px);opacity:.6}to{transform:none;opacity:1}}
+</style>
+
+<div id="app"></div>
+
+<script>
+'use strict';
+const ROUNDS = 10, HAND = 5, SUPPLY = 18, MAXHEAT = 10, RAID_AT = 7;
+
+// ---------- el mapa de Chicago ----------
+// x,y en un lienzo de 100×112; v: valor en PV de controlar el barrio; cap: hombres que caben
+const BARRIOS = {
+  uptown:{n:'Uptown',v:1,x:34,y:8},
+  lincoln:{n:'Lincoln Park',v:2,x:40,y:22},
+  goldcoast:{n:'Gold Coast',v:3,x:66,y:28},
+  westside:{n:'West Side',v:1,x:15,y:38},
+  nearnorth:{n:'Near North',v:2,x:45,y:38},
+  muelles:{n:'Los Muelles',v:2,x:78,y:44},
+  loop:{n:'The Loop',v:3,x:60,y:53,cap:5},
+  maxwell:{n:'Maxwell Street',v:1,x:33,y:54},
+  cicero:{n:'Cicero',v:2,x:9,y:66},
+  littleitaly:{n:'Little Italy',v:2,x:27,y:69},
+  levee:{n:'The Levee',v:2,x:72,y:66},
+  chinatown:{n:'Chinatown',v:1,x:50,y:70},
+  bridgeport:{n:'Bridgeport',v:2,x:42,y:84},
+  yards:{n:'Back of the Yards',v:2,x:19,y:94},
+  bronzeville:{n:'Bronzeville',v:2,x:66,y:88},
+  hydepark:{n:'Hyde Park',v:1,x:78,y:104}
+};
+const EDGES = [['uptown','lincoln'],['lincoln','goldcoast'],['lincoln','nearnorth'],['lincoln','westside'],['goldcoast','nearnorth'],['goldcoast','muelles'],
+  ['nearnorth','loop'],['nearnorth','westside'],['nearnorth','muelles'],['westside','maxwell'],['westside','cicero'],['loop','muelles'],['loop','maxwell'],
+  ['loop','levee'],['loop','chinatown'],['maxwell','littleitaly'],['maxwell','chinatown'],['littleitaly','cicero'],['littleitaly','bridgeport'],
+  ['chinatown','levee'],['chinatown','bridgeport'],['levee','bronzeville'],['bridgeport','yards'],['bridgeport','bronzeville'],['yards','cicero'],['bronzeville','hydepark']];
+const ADJ = {};
+for(const k of Object.keys(BARRIOS))ADJ[k]=[];
+for(const [a,b] of EDGES){ADJ[a].push(b);ADJ[b].push(a);}
+const capOf = b => BARRIOS[b].cap||4;
+
+// ---------- familias ----------
+const FAMS = {
+  moretti:{n:'Familia Moretti',dif:'Dificultad media',color:'#d0574a',hq:'littleitaly',perk:'Apretar a un rival te cuesta 2 de Músculo en vez de 3.'},
+  omalley:{n:"Banda O'Malley",dif:'Dificultad baja',color:'#5aa874',hq:'lincoln',perk:'Abrir un Bar te cuesta $3 en vez de $4.'},
+  kowalski:{n:'Hermanos Kowalski',dif:'Dificultad alta',color:'#5b8fd0',hq:'yards',perk:'Empiezan con 4 hombres en su base y los dos primeros que colocan cada turno son gratis.'},
+  rosen:{n:'Sindicato Rosen',dif:'Dificultad baja',color:'#b07ad6',hq:'maxwell',perk:'Empiezas cada turno con +$1 y sobornar a la policía te cuesta $1.'}
+};
+
+// ---------- cartas ----------
+const TYPES = {basica:'Básica',negocio:'Negocio',musculo:'Músculo',politica:'Política',sucio:'Juego sucio'};
+const CARDS = {
+  calderilla:{n:'Calderilla',t:'basica',c:0,x:'+$1.',play:f=>{money(f,1);return '+$1';}},
+  matoncillo:{n:'Matón de poca monta',t:'basica',c:0,x:'+1 Músculo.',play:f=>{muscle(f,1);return '+1 Músculo';}},
+  // siempre disponibles
+  recaudador:{n:'Recaudador',t:'negocio',c:3,pile:true,x:'+$2.',play:f=>{money(f,2);return '+$2';}},
+  maton:{n:'Matón a sueldo',t:'musculo',c:3,pile:true,x:'+2 Músculo.',play:f=>{muscle(f,2);return '+2 Músculo';}},
+  // Negocio
+  contable:{n:'Contable',t:'negocio',c:2,k:3,x:'+$1. Roba 1 carta.',play:f=>{money(f,1);draw(f,1);return '+$1, roba 1';}},
+  corredor:{n:'Corredor de apuestas',t:'negocio',c:4,k:3,x:'+$2. Roba 1 carta.',play:f=>{money(f,2);draw(f,1);return '+$2, roba 1';}},
+  contrabandista:{n:'Contrabandista de ron',t:'negocio',c:4,k:2,hot:true,x:'+$3. <em>+1 Calor.</em>',play:f=>{money(f,3);heat(f,1);return '+$3, +1 Calor';}},
+  destileria:{n:'Destilería clandestina',t:'negocio',c:6,k:2,vp:1,x:'+$2, y +$1 por cada Bar tuyo (máximo +$3).',
+    play:f=>{const v=2+Math.min(3,barsOf(f).length);money(f,v);return `+$${v}`;}},
+  lavanderia:{n:'Lavandería china',t:'negocio',c:4,k:2,choice:true,x:'+$2. Puedes retirar para siempre una carta de tu mano.',
+    play:f=>{money(f,2);ask(f,'exile');return '+$2';}},
+  cantante:{n:'Cantante de jazz',t:'negocio',c:3,k:2,x:'+$1. Tu próximo Bar de este turno cuesta $2 menos.',play:f=>{money(f,1);f.barDisc+=2;return '+$1, Bar más barato';}},
+  camion:{n:'Camión de cerveza',t:'negocio',c:3,k:2,x:'+$1. +1 Músculo.',play:f=>{money(f,1);muscle(f,1);return '+$1, +1 Músculo';}},
+  casino:{n:'Casino ilegal',t:'negocio',c:7,k:1,vp:2,hot:true,x:'+$4. <em>+1 Calor.</em>',play:f=>{money(f,4);heat(f,1);return '+$4, +1 Calor';}},
+  // Músculo
+  chofer:{n:'Chófer',t:'musculo',c:2,k:3,x:'+1 Músculo. Roba 1 carta.',play:f=>{muscle(f,1);draw(f,1);return '+1 Músculo, roba 1';}},
+  pistolero:{n:'Pistolero',t:'musculo',c:4,k:3,x:'+2 Músculo. +$1.',play:f=>{muscle(f,2);money(f,1);return '+2 Músculo, +$1';}},
+  boxeador:{n:'Boxeador retirado',t:'musculo',c:2,k:2,x:'+1 Músculo. +1 más si ya jugaste otra carta de Músculo este turno.',
+    play:f=>{const v=f.typed.musculo?2:1;muscle(f,v);return `+${v} Músculo`;}},
+  sicario:{n:'Sicario',t:'musculo',c:5,k:2,hot:true,x:'+3 Músculo. <em>+1 Calor.</em>',play:f=>{muscle(f,3);heat(f,1);return '+3 Músculo, +1 Calor';}},
+  thompson:{n:'Metralleta Thompson',t:'musculo',c:6,k:1,vp:1,hot:true,x:'+5 Músculo. <em>+2 Calor.</em>',play:f=>{muscle(f,5);heat(f,2);return '+5 Músculo, +2 Calor';}},
+  blindado:{n:'Coche blindado',t:'musculo',c:5,k:2,choice:true,x:'+1 Músculo. Coloca gratis un hombre en un barrio a tu alcance.',
+    play:f=>{muscle(f,1);ask(f,'free');return '+1 Músculo';}},
+  consigliere:{n:'Consigliere',t:'musculo',c:5,k:2,x:'+$1. +1 Músculo. Roba 1 carta.',play:f=>{money(f,1);muscle(f,1);draw(f,1);return '+$1, +1 Músculo, roba 1';}},
+  // Política
+  abogado:{n:'Abogado sin escrúpulos',t:'politica',c:3,k:2,x:'−2 Calor. Roba 1 carta.',play:f=>{heat(f,-2);draw(f,1);return '−2 Calor, roba 1';}},
+  concejal:{n:'Concejal comprado',t:'politica',c:5,k:2,vp:1,x:'+$2. −1 Calor.',play:f=>{money(f,2);heat(f,-1);return '+$2, −1 Calor';}},
+  comisario:{n:'Comisario sobornado',t:'politica',c:6,k:2,vp:1,x:'−1 Calor. Esta ronda la policía no te hace redadas.',play:f=>{heat(f,-1);f.immune=true;return '−1 Calor, sin redadas esta ronda';}},
+  juez:{n:'Juez corrupto',t:'politica',c:6,k:1,vp:2,x:'−3 Calor. +$1.',play:f=>{heat(f,-3);money(f,1);return '−3 Calor, +$1';}},
+  alcalde:{n:'El Alcalde',t:'politica',c:8,k:1,vp:3,x:'+$3. −1 Calor.',play:f=>{money(f,3);heat(f,-1);return '+$3, −1 Calor';}},
+  periodista:{n:'Periodista amigo',t:'politica',c:3,k:2,x:'Roba 2 cartas.',play:f=>{draw(f,2);return 'roba 2';}},
+  // Juego sucio
+  chantaje:{n:'Chantaje',t:'sucio',c:4,k:2,choice:true,hot:true,x:'Echa a un hombre rival de un barrio donde tengas presencia. <em>+1 Calor.</em>',
+    play:f=>{heat(f,1);ask(f,'remove',{mode:'here'});return '+1 Calor';}},
+  viuda:{n:'La Viuda Negra',t:'sucio',c:5,k:1,choice:true,hot:true,x:'+1 Músculo. Echa a un hombre rival de un barrio a tu alcance. <em>+1 Calor.</em>',
+    play:f=>{muscle(f,1);heat(f,1);ask(f,'remove',{mode:'reach'});return '+1 Músculo, +1 Calor';}},
+  incendio:{n:'Incendio provocado',t:'sucio',c:5,k:2,once:true,choice:true,hot:true,x:'Quema un Bar rival en un barrio donde tengas presencia. <em>+2 Calor.</em> Se retira tras usarla.',
+    play:f=>{heat(f,2);ask(f,'burn');return '+2 Calor';}},
+  soplon:{n:'Soplón',t:'sucio',c:3,k:2,x:'+$1. La familia rival con más Calor recibe +2 Calor.',
+    play:f=>{money(f,1);const r=rivals(f).sort((a,b)=>b.heat-a.heat)[0];if(r){heat(r,2);return `+$1, ${FAMS[r.key].n} +2 Calor`;}return '+$1';}}
+};
+
+// ---------- la prensa: un titular por ronda ----------
+const NEWS = {
+  redada:{h:'Redada federal en la ciudad',x:'La familia con más Calor sufre una redada ahora mismo.',
+    run:()=>{const m=Math.max(...G.fams.map(f=>f.heat));if(m<=0)return 'nadie llama la atención';G.fams.filter(f=>f.heat===m).forEach(f=>raid(f,true));return '';}},
+  fiesta:{h:'Noche de fiesta en el Lake Shore',x:'Esta ronda los Bares dan el doble de dinero.',run:()=>{G.flags.fiesta=true;return '';}},
+  huelga:{h:'Huelga en los muelles',x:'Esta ronda nadie puede colocar hombres en Los Muelles.',run:()=>{G.flags.blocked='muelles';return '';}},
+  verano:{h:'Ola de calor en Chicago',x:'Todas las familias reciben +1 Calor.',run:()=>{G.fams.forEach(f=>heat(f,1));return '';}},
+  tregua:{h:'Tregua entre las familias',x:'Esta ronda apretar a un rival cuesta 2 de Músculo más.',run:()=>{G.flags.tregua=true;return '';}},
+  agente:{h:'Llega un agente del Tesoro',x:'La familia con más Bares recibe +2 Calor.',
+    run:()=>{const m=Math.max(...G.fams.map(f=>barsOf(f).length));if(!m)return 'no encuentra ningún Bar';G.fams.filter(f=>barsOf(f).length===m).forEach(f=>heat(f,2));return '';}},
+  boda:{h:'Boda por todo lo alto',x:'Cada familia empieza su turno con +$2.',run:()=>{G.flags.boda=true;return '';}},
+  elecciones:{h:'Elecciones municipales',x:'Quien controle The Loop gana 2 PV.',
+    run:()=>{const k=control('loop');if(!k)return 'nadie controla The Loop';fam(k).bonus+=2;return `${FAMS[k].n} gana 2 PV`;}},
+  escandalo:{h:'Escándalo en primera plana',x:'La familia con más PV recibe +2 Calor.',
+    run:()=>{const sc=G.fams.map(score);const m=Math.max(...sc);G.fams.filter((f,i)=>sc[i]===m).forEach(f=>heat(f,2));return '';}},
+  reparto:{h:'Llega un cargamento de Canadá',x:'Quien tenga más Bares gana 1 PV.',
+    run:()=>{const m=Math.max(...G.fams.map(f=>barsOf(f).length));if(!m)return 'nadie tiene Bares';G.fams.filter(f=>barsOf(f).length===m).forEach(f=>f.bonus+=1);return '';}}
+};
+
+let G = null;
+const UI = {fam:'moretti', rivals:2, sel:null, confirmQuit:false};
+const C = id => CARDS[id];
+const fam = k => G.fams.find(f=>f.key===k);
+const rivals = f => G.fams.filter(o=>o!==f);
+const ME = () => G.fams[0];
+const shuffle = a => {for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const pickRand = a => a[Math.floor(Math.random()*a.length)];
+const esc = s => String(s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+
+function log(m,cls=''){G.log.unshift({m,cls});if(G.log.length>160)G.log.length=160;}
+function money(f,n){f.money=Math.max(0,f.money+n);}
+function muscle(f,n){f.muscle=Math.max(0,f.muscle+n);}
+function heat(f,n){f.heat=Math.max(0,Math.min(MAXHEAT,f.heat+n));}
+function mk(id){return {uid:++G.seq,id};}
+function draw(f,n){
+  for(let i=0;i<n;i++){
+    if(!f.deck.length){if(!f.discard.length)return;f.deck=shuffle(f.discard);f.discard=[];}
+    f.hand.push(f.deck.pop());
+  }
+}
+
+// ---------- el tablero ----------
+function men(b,k){return G.board[b].men[k]||0;}
+function total(b){return Object.values(G.board[b].men).reduce((s,v)=>s+v,0);}
+function control(b){
+  let best=null,bv=0,tie=false;
+  for(const [k,v] of Object.entries(G.board[b].men)){if(v>bv){best=k;bv=v;tie=false;}else if(v===bv&&v>0)tie=true;}
+  return tie?null:best;
+}
+function barsOf(f){return Object.keys(G.board).filter(b=>G.board[b].bar===f.key);}
+function controlled(f){return Object.keys(BARRIOS).filter(b=>control(b)===f.key);}
+function reach(f){
+  const s=new Set();
+  for(const b of Object.keys(BARRIOS))if(men(b,f.key)>0){s.add(b);ADJ[b].forEach(a=>s.add(a));}
+  if(!s.size){s.add(FAMS[f.key].hq);ADJ[FAMS[f.key].hq].forEach(a=>s.add(a));}
+  return s;
+}
+function canPlace(f,b,free){
+  return G.phase==='play'&&reach(f).has(b)&&total(b)<capOf(b)&&f.supply>0&&G.flags.blocked!==b&&(free||f.muscle>=placeCost(f));
+}
+function placeCost(f){return f.key==='kowalski'&&f.freeLeft>0?0:1;}
+function place(f,b,free){
+  if(!canPlace(f,b,free))return false;
+  if(!free){const c=placeCost(f);muscle(f,-c);if(c===0)f.freeLeft--;}
+  G.board[b].men[f.key]=men(b,f.key)+1;f.supply--;
+  return true;
+}
+function squeezeCost(f){return (f.key==='moretti'?2:3)+(G.flags.tregua?2:0);}
+function canSqueeze(f,b,rk){return G.phase==='play'&&rk!==f.key&&men(b,f.key)>0&&men(b,rk)>0&&f.muscle>=squeezeCost(f);}
+function removeMan(b,rk){G.board[b].men[rk]--;if(!G.board[b].men[rk])delete G.board[b].men[rk];fam(rk).supply++;}
+function squeeze(f,b,rk){
+  if(!canSqueeze(f,b,rk))return false;
+  muscle(f,-squeezeCost(f));removeMan(b,rk);heat(f,1);
+  log(`${FAMS[f.key].n} aprieta a ${FAMS[rk].n} en ${BARRIOS[b].n} (+1 Calor)`,f===ME()?'good':'bad');
+  return true;
+}
+function barCost(f){return Math.max(1,(f.key==='omalley'?3:4)-f.barDisc);}
+function canBar(f,b){return G.phase==='play'&&control(b)===f.key&&!G.board[b].bar&&f.money>=barCost(f);}
+function openBar(f,b){
+  if(!canBar(f,b))return false;
+  money(f,-barCost(f));f.barDisc=0;G.board[b].bar=f.key;
+  log(`${FAMS[f.key].n} abre un Bar clandestino en ${BARRIOS[b].n}`,f===ME()?'good':'');
+  return true;
+}
+function bribeCost(f){return f.key==='rosen'?1:2;}
+function canBribe(f){return G.phase==='play'&&f.heat>0&&f.money>=bribeCost(f);}
+function bribe(f){if(!canBribe(f))return;money(f,-bribeCost(f));heat(f,-1);log(`${FAMS[f.key].n} soborna a la policía (−1 Calor)`);}
+function raid(f,fromNews){
+  if(f.immune){log(`La policía mira hacia otro lado con ${FAMS[f.key].n}`,'');return;}
+  let lost=0;
+  for(let i=0;i<2;i++){
+    const bs=Object.keys(BARRIOS).filter(b=>men(b,f.key)>0).sort((a,b)=>men(b,f.key)-men(a,f.key));
+    if(!bs.length)break;
+    removeMan(bs[0],f.key);lost++;
+  }
+  heat(f,-3);
+  log(`Redada${fromNews?' federal':''} contra ${FAMS[f.key].n}: ${lost} hombres detenidos, −3 Calor`,'bad');
+}
+
+// ---------- cartas en juego ----------
+function ask(f,kind,opt={}){
+  if(!targetsFor(f,kind,opt).length)return;
+  if(f.human){G.pending={kind,...opt};return;}
+  aiResolve(f,kind,opt);
+}
+function targetsFor(f,kind,opt){
+  const out=[];
+  if(kind==='exile')return f.hand.map(c=>c.uid);
+  if(kind==='free'){for(const b of Object.keys(BARRIOS))if(canPlace(f,b,true))out.push({b});return out;}
+  if(kind==='remove'){
+    const area=opt.mode==='here'?Object.keys(BARRIOS).filter(b=>men(b,f.key)>0):[...reach(f)];
+    for(const b of area)for(const rk of Object.keys(G.board[b].men))if(rk!==f.key)out.push({b,rk});
+    return out;
+  }
+  if(kind==='burn'){for(const b of Object.keys(BARRIOS)){const o=G.board[b].bar;if(o&&o!==f.key&&men(b,f.key)>0)out.push({b,rk:o});}return out;}
+  return out;
+}
+function playable(f,c){return G.phase==='play'&&!G.pending&&!!C(c.id).play;}
+function playCard(f,uid){
+  const i=f.hand.findIndex(c=>c.uid===uid);if(i<0)return;
+  const c=f.hand[i];if(!playable(f,c))return;
+  f.hand.splice(i,1);
+  const d=C(c.id);
+  if(d.once)G.exiled.push(c);else f.played.push(c);
+  const r=d.play(f);
+  f.typed[d.t]=(f.typed[d.t]||0)+1;
+  if(f.human)log(`${d.n}${r?': '+r:''}`);
+}
+function resolvePending(target){
+  const f=ME(),p=G.pending;if(!p)return;
+  if(p.kind==='exile'){
+    const i=f.hand.findIndex(c=>c.uid===target);if(i<0)return;
+    const [c]=f.hand.splice(i,1);G.exiled.push(c);log(`Retiras ${C(c.id).n} de tu mazo`,'good');
+  } else if(p.kind==='free'){
+    if(!place(f,target.b,true))return;log(`Colocas un hombre gratis en ${BARRIOS[target.b].n}`,'good');
+  } else if(p.kind==='remove'){
+    if(!targetsFor(f,'remove',p).some(t=>t.b===target.b&&t.rk===target.rk))return;
+    removeMan(target.b,target.rk);log(`Echas a un hombre de ${FAMS[target.rk].n} de ${BARRIOS[target.b].n}`,'good');
+  } else if(p.kind==='burn'){
+    if(G.board[target.b].bar!==target.rk)return;
+    G.board[target.b].bar=null;log(`Ardes el Bar de ${FAMS[target.rk].n} en ${BARRIOS[target.b].n}`,'good');
+  }
+  G.pending=null;
+}
+
+// ---------- puntuación ----------
+function cardVP(f){return [...f.deck,...f.hand,...f.played,...f.discard].reduce((s,c)=>s+(C(c.id).vp||0),0);}
+function scoreParts(f){
+  const zones=controlled(f).reduce((s,b)=>s+BARRIOS[b].v,0);
+  return {zones,bars:barsOf(f).length,cards:cardVP(f),bonus:f.bonus};
+}
+function score(f){const p=scoreParts(f);return p.zones+p.bars+p.cards+p.bonus;}
+
+// ---------- partida ----------
+function newGame(key,nRivals){
+  G={seq:0,round:1,cur:0,fams:[],board:{},market:[],mdeck:[],exiled:[],news:null,newsDeck:[],flags:{},log:[],phase:'play',pending:null,result:null};
+  const others=shuffle(Object.keys(FAMS).filter(k=>k!==key)).slice(0,nRivals);
+  for(const b of Object.keys(BARRIOS))G.board[b]={men:{},bar:null};
+  for(const k of [key,...others]){
+    const f={key:k,human:k===key,deck:[],hand:[],played:[],discard:[],money:0,muscle:0,heat:0,bonus:0,supply:SUPPLY,
+             immune:false,barDisc:0,freeLeft:0,typed:{}};
+    for(let i=0;i<6;i++)f.deck.push(mk('calderilla'));
+    for(let i=0;i<4;i++)f.deck.push(mk('matoncillo'));
+    shuffle(f.deck);
+    const start=k==='kowalski'?4:3;G.board[FAMS[k].hq].men[k]=start;f.supply-=start;
+    G.fams.push(f);
+  }
+  for(const [id,d] of Object.entries(CARDS))if(d.k)for(let i=0;i<d.k;i++)G.mdeck.push(mk(id));
+  shuffle(G.mdeck);
+  for(let i=0;i<5;i++)G.market.push(G.mdeck.pop());
+  G.newsDeck=shuffle(Object.keys(NEWS));
+  G.fams.forEach(f=>draw(f,HAND));
+  UI.sel=FAMS[key].hq;UI.confirmQuit=false;
+  log(`Chicago, 1925. ${FAMS[key].n} contra ${others.map(k=>FAMS[k].n).join(', ')}.`);
+  beginRound();
+}
+function startTurn(f){
+  f.money=0;f.muscle=0;f.typed={};f.barDisc=0;f.freeLeft=2;
+  let inc=0;
+  for(const b of barsOf(f))if(control(b)===f.key)inc+=G.flags.fiesta?2:1;
+  if(G.flags.boda)inc+=2;
+  if(f.key==='rosen')inc+=1;
+  if(inc){money(f,inc);if(f.human)log(`Tus Bares y negocios te dan $${inc}`,'good');}
+}
+function endTurn(f){
+  f.discard.push(...f.hand,...f.played);f.hand=[];f.played=[];
+  f.money=0;f.muscle=0;
+  draw(f,HAND);
+}
+// el orden de turno rota cada ronda; las familias que van antes que tú juegan al empezar la ronda
+function beginRound(){
+  const n=G.fams.length,sh=(G.round-1)%n;
+  G.order=G.fams.map((_,i)=>(i+sh)%n);
+  log(`Ronda ${G.round} · abre ${FAMS[G.fams[G.order[0]].key].n}`,'turn');
+  G.pos=0;
+  runAIsUntilHuman();
+}
+function runAIsUntilHuman(){
+  while(G.pos<G.order.length&&G.phase==='play'){
+    const f=G.fams[G.order[G.pos]];
+    if(f.human){startTurn(f);return;}
+    log(`Turno de ${FAMS[f.key].n}`);
+    startTurn(f);aiTurn(f);endTurn(f);G.pos++;
+  }
+  endRound();
+}
+function humanEnd(){
+  if(G.phase!=='play'||G.pending)return;
+  endTurn(ME());G.pos++;
+  runAIsUntilHuman();
+}
+function endRound(){
+  for(const f of G.fams){
+    if(f.heat>=RAID_AT)raid(f,false);
+    heat(f,-1);f.immune=false;
+  }
+  if(G.round>=ROUNDS){finish();return;}
+  G.round++;G.flags={};
+  if(!G.newsDeck.length)G.newsDeck=shuffle(Object.keys(NEWS));
+  const id=G.newsDeck.pop();G.news=id;
+  const r=NEWS[id].run();
+  log(`Titular: ${NEWS[id].h}${r?' · '+r:''}`,'bad');
+  beginRound();
+}
+function finish(){
+  G.phase='over';
+  const rows=G.fams.map(f=>({f,...scoreParts(f),total:score(f)})).sort((a,b)=>b.total-a.total||controlled(b.f).length-controlled(a.f).length);
+  G.result={rows,win:rows[0].f.human};
+  log(`Fin de la Ley Seca. Gana ${FAMS[rows[0].f.key].n} con ${rows[0].total} PV.`,'turn');
+}
+
+// ---------- compras ----------
+function canBuy(f,id){
+  if(G.phase!=='play'||G.pending)return false;
+  return f.money>=C(id).c;
+}
+function buy(f,uid){
+  const i=G.market.findIndex(c=>c&&c.uid===uid);if(i<0)return;
+  const c=G.market[i];if(!canBuy(f,c.id))return;
+  money(f,-C(c.id).c);f.discard.push(c);
+  G.market[i]=G.mdeck.length?G.mdeck.pop():null;
+  log(`${f.human?'Compras':FAMS[f.key].n+' compra'} ${C(c.id).n}`,f.human?'good':'');
+}
+function buyPile(f,id){
+  if(!C(id).pile||!canBuy(f,id))return;
+  money(f,-C(id).c);f.discard.push(mk(id));
+  log(`${f.human?'Compras':FAMS[f.key].n+' compra'} ${C(id).n}`,f.human?'good':'');
+}
+
+// ---------- las familias rivales ----------
+function placeScore(f,b){
+  if(!canPlace(f,b,true))return -99;
+  const mine=men(b,f.key);
+  const top=Math.max(0,...Object.entries(G.board[b].men).filter(([k])=>k!==f.key).map(([,v])=>v));
+  let s=BARRIOS[b].v*0.6;
+  if(mine<=top&&mine+1>top)s+=2+BARRIOS[b].v;      // pasa a controlarlo
+  else if(mine===top-1)s+=0.8;                       // se pone a la par
+  else if(mine>top)s-=1.2*(mine-top);                // ya lo controla
+  if(G.board[b].bar===f.key&&control(b)!==f.key)s+=2;
+  return s+Math.random()*0.4;
+}
+function squeezeScore(f,b,rk){
+  const before=control(b),mine=men(b,f.key);
+  const after=men(b,rk)-1;
+  const others=Object.entries(G.board[b].men).filter(([k])=>k!==f.key&&k!==rk).map(([,v])=>v);
+  const topAfter=Math.max(after,0,...others);
+  let s=0;
+  if(before!==f.key&&mine>topAfter)s+=2.5+BARRIOS[b].v;
+  if(before===rk&&control(b)!==null)s+=1+BARRIOS[b].v*0.7;
+  if(fam(rk).human)s+=0.3;
+  return s-0.8;
+}
+function aiResolve(f,kind,opt){
+  const ts=targetsFor(f,kind,opt);if(!ts.length)return;
+  if(kind==='exile'){
+    const c=f.hand.find(x=>x.id==='calderilla')||f.hand.find(x=>x.id==='matoncillo');
+    if(c&&f.deck.length+f.discard.length>8){f.hand.splice(f.hand.indexOf(c),1);G.exiled.push(c);}
+  } else if(kind==='free'){
+    const best=ts.map(t=>({t,s:placeScore(f,t.b)})).sort((a,b)=>b.s-a.s)[0];
+    place(f,best.t.b,true);log(`${FAMS[f.key].n} coloca un hombre en ${BARRIOS[best.t.b].n}`);
+  } else if(kind==='remove'){
+    const best=ts.map(t=>({t,s:squeezeScore(f,t.b,t.rk)+BARRIOS[t.b].v*0.2})).sort((a,b)=>b.s-a.s)[0].t;
+    removeMan(best.b,best.rk);log(`${FAMS[f.key].n} echa a un hombre de ${FAMS[best.rk].n} de ${BARRIOS[best.b].n}`,fam(best.rk).human?'bad':'');
+  } else if(kind==='burn'){
+    const best=ts.sort((a,b)=>BARRIOS[b.b].v-BARRIOS[a.b].v)[0];
+    G.board[best.b].bar=null;log(`${FAMS[f.key].n} quema el Bar de ${FAMS[best.rk].n} en ${BARRIOS[best.b].n}`,fam(best.rk).human?'bad':'');
+  }
+}
+function aiTurn(f){
+  // jugar cartas (si va caliente, evita las que dan Calor)
+  let g=0;
+  while(g++<40&&G.phase==='play'){
+    const c=f.hand.find(x=>C(x.id).play&&!(C(x.id).hot&&f.heat>=RAID_AT-2&&!f.immune));
+    if(!c)break;
+    playCard(f,c.uid);
+  }
+  // usar el Músculo
+  g=0;
+  while(g++<30&&(f.muscle>0||placeCost(f)===0)){
+    let best=null;
+    for(const b of reach(f)){const s=placeScore(f,b);if(canPlace(f,b,false)&&(!best||s>best.s))best={s,a:'place',b};}
+    if(f.muscle>=squeezeCost(f)&&f.heat<RAID_AT-1)
+      for(const b of Object.keys(BARRIOS))for(const rk of Object.keys(G.board[b].men))
+        if(canSqueeze(f,b,rk)){const s=squeezeScore(f,b,rk)*(squeezeCost(f)>3?0.6:1);if(!best||s>best.s)best={s,a:'sq',b,rk};}
+    if(!best||best.s<0)break;
+    if(best.a==='place'){if(!place(f,best.b,false))break;log(`${FAMS[f.key].n} coloca un hombre en ${BARRIOS[best.b].n}`);}
+    else if(!squeeze(f,best.b,best.rk))break;
+  }
+  // sobornar si está a punto de sufrir una redada
+  while(f.heat>=RAID_AT-1&&canBribe(f)&&!f.immune)bribe(f);
+  // abrir bares
+  const want=G.round>=3||f.money>=7;
+  for(const b of controlled(f).sort((a,b)=>BARRIOS[b].v-BARRIOS[a].v)){if(want&&canBar(f,b))openBar(f,b);}
+  // comprar cartas
+  g=0;
+  while(g++<6&&f.money>=2){
+    const all=[...f.deck,...f.hand,...f.played,...f.discard];
+    const mus=all.filter(c=>C(c.id).t==='musculo'||c.id==='matoncillo').length/all.length;
+    const opts=[...G.market.filter(Boolean).map(c=>({c,id:c.id})),{id:'recaudador'},{id:'maton'}].filter(o=>canBuy(f,o.id)&&C(o.id).c>=2);
+    if(!opts.length)break;
+    const val=o=>{const d=C(o.id);let v=d.c+(d.vp||0)*(G.round>=7?1.5:0.5)+Math.random();
+      if(d.t==='musculo')v+=mus<0.4?2:0;if(d.t==='negocio')v+=mus>0.5?2:0;if(d.hot&&f.heat>=4)v-=2;if(G.round>=9&&!d.vp)v-=3;return v;};
+    opts.sort((a,b)=>val(b)-val(a));
+    const o=opts[0];if(G.round>=9&&!C(o.id).vp)break;
+    if(o.c)buy(f,o.c.uid);else buyPile(f,o.id);
+  }
+}
+
+// ---------- ilustraciones ----------
+const F='fill="currentColor"';
+const ICONS = {
+  calderilla:`<ellipse cx="32" cy="46" rx="14" ry="5"/><path d="M18 46v-6M46 46v-6"/><ellipse cx="32" cy="40" rx="14" ry="5"/><path d="M18 40v-6M46 40v-6"/><ellipse cx="32" cy="34" rx="14" ry="5" ${F} fill-opacity=".3"/><path d="M29 32.5h6"/>`,
+  matoncillo:`<path d="M13 30h38v10a7 7 0 0 1-7 7H20a7 7 0 0 1-7-7z" ${F} fill-opacity=".2"/><circle cx="19.5" cy="29" r="5"/><circle cx="28.5" cy="29" r="5"/><circle cx="37.5" cy="29" r="5"/><circle cx="46.5" cy="29" r="5"/>`,
+  recaudador:`<path d="M25 13h14l-4 8q15 6 15 21 0 12-18 12T14 42q0-15 15-21z"/><path d="M37 31q-4-3-8 0t0 6 8 6-4 6-9 0M32 27v25"/>`,
+  maton:`<path d="M13 53l29-35q4-5 8-1t-1 8L19 58z" ${F} fill-opacity=".2"/><path d="M13 53l6 5"/>`,
+  contable:`<rect x="13" y="10" width="30" height="44" rx="2"/><path d="M19 20h18M19 28h18M19 36h12"/><path d="M40 51l12-24 4 2-12 24-5 3z"/>`,
+  corredor:`<rect x="9" y="22" width="22" height="22" rx="3" transform="rotate(-12 20 33)"/><rect x="33" y="26" width="22" height="22" rx="3" transform="rotate(10 44 37)"/><circle cx="16" cy="30" r="2" ${F}/><circle cx="24" cy="37" r="2" ${F}/><circle cx="39" cy="32" r="2" ${F}/><circle cx="44" cy="37" r="2" ${F}/><circle cx="49" cy="42" r="2" ${F}/>`,
+  contrabandista:`<path d="M20 10h24q6 22 0 44H20q-6-22 0-44z"/><path d="M17 22h30M17 42h30"/><path d="M26 28l4 4 4-4 4 4M26 36l4-4M34 36l4-4" opacity=".7"/>`,
+  destileria:`<path d="M12 55V31q0-10 12-10t12 10v24z"/><path d="M24 21v-9h18v10"/><path d="M42 22q9 2 9 11v8"/><path d="M47 41h9v7h-9z"/><path d="M12 41h24"/>`,
+  lavanderia:`<path d="M22 10l-12 8 6 10 6-4v30h20V24l6 4 6-10-12-8q-4 6-10 6t-10-6z"/>`,
+  cantante:`<rect x="26" y="7" width="12" height="20" rx="6" ${F} fill-opacity=".25"/><path d="M20 21q0 15 12 15t12-15"/><path d="M32 36v14M23 55h18"/><path d="M47 12l4-3M49 20h5M14 12l-4-3M15 20h-5"/>`,
+  camion:`<path d="M5 20h33v24H5z"/><path d="M38 28h12l9 8v8H38z"/><circle cx="15" cy="48" r="5"/><circle cx="48" cy="48" r="5"/><path d="M11 28h21M11 35h21" opacity=".6"/>`,
+  casino:`<circle cx="32" cy="32" r="22"/><circle cx="32" cy="32" r="8" ${F} fill-opacity=".2"/><path d="M32 10v14M32 40v14M10 32h14M40 32h14M16 16l10 10M38 38l10 10M48 16L38 26M26 38L16 48"/><circle cx="45" cy="20" r="2.5" ${F}/>`,
+  chofer:`<path d="M5 42v-8l9-2 6-11h21l8 11 10 2v8z"/><circle cx="17" cy="44" r="5"/><circle cx="47" cy="44" r="5"/><path d="M23 22v10M35 22v10"/>`,
+  pistolero:`<path d="M8 20h36l3-3h7v9H30l-3 5h-5l-4 22H8l5-22-2-5z" ${F} fill-opacity=".3"/><circle cx="25" cy="29" r="4"/><path d="M21 31q1 7 7 7"/>`,
+  boxeador:`<path d="M22 48V28a12 12 0 0 1 12-12h4a10 10 0 0 1 10 10v8a8 8 0 0 1-8 8H22"/><path d="M19 48h24v8H19z"/><path d="M30 28h10a4 4 0 0 1 0 8h-8"/>`,
+  sicario:`<path d="M10 18h44"/><path d="M18 18l3-9q11-4 22 0l3 9"/><path d="M12 48l22-9h6v6l-22 9z" ${F} fill-opacity=".25"/><path d="M40 39l16-14"/>`,
+  thompson:`<path d="M5 25h33v8H5z"/><path d="M38 23h21v6H38z"/><circle cx="26" cy="41" r="8"/><circle cx="26" cy="41" r="2.5" ${F}/><path d="M12 33l-4 16h7l4-16"/><path d="M45 29v10"/>`,
+  blindado:`<path d="M5 45V27l10-7h32l11 11v14z" ${F} fill-opacity=".18"/><path d="M19 27h7M31 27h7"/><circle cx="17" cy="47" r="5"/><circle cx="47" cy="47" r="5"/><path d="M8 37h48"/><circle cx="14" cy="32" r=".8" ${F}/><circle cx="50" cy="32" r=".8" ${F}/>`,
+  consigliere:`<path d="M9 34h46"/><path d="M17 34l3-14q12-6 24 0l3 14"/><path d="M19 28h26" stroke-width="3"/><path d="M37 47h17" stroke-width="3"/><path d="M55 44q4-6 0-10M50 42q3-5 0-8" opacity=".6"/>`,
+  abogado:`<rect x="9" y="22" width="46" height="30" rx="3"/><path d="M24 22v-6h16v6"/><path d="M9 34h46"/><path d="M29 34v5h6v-5"/>`,
+  concejal:`<path d="M9 22l23-12 23 12z" ${F} fill-opacity=".2"/><path d="M14 22v24M24 22v24M40 22v24M50 22v24"/><path d="M8 50h48M11 46h42"/>`,
+  comisario:`<path d="M32 7l6 10 12 2-8 9 2 12-12-5-12 5 2-12-8-9 12-2z" ${F} fill-opacity=".22"/><circle cx="32" cy="27" r="5"/><path d="M18 47h28l-3 8H21z"/>`,
+  juez:`<path d="M19 22l12-12 11 11-12 12z" ${F} fill-opacity=".28"/><path d="M36 27l17 17"/><path d="M10 55h30"/><path d="M14 55v-5h22v5"/>`,
+  alcalde:`<path d="M20 40V12h24v28" ${F} fill-opacity=".2"/><path d="M9 40h46"/><path d="M20 33h24" stroke-width="3"/><path d="M24 50q8 6 16 0"/>`,
+  periodista:`<path d="M10 13h38v39H14a4 4 0 0 1-4-4z"/><path d="M48 21h6v27a4 4 0 0 1-4 4"/><path d="M16 20h26M16 26h12M32 26h10v10H32zM16 32h12M16 39h26M16 45h26"/>`,
+  chantaje:`<rect x="9" y="18" width="46" height="30" rx="2"/><path d="M9 18l23 16 23-16"/><path d="M21 42q11-8 22 0q-11 8-22 0z"/><circle cx="32" cy="42" r="2" ${F}/>`,
+  viuda:`<ellipse cx="32" cy="35" rx="7" ry="9" ${F} fill-opacity=".3"/><circle cx="32" cy="22" r="4"/><path d="M26 31l-14-8M26 35H10M26 39l-14 8M27 43l-10 12M38 31l14-8M38 35h16M38 39l14 8M37 43l10 12"/><path d="M32 38l-2 3h4z" ${F}/>`,
+  incendio:`<path d="M32 57q-17 0-17-15 0-10 10-21 0 8 6 11 2-15 11-25 0 15 6 21 4 6 4 14 0 15-20 15z" ${F} fill-opacity=".25"/><path d="M32 57q-6 0-6-6 0-6 6-11 6 5 6 11t-6 6z"/>`,
+  soplon:`<path d="M23 51q-4-7 0-13t6-14q0-11 11-11t10 13q0 10-8 14t-6 10q-2 7-13 1z"/><path d="M34 26q4-4 8 0t-2 8"/>`
+};
+function art(id){
+  return `<svg viewBox="0 0 64 64" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${ICONS[id]||''}</svg>`;
+}
+function hash(s){let h=2166136261;for(const ch of s){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+
+// ---------- dibujo ----------
+function cardHTML(c,zone){
+  const d=C(c.id),f=ME();
+  let acts='';
+  const pk=G.pending&&G.pending.kind;
+  if(zone==='hand'){
+    if(pk==='exile')acts=`<button class="btn gold" data-a="pexile" data-u="${c.uid}">Retirar</button>`;
+    else if(d.play)acts=`<button class="btn gold" data-a="play" data-u="${c.uid}" ${playable(f,c)?'':'disabled'}>Jugar</button>`;
+  } else if(zone==='market'){
+    acts=`<button class="btn gold" data-a="buy" data-u="${c.uid}" ${canBuy(f,c.id)?'':'disabled'}>Comprar</button>`;
+  } else if(zone==='pile'){
+    acts=`<button class="btn gold" data-a="pile" data-u="${c.id}" ${canBuy(f,c.id)?'':'disabled'}>Comprar · siempre</button>`;
+  }
+  const cost=zone==='market'||zone==='pile'?`<span class="cost" title="Precio">$${d.c}</span>`:'<span></span>';
+  return `<article class="card" style="--tc:var(--t-${d.t});--hx:${20+hash(c.id)%60}%">
+    <div class="head"><span class="kind">${TYPES[d.t]}</span><h3 class="name">${esc(d.n)}</h3></div>
+    <div class="art">${art(c.id)}</div>
+    <p class="txt">${d.x}</p>
+    <div class="foot">${cost}<span class="vp">${d.vp?d.vp+' PV':''}</span></div>
+    ${acts?`<div class="acts">${acts}</div>`:''}
+  </article>`;
+}
+function mapHTML(){
+  const f=ME();
+  const rch=G.phase==='play'?reach(f):new Set();
+  const edges=EDGES.map(([a,b])=>{const A=BARRIOS[a],B=BARRIOS[b];return `<line class="edge" x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}"/>`;}).join('');
+  const nodes=Object.entries(BARRIOS).map(([id,B])=>{
+    const w=21,h=12.5,x=B.x-w/2,y=B.y-h/2;
+    const ck=control(id);
+    const fill=ck?FAMS[ck].color:'none';
+    const dots=[];let i=0;
+    for(const [k,v] of Object.entries(G.board[id].men))for(let j=0;j<v;j++){dots.push(`<circle cx="${(x+2.6+i*2.6).toFixed(1)}" cy="${(y+h-2.4).toFixed(1)}" r="1" fill="${FAMS[k].color}" stroke="#100f0d" stroke-width=".25"/>`);i++;}
+    const bar=G.board[id].bar;
+    const barB=bar?`<rect x="${(x+w-5.6).toFixed(1)}" y="${(y+h-3.8).toFixed(1)}" width="4.8" height="2.8" fill="${FAMS[bar].color}"/><text class="barbadge" x="${(x+w-3.2).toFixed(1)}" y="${(y+h-1.75).toFixed(1)}" text-anchor="middle" fill="#100f0d">BAR</text>`:'';
+    const cls=['node',UI.sel===id?'sel':'',G.phase==='play'&&rch.has(id)&&(f.muscle>0||placeCost(f)===0)?'reach':''].join(' ');
+    return `<g class="${cls}" data-a="sel" data-u="${id}" tabindex="0" role="button" aria-label="${esc(B.n)}">
+      <rect class="bg" x="${x}" y="${y}" width="${w}" height="${h}" rx=".6"/>
+      ${ck?`<rect class="ctrl" x="${x}" y="${y}" width="${w}" height="1.4" fill="${fill}"/>`:''}
+      <text class="nm" x="${B.x}" y="${(y+5.2).toFixed(1)}" text-anchor="middle">${esc(B.n.length>14?B.n.replace('Back of the ','B. ').replace('Maxwell Street','Maxwell St.'):B.n)}</text>
+      <text class="val" x="${B.x}" y="${(y+8.1).toFixed(1)}" text-anchor="middle">${'★'.repeat(B.v)}${G.flags.blocked===id?' · HUELGA':''}</text>
+      ${dots.join('')}${barB}
+    </g>`;}).join('');
+  return `<div class="mapwrap"><svg class="map" viewBox="0 0 100 112" role="group" aria-label="Mapa de Chicago">
+    <path class="lake" d="M88 0H100V112H92Q86 96 90 80T86 50Q84 30 90 16Z"/>
+    <text class="lake-l" x="95" y="62" text-anchor="middle" transform="rotate(90 95 62)">Lago Michigan</text>
+    <path class="river" d="M0 47Q20 44 36 46T70 46Q78 44 88 40"/>
+    ${edges}${nodes}
+  </svg></div>`;
+}
+function barrioHTML(){
+  const id=UI.sel;if(!id)return '';
+  const B=BARRIOS[id],s=G.board[id],f=ME(),ck=control(id);
+  const p=G.pending;
+  const list=Object.entries(s.men).map(([k,v])=>`<span><i class="dot" style="--fc:${FAMS[k].color}"></i>${esc(FAMS[k].n)}: ${v}</span>`).join('')||'<span class="empty">Nadie trabaja aquí todavía.</span>';
+  let acts='';
+  if(p&&p.kind==='free'){
+    acts=`<button class="btn gold" data-a="pfree" data-u="${id}" ${canPlace(f,id,true)?'':'disabled'}>Colocar gratis aquí</button>`;
+  } else if(p&&p.kind==='remove'){
+    const ts=targetsFor(f,'remove',p).filter(t=>t.b===id);
+    acts=ts.length?ts.map(t=>`<button class="btn red" data-a="premove" data-u="${id}|${t.rk}">Echar a un hombre de ${esc(FAMS[t.rk].n)}</button>`).join(''):'<span class="empty">Aquí no hay a quién echar. Elige otro barrio en el mapa.</span>';
+  } else if(p&&p.kind==='burn'){
+    const ts=targetsFor(f,'burn',p).filter(t=>t.b===id);
+    acts=ts.length?`<button class="btn red" data-a="pburn" data-u="${id}|${ts[0].rk}">Quemar el Bar de ${esc(FAMS[ts[0].rk].n)}</button>`:'<span class="empty">Aquí no hay un Bar rival que quemar.</span>';
+  } else if(!p&&G.phase==='play'){
+    const pc=placeCost(f);
+    acts=`<button class="btn gold" data-a="place" data-u="${id}" ${canPlace(f,id,false)?'':'disabled'}>Colocar hombre · ${pc?pc+' Músculo':'gratis'}</button>`;
+    for(const rk of Object.keys(s.men))if(rk!==f.key)
+      acts+=`<button class="btn red" data-a="squeeze" data-u="${id}|${rk}" ${canSqueeze(f,id,rk)?'':'disabled'}>Apretar a ${esc(FAMS[rk].n)} · ${squeezeCost(f)} Músculo</button>`;
+    if(ck===f.key&&!s.bar)acts+=`<button class="btn" data-a="bar" data-u="${id}" ${canBar(f,id)?'':'disabled'}>Abrir Bar · $${barCost(f)}</button>`;
+  }
+  const why=!reach(f).has(id)?'Fuera de tu alcance: necesitas hombres en este barrio o en uno vecino.':total(id)>=capOf(id)?'El barrio está lleno.':'';
+  return `<div class="barrio">
+    <h3>${esc(B.n)}</h3>
+    <p class="meta">${'★'.repeat(B.v)} Vale ${B.v} PV · caben ${capOf(id)} hombres · ${ck?`lo controla <b style="color:${FAMS[ck].color}">${esc(FAMS[ck].n)}</b>`:'nadie lo controla'}${s.bar?` · Bar de ${esc(FAMS[s.bar].n)}`:''}</p>
+    <div class="men">${list}</div>
+    ${why&&!p?`<p class="meta"><i>${why}</i></p>`:''}
+    <div class="controls">${acts}</div>
+  </div>`;
+}
+function hint(){
+  const p=G.pending;
+  if(p){
+    if(p.kind==='exile')return 'Elige una carta de tu mano para retirarla de tu mazo, o sáltatelo.';
+    if(p.kind==='free')return 'Toca un barrio a tu alcance en el mapa y coloca allí un hombre gratis.';
+    if(p.kind==='remove')return p.mode==='here'?'Toca un barrio donde tengas hombres y echa a un rival.':'Toca un barrio a tu alcance y echa a un rival.';
+    if(p.kind==='burn')return 'Toca un barrio donde tengas hombres y haya un Bar rival.';
+  }
+  return 'Juega cartas para conseguir dinero y Músculo. Toca un barrio del mapa para colocar hombres, apretar a rivales o abrir un Bar.';
+}
+function rulesHTML(){
+  return `<details class="rules"><summary>Cómo se juega</summary><div class="rules-body">
+    <p>Chicago, 1925. Tu familia y sus rivales se reparten la ciudad durante 10 rondas. Gana quien tenga más PV al final.</p>
+    <h3>Tu turno</h3>
+    <ul>
+      <li>El orden de turno rota cada ronda, así que no siempre empiezas tú.</li>
+      <li><b>Juega cartas</b> de tu mano para conseguir Dinero ($) y Músculo. Empiezas con 6 Calderillas y 4 Matones de poca monta.</li>
+      <li><b>Compra cartas</b> en el mercado negro con Dinero. Van a tu descarte y saldrán más adelante.</li>
+      <li><b>Coloca hombres</b> (1 Músculo) en barrios donde ya tengas gente o en uno vecino.</li>
+      <li><b>Aprieta</b> a un rival (3 Músculo) en un barrio donde tengas presencia: su hombre vuelve a su reserva y tú ganas +1 Calor.</li>
+      <li><b>Abre un Bar</b> ($4) en un barrio que controles. Cada Bar da 1 PV y, mientras controles su barrio, $1 al empezar tu turno.</li>
+      <li><b>Soborna</b> a la policía ($2) para bajar 1 de Calor.</li>
+    </ul>
+    <h3>Control y puntos</h3>
+    <ul>
+      <li>Controla un barrio quien tenga allí más hombres que nadie. Los empates no los controla nadie.</li>
+      <li>Al final: PV de los barrios que controlas + 1 PV por Bar + PV de las cartas de tu mazo + PV ganados con titulares de prensa.</li>
+    </ul>
+    <h3>Calor y prensa</h3>
+    <ul>
+      <li>El juego sucio, las armas y el contrabando suben tu Calor. Al final de cada ronda, la familia con 7 o más sufre una redada: pierde 2 hombres y baja 3 de Calor. Después, el Calor de todos baja 1.</li>
+      <li>Cada ronda sale un titular de prensa que cambia las reglas durante esa ronda.</li>
+    </ul>
+  </div></details>`;
+}
+function titleHTML(){
+  const famOpts=Object.entries(FAMS).map(([k,o])=>`<button class="opt" style="--fc:${o.color}" data-a="fam" data-u="${k}" aria-pressed="${UI.fam===k}"><b>${esc(o.n)}</b><i>Base en ${esc(BARRIOS[o.hq].n)} · ${o.dif}</i><span>${esc(o.perk)}</span></button>`).join('');
+  const rivOpts=[1,2,3].map(n=>`<button class="opt" data-a="rivals" data-u="${n}" aria-pressed="${UI.rivals===n}"><b>${n} ${n===1?'familia rival':'familias rivales'}</b><span>${n===1?'Duelo directo, partidas rápidas.':n===2?'La partida recomendada.':'La ciudad entera en guerra.'}</span></button>`).join('');
+  return `<div class="title">
+    <div class="hero"><p class="eyebrow">Chicago · 1925</p><h1>Ley <span>Seca</span></h1>
+      <p>El alcohol está prohibido y la ciudad tiene sed. Convierte tu calderilla en un imperio: compra matones, abogados y destilerías, reparte a tus hombres por los barrios y abre bares clandestinos antes que las otras familias. Pero no hagas demasiado ruido: la policía también sabe leer los periódicos.</p></div>
+    <div class="deco"></div>
+    <div class="pick"><h2>Tu familia</h2><div class="opt-grid">${famOpts}</div></div>
+    <div class="pick"><h2>Rivales</h2><div class="opt-grid">${rivOpts}</div></div>
+    <div><button class="btn gold big" data-a="start">Empezar la partida</button></div>
+    ${rulesHTML()}
+  </div>`;
+}
+function boardHTML(){
+  const f=ME(),p=G.pending;
+  const piles=['recaudador','maton'].map(id=>cardHTML({uid:0,id},'pile')).join('');
+  const fams=G.fams.map(o=>{const pt=scoreParts(o);return `<div class="fam${o.human?' you':''}" style="--fc:${FAMS[o.key].color}"><i class="dot"></i><b>${esc(FAMS[o.key].n)}</b><span class="pv">${score(o)}</span>
+    <small>${controlled(o).length} barrios · ${pt.bars} bares · Calor ${o.heat}${o.heat>=RAID_AT?' (¡redada!)':''} · reserva ${o.supply}</small></div>`;}).join('');
+  const nw=G.news?NEWS[G.news]:null;
+  return `<header class="top">
+    <div class="brand">Ley <span>Seca</span></div>
+    <div class="stats">
+      <div class="stat"><span class="lbl">Ronda</span><span class="val">${G.round}/${ROUNDS}</span></div>
+      <div class="stat money"><span class="lbl">Dinero</span><span class="val">$${f.money}</span></div>
+      <div class="stat muscle"><span class="lbl">Músculo</span><span class="val">${f.muscle}</span></div>
+      <div class="stat heat${f.heat>=RAID_AT-2?' hot':''}"><span class="lbl">Calor</span><span class="val">${f.heat}</span></div>
+      <div class="stat"><span class="lbl">PV</span><span class="val">${score(f)}</span></div>
+    </div>
+  </header>
+  <div class="layout">
+    <main class="board">
+      <section class="zone">
+        <div class="zone-head"><h2>Chicago</h2><span class="sub">Toca un barrio · los que tienen borde dorado están a tu alcance</span></div>
+        ${mapHTML()}
+        ${barrioHTML()}
+      </section>
+      <section class="zone">
+        <div class="zone-head"><h2>Tu mano</h2><span class="sub">Mazo ${f.deck.length} · Descarte ${f.discard.length}</span></div>
+        <div class="pool">
+          <span class="res money"><b>$${f.money}</b><span>Dinero</span></span>
+          <span class="res muscle"><b>${f.muscle}</b><span>Músculo</span></span>
+          <button class="btn" data-a="bribe" ${canBribe(f)&&!p?'':'disabled'}>Sobornar · $${bribeCost(f)} → −1 Calor</button>
+        </div>
+        <p class="hint">${esc(hint())}</p>
+        <div class="row">${f.hand.length?f.hand.map(c=>cardHTML(c,'hand')).join(''):'<p class="empty">No te quedan cartas en la mano.</p>'}</div>
+        ${f.played.length?`<div class="played">${f.played.map(c=>`<span class="mini" style="--tc:var(--t-${C(c.id).t})">${esc(C(c.id).n)}</span>`).join('')}</div>`:''}
+        <div class="controls hide-m">
+          ${p?`<button class="btn" data-a="skip">${p.kind==='exile'?'No retirar nada':'Cancelar'}</button>`:''}
+          <button class="btn" data-a="playall" ${!p&&f.hand.some(c=>playable(f,c)&&!C(c.id).choice)?'':'disabled'}>Jugar cartas sencillas</button>
+          <button class="btn gold big" data-a="end" ${p?'disabled':''}>Terminar el turno</button>
+        </div>
+      </section>
+      <section class="zone">
+        <div class="zone-head"><h2>Mercado negro</h2><span class="sub">${G.mdeck.length} cartas en el mazo</span></div>
+        <div class="row">${G.market.map(c=>c?cardHTML(c,'market'):'').join('')}${piles}</div>
+      </section>
+    </main>
+    <aside class="side">
+      ${nw?`<div class="news"><div class="mast">Chicago Herald <small>Ronda ${G.round}</small></div><h4>${esc(nw.h)}</h4><p>${esc(nw.x)}</p></div>`:''}
+      <div class="panel"><h3>Las familias</h3>${fams}</div>
+      <div class="panel"><h3>Tu familia</h3><p><b style="color:${FAMS[f.key].color}">${esc(FAMS[f.key].n)}</b>. ${esc(FAMS[f.key].perk)}</p></div>
+      <div class="panel"><h3>Crónica</h3><ul class="log">${G.log.map(l=>`<li class="${l.cls}">${esc(l.m)}</li>`).join('')}</ul></div>
+      <div class="panel">${UI.confirmQuit?`<div class="confirm"><span>¿Abandonar esta partida?</span><button class="btn red" data-a="quit">Sí, abandonar</button><button class="btn" data-a="noquit">No</button></div>`:`<button class="btn" data-a="askquit">Nueva partida</button>`}</div>
+      ${rulesHTML()}
+    </aside>
+  </div>
+  <div id="mbar">
+    <div class="mres"><span class="m"><b>$${f.money}</b></span><span class="u"><b>${f.muscle}</b> mús.</span></div>
+    ${p?`<button class="btn" data-a="skip">${p.kind==='exile'?'No retirar':'Cancelar'}</button>`:`<button class="btn" data-a="playall" ${f.hand.some(c=>playable(f,c)&&!C(c.id).choice)?'':'disabled'}>Jugar sencillas</button>`}
+    <button class="btn gold" data-a="end" ${p?'disabled':''}>Fin de turno</button>
+  </div>
+  ${G.phase==='over'?endHTML():''}`;
+}
+function endHTML(){
+  const r=G.result,me=r.rows.find(x=>x.f.human);
+  const pos=r.rows.indexOf(me)+1;
+  const verdict=r.win?'La ciudad es tuya. Los periódicos te llaman empresario y los concejales te saludan por tu nombre.'
+    :pos===2?'Te quedas con un buen trozo de la ciudad, pero otro se sienta en la mesa principal.'
+    :'Tu familia acaba la década con más deudas que amigos.';
+  return `<div class="overlay"><div class="end" role="dialog" aria-label="Resultado">
+    <div class="mast">Chicago Herald · Edición especial</div>
+    <h2>${r.win?'¡Tu familia manda en Chicago!':`${esc(FAMS[r.rows[0].f.key].n)} se queda la ciudad`}</h2>
+    <p class="verdict">${verdict}</p>
+    <table><tr><th>Familia</th><th>Barrios</th><th>Bares</th><th>Cartas</th><th>Prensa</th><th>Total</th></tr>
+    ${r.rows.map(x=>`<tr class="${x===r.rows[0]?'win':''}"><td style="color:${FAMS[x.f.key].color}">${esc(FAMS[x.f.key].n)}${x.f.human?' (tú)':''}</td><td>${x.zones}</td><td>${x.bars}</td><td>${x.cards}</td><td>${x.bonus}</td><td>${x.total}</td></tr>`).join('')}</table>
+    <button class="btn gold big" data-a="again">Jugar otra partida</button>
+  </div></div>`;
+}
+
+const HAS_DOM=typeof document!=='undefined';
+const KEY='ley-seca';
+function save(){try{if(G)localStorage.setItem(KEY,JSON.stringify(G));else localStorage.removeItem(KEY);}catch(e){}}
+function render(){if(!HAS_DOM)return;document.getElementById('app').innerHTML=G?boardHTML():titleHTML();save();}
+function handle(a,u){
+  const f=G&&ME();
+  switch(a){
+    case 'fam':UI.fam=u;break;
+    case 'rivals':UI.rivals=+u;break;
+    case 'start':newGame(UI.fam,UI.rivals);break;
+    case 'sel':UI.sel=u;break;
+    case 'play':playCard(f,+u);break;
+    case 'playall':{let g=0;while(g++<40){const c=f.hand.find(x=>playable(f,x)&&!C(x.id).choice);if(!c)break;playCard(f,c.uid);}break;}
+    case 'pexile':resolvePending(+u);break;
+    case 'pfree':resolvePending({b:u});break;
+    case 'premove':{const [b,rk]=u.split('|');resolvePending({b,rk});break;}
+    case 'pburn':{const [b,rk]=u.split('|');resolvePending({b,rk});break;}
+    case 'skip':G.pending=null;break;
+    case 'place':if(place(f,u,false))log(`Colocas un hombre en ${BARRIOS[u].n}`,'good');break;
+    case 'squeeze':{const [b,rk]=u.split('|');squeeze(f,b,rk);break;}
+    case 'bar':openBar(f,u);break;
+    case 'bribe':bribe(f);break;
+    case 'buy':buy(f,+u);break;
+    case 'pile':buyPile(f,u);break;
+    case 'end':humanEnd();break;
+    case 'askquit':UI.confirmQuit=true;break;
+    case 'noquit':UI.confirmQuit=false;break;
+    case 'quit':case 'again':G=null;UI.confirmQuit=false;break;
+  }
+}
+if(HAS_DOM){
+  const app=document.getElementById('app');
+  app.addEventListener('click',e=>{
+    const b=e.target.closest('[data-a]');if(!b||b.disabled)return;
+    const wasTitle=!G,a=b.dataset.a;
+    handle(a,b.dataset.u);render();
+    if((wasTitle&&G)||a==='end')window.scrollTo(0,0);
+  });
+  app.addEventListener('keydown',e=>{
+    if((e.key==='Enter'||e.key===' ')&&e.target.matches('g[data-a]')){e.preventDefault();handle('sel',e.target.dataset.u);render();}
+  });
+  const boot=data=>{
+    if(data&&data.G)G=data.G;
+    else{try{const s=localStorage.getItem(KEY);if(s){const g=JSON.parse(s);if(g&&g.phase==='play'&&g.fams)G=g;}}catch(e){}}
+    if(G&&!UI.sel)UI.sel=FAMS[ME().key].hq;
+    render();
+  };
+  try{window.claude?.hot?.snapshot?.(()=>({G}));}catch(e){}
+  window.claude?.hot?.ready?window.claude.hot.ready(boot):boot(window.claude?.hot?.data??{});
+}
+</script>
+
+</body></html>

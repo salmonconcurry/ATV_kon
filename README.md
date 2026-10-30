@@ -28,6 +28,31 @@ Adaptación roguelike del clásico juego de cartas para un solo jugador. Eres un
 * **Temática:** Japón Feudal / Ukiyo-e
 * **Ruta:** `/scoundrel`
 
+### [4] Marea de Innsmouth
+Deckbuilder cooperativo de horror cósmico. Compra Tomos, Aliados, Armas y Hechizos en la Biblioteca, derrota a los Horrores que suben al Muelle y acaba con el jefe antes de perder la Cordura o de que la Perdición llegue a 10.
+* **Temática:** Lovecraft / Años 20
+* **Ruta:** `/Marea_de_Innsmouth`
+
+### [5] Ecos de R'lyeh
+Juego en solitario de cartas: revela cartas del mazo, adquiere o quema lo que encuentres para construir tu Estudio y destierra a los Horrores que cruzan el Umbral. Sobrevive hasta agotar el mazo.
+* **Temática:** Lovecraft / Investigación
+* **Ruta:** `/Ecos_de_Rlyeh`
+
+### [6] Última Vigilia
+Variante de Marea de Innsmouth con defensa del pueblo, jefes con tres fases y una Biblioteca de pilas fijas distinta en cada partida.
+* **Temática:** Lovecraft / Asedio
+* **Ruta:** `/Ultima_Vigilia`
+
+### [7] Ley Seca
+Deckbuilder de control de territorio en el Chicago de 1925. Coloca a tus hombres por los barrios, abre bares clandestinos y vigila el Calor policial mientras compites contra familias rivales durante 10 rondas.
+* **Temática:** Gánsteres / Prohibición
+* **Ruta:** `/Ley_Seca`
+
+### [8] Erebus
+Supervivencia en solitario a bordo de un carguero minero. Explora el plano de la nave, reúne a la tripulación y acaba con la criatura: con el cañón de plasma, por la esclusa o huyendo en la lanzadera.
+* **Temática:** Ciencia ficción / Terror
+* **Ruta:** `/Erebus`
+
 ---
 
 ## 🏗️ Arquitectura y Tecnologías
@@ -49,6 +74,11 @@ ATV_kon/
 ├── AfterTheVirus_Web/      # Módulo: Supervivencia Zombie
 ├── Card_Capture/           # Módulo: Hacking Cyberpunk
 ├── scoundrel/              # Módulo: Roguelike Samurái
+├── Marea_de_Innsmouth/     # Módulo: Deckbuilder Lovecraft
+├── Ecos_de_Rlyeh/          # Módulo: Solitario Lovecraft
+├── Ultima_Vigilia/         # Módulo: Deckbuilder Lovecraft (asedio)
+├── Ley_Seca/               # Módulo: Territorio Gánster
+├── Erebus/                 # Módulo: Supervivencia Sci-fi
 ├── index.html              # HUB: Interfaz del Terminal
 ├── style.css               # HUB: Estilos y animaciones (CRT/Glitch)
 └── main.js                 # HUB: Lógica de la barra de progreso

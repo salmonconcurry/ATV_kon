@@ -69,5 +69,11 @@ body, html {
 /* NUEVO: Estilo Samurái para Scoundrel */
 .samurai-theme { background: #8b0000; color: #e6dfd3; box-shadow: 0 0 10px rgba(139, 0, 0, 0.5); border: 1px solid #111; }
 .samurai-theme:hover { background: #e6dfd3; color: #8b0000; box-shadow: 0 0 20px #8b0000; transform: scale(1.02); }
+.abyss-theme { background: #2f5a4c; color: #e3efe9; box-shadow: 0 0 10px rgba(79, 154, 142, 0.5); }
+.abyss-theme:hover { background: #6fa892; color: #0b1112; box-shadow: 0 0 20px #4f9a8e; transform: scale(1.02); }
+.gangster-theme { background: #c9a24a; color: #100f0d; box-shadow: 0 0 10px rgba(201, 162, 74, 0.5); }
+.gangster-theme:hover { background: #efe6d2; box-shadow: 0 0 20px #c9a24a; transform: scale(1.02); }
+.erebus-theme { background: #07090a; color: #ffb347; border: 1px solid #ffb347; box-shadow: 0 0 10px rgba(255, 179, 71, 0.4); }
+.erebus-theme:hover { background: #ffb347; color: #07090a; box-shadow: 0 0 20px #ffb347; transform: scale(1.02); }
 
 .hidden { display: none !important; }
