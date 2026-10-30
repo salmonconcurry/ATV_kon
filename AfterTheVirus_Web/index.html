@@ -9,7 +9,7 @@
     
     <!-- FUENTE TEMÁTICA -->
     <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
     
   <style>
     :root { 
@@ -130,8 +130,10 @@
 
     .top-bar { display: flex; justify-content: space-between; align-items: center; background-color: #0a0505; padding: 10px; border-bottom: 2px solid #700; position: relative; z-index: 10;}
     .counter { display: flex; align-items: center; gap: 8px; background: #1a0a0a; padding: 8px 12px; border-radius: 4px; border: 1px solid #500; font-size: 14px; font-weight: bold; color: #fff; font-family: 'Courier New', Courier, monospace;}
-    .wound-label { font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; color: #aaa; text-transform: uppercase;}
-    .wound-label input { accent-color: var(--accent-red); width: 16px; height: 16px;}
+    .wound-label { font-size: 11px; display: flex; align-items: center; gap: 4px; color: #aaa; text-transform: uppercase;}
+    .wound-label input { accent-color: var(--accent-red); width: 16px; height: 16px; pointer-events: none;}
+    /* Contador sobre la carta: munición de un arma o zombies que quedan en una carta */
+    .card .badge { position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.85); color: #fff; font-size: 12px; font-weight: bold; padding: 2px 6px; border-radius: 3px; border: 1px solid #a00; pointer-events: none; }
     
     #mission-banner { background: #500000; color: #fff; text-align: center; padding: 8px; font-size: 13px; font-weight: bold; letter-spacing: 1px; border-bottom: 1px solid #222; font-family: sans-serif; position: relative; z-index: 10;}
 
@@ -230,12 +232,12 @@
         <div class="htp-box">
             <h2>📜 REGISTRO DE SUPERVIVENCIA</h2>
             <ul>
-                <li><b>🎯 OBJETIVO:</b> Sobrevive y cumple la condición de la misión actual[cite: 3].</li>
-                <li><b>👆 CONTROLES:</b> Haz Clic/Tap sobre una carta para desplegar sus opciones de combate o uso. ¡El destino de la humanidad está a un tap de distancia!</li>
-                <li><b>🛒 MERCADO (ZONA ÁREA):</b> Pulsa "Explorar Área" para revelar cartas (coste: 1 carta de tu mano por revelación). Haz clic sobre ellas para comprarlas[cite: 3].</li>
-                <li><b>✋ LÍMITE DE MANO:</b> El sistema frena el robo automático a las 5 cartas en mano[cite: 3].</li>
-                <li><b>🔄 CARTAS DE EQUIPO/ANIMALES:</b> Entran a la mesa agotadas. Paga su coste de Preparación desde tu mano para ponerlas en activo[cite: 3].</li>
-                <li><b>⭐ ENTRENAMIENTOS:</b> Son pasivas (ej. "Apuntar"). Prepáralas en mesa y su bonificador estará activo siempre.</li>
+                <li><b>🎯 OBJETIVO:</b> Cumple el objetivo de la misión. Se comprueba al terminar el turno.</li>
+                <li><b>🃏 ROBO:</b> Cada turno robas 5 cartas; los zombies que salgan cuentan entre esas 5 y pasan a la Zona de Infección. Si se acaba el mazo, sube la oleada y se añaden zombies a tus descartes antes de barajar.</li>
+                <li><b>👆 CONTROLES:</b> Toca una carta para ver lo que puedes hacer con ella. También puedes arrastrar cartas de tu mano a la mesa o a los descartes.</li>
+                <li><b>🔍 EXPLORAR Y RECUPERAR:</b> Explorar cuesta 1 carta de tu mano por carta revelada. Recuperar una carta explorada cuesta su coste y la carta entra agotada en tu mesa (los eventos van a descartes).</li>
+                <li><b>🔄 PREPARAR:</b> Paga su coste para ponerla activa. Una carta preparada no vuelve a agotarse. Escopeta, pistola, ametralladora y rifle se preparan con munición: las cartas que pagas quedan debajo del arma.</li>
+                <li><b>🧟 ZOMBIES:</b> No puedes terminar el turno con zombies en juego. Si no puedes eliminarlos, deja que te ataquen: cada zombie causa 1 herida y muere. Con 3 heridas (o una en el cerebro) mueres.</li>
             </ul>
             <button class="btn-start" style="width: 100%; margin-top: 20px;" onclick="document.getElementById('how-to-play-modal').style.display='none'">¡ENTENDIDO!</button>
         </div>
@@ -254,9 +256,9 @@
                     <option value="robert">Robert (Chaleco)</option>
                     <option value="angela">Angela (Rifle)</option>
                     <option value="bill">Bill (Túnel)</option>
-                    <option value="chen">Chen (Sigilo)</option>
+                    <option value="chen">Chen (incompleto: faltan cartas de La Gran Helada)</option>
                     <option value="mac">Mac (Gasolina)</option>
-                    <option value="carrie">Carrie (Armadura)</option>
+                    <option value="carrie">Carrie (incompleto: faltan cartas de La Gran Helada)</option>
                 </select>
             </div>
             <div>
@@ -266,16 +268,16 @@
                     <option value="1B">1B: Multitud Muertos (Obj: 4 Rescatados)</option>
                     <option value="1C">1C: Ponte a Salvo (Obj: 6 Rescatados + Instalación)</option>
                     <option value="2A">2A: Entrenando (Obj: 5 Rescatados)</option>
-                    <option value="2B">2B: Preparando Base (Obj: 5 Rescatados + Defensas)</option>
+                    <option value="2B">2B: Preparando Base (Obj: 5 Rescatados + 3 Trampas, 3 Equipos, 3 Instalaciones)</option>
                     <option value="2C">2C: Asalto (Obj: Llegar a Oleada 6)</option>
-                    <option value="3A">3A: La Ayuda (Empieza Oleada 5)</option>
-                    <option value="3B">3B: Salva a tu Familia (Obj: 4 Personas + Furgoneta)</option>
+                    <option value="3A">3A: La Ayuda (Obj: Llegar a Oleada 8)</option>
+                    <option value="3B">3B: Salva a tu Familia (Obj: 4 Personas, 3 Equipos y Furgoneta)</option>
                     <option value="4A">4A: Explorando (Obj: Mazo Área Vacío)</option>
                     <option value="4B">4B: Rescate (Obj: 10 Rescatados)</option>
-                    <option value="4C">4C: Noche Silenciosa (Sin explosivos/motores)</option>
+                    <option value="4C">4C: Noche Silenciosa (Obj: 5 Rescatados, sin motores ni explosivos)</option>
                     <option value="4D">4D: Limpieza (Matar 100 Zombies)</option>
-                    <option value="5A">5A: Encuentra Profesora (VIP + Hospital en mesa)</option>
-                    <option value="5B">5B: Investiga Cura (Usar 5 médicos)</option>
+                    <option value="5A">5A: Encuentra Profesora (VIP + Hospital como Laboratorio)</option>
+                    <option value="5B">5B: Investiga Cura (Usar 5 equipos médicos sin pasar de Oleada 6)</option>
                     <option value="5C">5C: Probando Cura (Curar 6 Zombies)</option>
                     <option value="5D">5D: Batalla Final (Llegar a Oleada 6)</option>
                 </select>
@@ -290,14 +292,14 @@
         <div class="action-box">
             <h3 id="action-title">Carta</h3>
             <div id="action-buttons"></div>
-            <button class="action-btn cancel" onclick="closeActionMenu()">Abortar Acción</button>
+            <button id="action-cancel" class="action-btn cancel" onclick="closeActionMenu()">Abortar Acción</button>
         </div>
     </div>
 
     <div id="wound-modal">
         <div class="action-box">
             <h3 style="color: #ff3333;">🩸 RECIBIR HERIDA CRÍTICA</h3>
-            <p style="font-size: 14px; color: #ccc; margin-bottom: 15px; font-family: -apple-system, sans-serif;">La infección avanza. Elige el foco del daño. Perderás 1 carta de tu mano al instante[cite: 3].</p>
+            <p style="font-size: 14px; color: #ccc; margin-bottom: 15px; font-family: -apple-system, sans-serif;">El zombie te ataca y muere en la lucha. Elige dónde recibes la herida.</p>
             <button class="action-btn" onclick="confirmWound('pierna')" id="btn-w-pierna">Pierna (Anula cartas ¡Corre!)</button>
             <button class="action-btn" onclick="confirmWound('brazo')" id="btn-w-brazo">Brazo (Límite: Solo 1 Arma en mesa)</button>
             <button class="action-btn execute" onclick="confirmWound('cerebro')">Cerebro (MUERTE INSTANTÁNEA)</button>
@@ -310,17 +312,17 @@
             <h3 id="payment-title">PAGAR COSTE</h3>
             <p id="payment-desc" style="font-size: 14px; color: #ccc; margin-bottom: 10px; font-family: -apple-system, sans-serif;">Selecciona las cartas a descartar como pago.</p>
             <div id="payment-cards"></div>
-            <button id="payment-confirm-btn" class="action-btn prepare" onclick="confirmPayment()">Confirmar Transferencia</button>
-            <button class="action-btn cancel" onclick="document.getElementById('payment-modal').style.display='none'">Atrás</button>
+            <button id="payment-confirm-btn" class="action-btn prepare" onclick="confirmPayment()">Confirmar</button>
+            <button class="action-btn cancel" onclick="cancelPayment()">Atrás</button>
         </div>
     </div>
 
     <div class="top-bar">
         <div class="counter" title="Heridas (Límites y Penalizaciones)">
             ❤️ 
-            <label class="wound-label"><input type="checkbox" id="w-pierna" onclick="toggleWound('pierna')"> Pierna</label>
-            <label class="wound-label"><input type="checkbox" id="w-brazo" onclick="toggleWound('brazo')"> Brazo</label>
-            <label class="wound-label"><input type="checkbox" id="w-cerebro" onclick="toggleWound('cerebro')"> Cerebro</label>
+            <label class="wound-label"><input type="checkbox" id="w-pierna" tabindex="-1"> Pierna</label>
+            <label class="wound-label"><input type="checkbox" id="w-brazo" tabindex="-1"> Brazo</label>
+            <label class="wound-label"><input type="checkbox" id="w-cerebro" tabindex="-1"> Cerebro</label>
         </div>
         <div class="counter" title="Nivel de Amenaza (Oleada)">🌊 <span id="wave-count">1</span></div>
         <div class="counter" title="Vidas Salvadas (Rescatados)">🎯 <span id="rescued-count">0</span></div>
@@ -329,8 +331,7 @@
     <div id="mission-banner">Sincronizando coordenadas de misión...</div>
 
     <div class="deck-controls">
-        <button id="explore-btn" class="btn btn-explore" onclick="openPaymentMenu(null, 'explore')">🔍 Explorar Área (<span id="area-count">0</span>)</button>
-        <button id="shuffle-btn" class="btn btn-shuffle" onclick="shuffleDiscardToDeck(false)">Ciclar Descartes (+Oleada)</button>
+        <button id="explore-btn" class="btn btn-explore" onclick="openExplore()">🔍 Explorar Área (<span id="area-count">0</span>)</button>
         <button id="end-turn-btn" class="btn btn-endturn" onclick="endTurn()">TERMINAR TURNO</button>
     </div>
 
@@ -342,7 +343,7 @@
 
     <div class="bottom-area">
         <div id="deck-visual-container">
-            <div id="deck-visual" class="card deck-back" onclick="drawCards(1, false)" title="Robar 1"></div>
+            <div id="deck-visual" class="card deck-back" title="Mazo de robo"></div>
             <div style="font-size:12px; margin-top:8px; color:#999; font-weight: bold; text-align: center; font-family: -apple-system, sans-serif;">MAZO: <span id="deck-count">0</span></div>
         </div>
         <div class="hand-container">
@@ -365,21 +366,25 @@
     </div>
 
   <script>
-        let wave = 1; let rescued = 0; let currentMission = ""; let lootingActive = false; // Controla si el jugador está usando "Saquear"
+        // ==========================================
+        // ESTADO DE LA PARTIDA
+        // ==========================================
+        let wave = 1; let rescued = 0; let currentMission = ""; let lootingActive = false;
         let deck = []; let zombieReserve = []; let areaDeck = [];
-        let cardToPrepare = null; let cardsSelectedForPayment = [];
-        let paymentMode = ''; 
-        let zombiesKilledGlobal = 0; let medicsUsed = 0; let zombiesCured = 0; 
-        
-        let gameWon = false;
-        let vipRescued = false; let furgonetaUsed = false; let preventWounds = 0;
+        let zombiesKilledGlobal = 0; let medicsUsed = 0; let zombiesCured = 0;
+        let gameWon = false; let gameLost = false;
+        let vipRescued = false; let preventWounds = 0;
         let turnUsedWeapons = new Set();
         let wounds = { pierna: false, brazo: false, cerebro: false };
+        let ammo = {};          // id del arma -> cartas colocadas debajo como munición
+        let payment = null;     // pago en curso: { exact | min, onConfirm, selected }
+        let cardSeq = 0;
+        let sortableReady = false;
 
-        function isGameOver() { return gameWon || wounds.cerebro; }
+        function isGameOver() { return gameWon || gameLost || wounds.cerebro; }
 
         // --- MOTOR DE REGISTRO (LOGGER AVANZADO) ---
-        function toggleTerminal() { 
+        function toggleTerminal() {
             const term = document.getElementById('bunker-terminal');
             term.classList.toggle('open');
             document.getElementById('term-toggle-icon').innerText = term.classList.contains('open') ? '▼' : '▲';
@@ -387,12 +392,12 @@
 
         function logAction(msg, type='info') {
             const term = document.getElementById('terminal-content');
-            const d = new Date(); 
+            const d = new Date();
             const time = d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0') + ':' + d.getSeconds().toString().padStart(2,'0');
-            
+
             let colorCls = type === 'warn' ? 'log-warn' : (type === 'error' ? 'log-error' : '');
             let icon = type === 'warn' ? '[!]' : (type === 'error' ? '[X]' : '[>]');
-            
+
             term.innerHTML += `<div class="log-entry ${colorCls}"><span class="log-time">${time}</span> ${icon} ${msg}</div>`;
             term.scrollTop = term.scrollHeight;
             console.log(`[${type.toUpperCase()}] ${msg}`);
@@ -408,49 +413,49 @@
             "1_antidoto": { t: "ANTÍDOTO", type: "EQUIPO MÉDICO", d: "Destrúyela para prevenir tu siguiente herida en este turno." },
             "1_apuntar": { t: "APUNTAR", type: "ENTRENAMIENTO", d: "Cada vez que uses un arma de fuego, mata 1 zombie adicional." },
             "1_comida": { t: "COMIDA", type: "EQUIPO", d: "Si no hay zombies en juego, colócala en la parte superior o inferior del mazo de área para curar 1 herida." },
-            "1_corre": { t: "¡CORRE!", type: "EVENTO", d: "Descarta 1 carta de zombie atacante." },
-            "1_escopeta": { t: "ESCOPETA", type: "ARMA DE FUEGO", d: "Descarta munición o destruye la escopeta para matar 1 zombie (Máx 2 armas preparadas)." },
+            "1_corre": { t: "¡CORRE!", type: "EVENTO", d: "Descarta 1 carta de zombie." },
+            "1_escopeta": { t: "ESCOPETA", type: "ARMA DE FUEGO", d: "Descarta munición o destruye la escopeta para matar 1 zombie. (Máx. 2 armas preparadas)" },
             "1_habilidad_armas": { t: "HAB. CON LAS ARMAS", type: "ENTRENAMIENTO", d: "Cada vez que prepares un arma, mata 1 zombie." },
             "1_habiliadades_caza": { t: "HAB. DE CAZA", type: "ENTRENAMIENTO", d: "Cada vez que prepares una trampa, mata 1 zombie." },
             "1_kit_medico": { t: "KIT MÉDICO", type: "EQUIPO MÉDICO", d: "Si no hay zombies en juego, destrúyela para curar 2 heridas." },
-            "1_llave_inglesa": { t: "LLAVE INGLESA", type: "ARMA CONTUNDENTE", d: "Mata 1 zombi al prepararla. Descártala para descartar 1 zombi." },
-            "1_machete": { t: "MACHETE", type: "ARMA CONTUNDENTE", d: "Una vez por turno: descarta 1 carta de tu mano para matar 1 zombie." },
-            "1_motocicleta": { t: "MOTOCICLETA", type: "VEHÍCULO", d: "Descarta 1 zombie al prepararla. Descártala para descartar 1 zombie." },
-            "1_superviviente": { t: "SUPERVIVIENTE", type: "PERSONA", d: "Prepáralo y usa un refugio para rescatarlo." },
-            "2_ametralladora": { t: "AMETRALLADORA", type: "ARMA DE FUEGO", d: "Descarta munición para matar 2 zombies. (Máx 2 armas preparadas)." },
+            "1_llave_inglesa": { t: "LLAVE INGLESA", type: "ARMA CONTUNDENTE", d: "Descarta 1 zombie cuando la llave inglesa sea preparada. Descártala para descartar 1 zombie. (Máx. 2 armas preparadas)" },
+            "1_machete": { t: "MACHETE", type: "ARMA CONTUNDENTE", d: "Una vez por turno: descarta 1 carta para matar 1 zombie. (Máx. 2 armas preparadas)" },
+            "1_motocicleta": { t: "MOTOCICLETA", type: "VEHÍCULO", d: "Descarta 1 carta de zombie cuando la motocicleta sea preparada. Descártala para descartar 1 carta de zombie. (Máx. 1 vehículo preparado)" },
+            "1_superviviente": { t: "SUPERVIVIENTE", type: "PERSONA", d: "Prepáralo y juega un Refugio para rescatarlo." },
+            "2_ametralladora": { t: "AMETRALLADORA", type: "ARMA DE FUEGO", d: "Descarta munición para matar 2 zombies. (Máx. 2 armas preparadas)" },
             "2_cargadores": { t: "CARGADORES", type: "MUNICIÓN", d: "Coloca los cargadores como munición en una de tus armas preparadas." },
             "2_chaleco_antibalas": { t: "CHALECO ANTIBALAS", type: "ARMADURA", d: "Destrúyela para prevenir las siguientes 2 heridas que recibas este turno." },
             "2_comisaria": { t: "COMISARÍA", type: "INSTALACIÓN", d: "Cuando juegues un refugio, cura 1 herida." },
             "2_creamatorio": { t: "CREMATORIO", type: "TRAMPA", d: "Descártala para matar 2 zombies." },
-            "2_cura": { t: "CURA", type: "EQUIPO MÉDICO", d: "Destrúyela para convertir 1 carta de 1 zombie a un superviviente preparado." },
+            "2_cura": { t: "CURA", type: "EQUIPO MÉDICO", d: "Destrúyela para convertir 1 carta de 1 zombie en un superviviente preparado. Cuando sea rescatado, la carta vuelve a tu pila de zombies." },
             "2_explorador": { t: "EXPLORADOR", type: "PERSONA", d: "Descártala para explorar 2 cartas." },
             "2_fuego_cruzado": { t: "FUEGO CRUZADO", type: "TRAMPA", d: "Descártala para matar 1 zombie por cada persona preparada que tengas." },
-            "2_furgoneta": { t: "FURGONETA", type: "VEHÍCULO", d: "Descártala para matar 1 carta de zombie y descartar el resto." },
+            "2_furgoneta": { t: "FURGONETA", type: "VEHÍCULO", d: "Descártala para matar 1 carta de zombie y descartar el resto. (Máx. 1 vehículo preparado)" },
             "2_gasolina": { t: "GASOLINA", type: "EQUIPO", d: "Destrúyela para preparar cualquier cantidad de tus trampas, vehículos y armas." },
-            "2_gran_explosion": { t: "GRAN EXPLOSIÓN", type: "TRAMPA", d: "Destrúyela para matar a TODOS los zombies en juego y en la pila de descartes." },
-            "2_granada_explosiva": { t: "GRANADA EXPLOSIVA", type: "ARMA ARROJADIZA", d: "Descártala para descartar 5 zombies atacantes." },
-            "2_guia": { t: "GUÍA", type: "PERSONA", d: "Descártala para eliminar 2 zombies de cualquier pila de descartes." },
-            "2_hospital": { t: "HOSPITAL", type: "INSTALACIÓN", d: "En cualquier momento, tu equipo médico destruido puede ser colocado en la pila de descartes." },
-            "2_motosierra": { t: "MOTOSIERRA", type: "ARMA CONTUNDENTE", d: "Descártala para matar 6 zombies." },
-            "2_pistola": { t: "PISTOLA", type: "ARMA DE FUEGO", d: "Una vez por turno: Descarta munición o la pistola para matar 1 zombie." },
+            "2_gran_explosion": { t: "GRAN EXPLOSIÓN", type: "TRAMPA", d: "Destrúyela para matar a TODOS los zombies en juego y en tu pila de descartes." },
+            "2_granada_explosiva": { t: "GRANADA EXPLOSIVA", type: "ARMA ARROJADIZA", d: "Descártala para descartar 5 zombies. (Máx. 2 armas preparadas)" },
+            "2_guia": { t: "GUÍA", type: "PERSONA", d: "Descártala para eliminar 2 zombies de tu pila de descartes." },
+            "2_hospital": { t: "HOSPITAL", type: "INSTALACIÓN", d: "Tu equipo médico destruido va a la pila de descartes. (Hace de Laboratorio en las misiones 5A, 5B y 5C)" },
+            "2_motosierra": { t: "MOTOSIERRA", type: "ARMA CONTUNDENTE", d: "Descártala para matar 6 zombies. (Máx. 2 armas preparadas)" },
+            "2_pistola": { t: "PISTOLA", type: "ARMA DE FUEGO", d: "Una vez por turno: descarta munición o la pistola para matar 1 zombie. (Máx. 2 armas preparadas)" },
             "2_perro": { t: "PERRO", type: "ANIMAL", d: "Descártala para matar 1 zombie." },
             "2_refugio": { t: "REFUGIO", type: "EVENTO", d: "Rescata 1 o más de tus supervivientes preparados." },
-            "2_rifle": { t: "RIFLE", type: "ARMA DE FUEGO", d: "Una vez por turno: descarta munición para matar 1 zombie en juego o pila de descartes." },
-            "2_saquear": { t: "SAQUEAR", type: "EVENTO", d: "Recupera 1 carta gratis del área." },
-            "2_trampa_perimetral": { t: "TRAMPA PERIMETRAL", type: "TRAMPA", d: "Descártala para matar 6 zombies de cualquier pila de descartes." },
+            "2_rifle": { t: "RIFLE", type: "ARMA DE FUEGO", d: "Puedes añadir cartas de tu mano como munición. Una vez por turno: descarta munición para matar 1 zombie en juego o de la pila de descartes. (Máx. 2 armas preparadas)" },
+            "2_saquear": { t: "SAQUEAR", type: "EVENTO", d: "Recupera 1 carta explorada gratis." },
+            "2_trampa_perimetral": { t: "TRAMPA PERIMETRAL", type: "TRAMPA", d: "Descártala para matar 6 zombies de tu pila de descartes." },
             "2_tunel": { t: "TÚNEL", type: "INSTALACIÓN", d: "Preparar a tus personas es gratis." },
-            "3_lanzallamas": { t: "LANZALLAMAS", type: "ARMA DE FUEGO", d: "Descártala para matar 3 zombies." },
+            "3_lanzallamas": { t: "LANZALLAMAS", type: "ARMA DE FUEGO", d: "Descártala para matar 3 zombies. (Máx. 2 armas preparadas)" },
             "3_vip": { t: "VIP", type: "PERSONA", d: "Cuenta como 3 supervivientes cuando se juega un refugio. Esta carta se destruye tras esto." },
-            "zombie": { t: "ZOMBIE", type: "ENEMIGO", d: "Si no lo matas, te hará daño (Herida: 1 Marca y descarta 1 carta)." },
+            "zombie": { t: "ZOMBIE", type: "ENEMIGO", d: "Si no lo matas o descartas, te atacará: cada zombie de la carta causa 1 herida y muere en la lucha." },
             "adam": { t: "ADAM", type: "PERSONAJE", d: "Empieza con: Machete en juego." },
             "ruth": { t: "RUTH", type: "PERSONAJE", d: "Empieza con: Comisaría en juego." },
             "jennie": { t: "JENNIE", type: "PERSONAJE", d: "Empieza con: Habilidad con las armas en juego." },
             "robert": { t: "ROBERT", type: "PERSONAJE", d: "Empieza con: Chaleco antibalas en juego." },
             "angela": { t: "ANGELA", type: "PERSONAJE", d: "Empieza con: Rifle en juego." },
             "bill": { t: "BILL", type: "PERSONAJE", d: "Empieza con: Túnel en juego." },
-            "chen": { t: "CHEN ❄️", type: "PERSONAJE", d: "Empieza con: Sigilo en juego." },
+            "chen": { t: "CHEN ❄️", type: "PERSONAJE", d: "Empieza con: Sigilo en juego (carta de La Gran Helada, no incluida)." },
             "mac": { t: "MAC", type: "PERSONAJE", d: "Empieza con: Gasolina en juego." },
-            "carrie": { t: "CARRIE ❄️", type: "PERSONAJE", d: "Empieza con: Remendar armadura en juego." }
+            "carrie": { t: "CARRIE ❄️", type: "PERSONAJE", d: "Empieza con: Remendar armadura en juego (carta de La Gran Helada, no incluida)." }
         };
 
         const characters = {
@@ -466,41 +471,59 @@
         };
 
         const baseAreaCards = [
-            "1_antidoto", "1_antidoto", "1_comida", "1_comida", "1_escopeta", 
-            "1_habilidad_armas", "1_habiliadades_caza", "1_kit_medico", "1_kit_medico", 
-            "1_llave_inglesa", "1_machete", "1_motocicleta", "1_apuntar", 
+            "1_antidoto", "1_antidoto", "1_comida", "1_comida", "1_escopeta",
+            "1_habilidad_armas", "1_habiliadades_caza", "1_kit_medico", "1_kit_medico",
+            "1_llave_inglesa", "1_machete", "1_motocicleta", "1_apuntar",
             "1_superviviente", "1_superviviente", "1_corre", "1_corre",
-            "2_ametralladora", "2_chaleco_antibalas", "2_furgoneta", "2_gasolina", 
-            "2_granada_explosiva", "2_hospital", "2_motosierra", "2_pistola", 
-            "2_rifle", "2_trampa_perimetral", "2_cura", "2_cura", "2_explorador", 
-            "2_cargadores", "2_creamatorio", "2_fuego_cruzado", "2_guia", 
+            "2_ametralladora", "2_chaleco_antibalas", "2_furgoneta", "2_gasolina",
+            "2_granada_explosiva", "2_hospital", "2_motosierra", "2_pistola",
+            "2_rifle", "2_trampa_perimetral", "2_cura", "2_cura", "2_explorador",
+            "2_cargadores", "2_creamatorio", "2_fuego_cruzado", "2_guia",
             "2_saquear", "2_saquear", "2_refugio", "2_refugio", "2_perro", "2_perro",
             "3_lanzallamas", "3_vip"
         ];
-        
+
+        // La pila de zombies: el final del array es la parte superior (cartas de 1 zombie)
         const strictZombieStack = ["4_zombies_2", "4_zombies_1", "3_zombies_3", "3_zombies_2", "3_zombies_1", "2_zombies_4", "2_zombies_3", "2_zombies_2", "2_zombies_1", "1_zombie_5", "1_zombie_4", "1_zombie_3", "1_zombie_2", "1_zombie_1"];
 
+        const AMMO_WEAPONS = ['1_escopeta', '2_ametralladora', '2_pistola', '2_rifle'];   // se preparan con munición (coste "//")
+        const HAND_ONLY = ['1_corre', '2_refugio', '2_saquear', '2_cargadores'];          // no se bajan a la mesa
+        const MEDICAL = ['1_antidoto', '1_kit_medico', '2_cura'];
+        const SILENT_NIGHT_BANNED = ['motocicleta', 'furgoneta', 'pistola', 'rifle', 'motosierra', 'granada_explosiva', 'escopeta', 'ametralladora', 'gran_explosion'];
+
+        // ==========================================
+        // UTILIDADES
+        // ==========================================
+        const $ = id => document.getElementById(id);
+        const baseOf = name => name.replace(/_\d+$/, '');
+        const infoOf = name => cardDictionary[baseOf(name)] || { t: name.toUpperCase(), type: 'CARTA', d: '' };
+        const typeOf = el => el.dataset.kind === 'zombie' ? 'ZOMBIE' : (infoOf(el.dataset.name).type || '');
+        const titleOf = el => infoOf(el.dataset.name).t;
+        const costOf = name => { const m = name.match(/^(\d+)_/); return m ? parseInt(m[1]) : 0; };
+        const zoneCards = id => Array.from($(id).children);
+        const handCards = () => zoneCards('hand-zone');
+        const tableCards = () => zoneCards('table-zone').filter(c => c.dataset.kind !== 'personaje');
+        const preparedCards = () => tableCards().filter(c => !c.classList.contains('exhausted'));
+        const hasPrepared = key => preparedCards().some(c => c.dataset.name.includes(key));
+        const isWeapon = el => typeOf(el).includes('ARMA');
+        const isVehicle = el => typeOf(el) === 'VEHÍCULO';
+        const isFirearm = el => typeOf(el) === 'ARMA DE FUEGO';
+        const hasWound = () => wounds.pierna || wounds.brazo;
+        const kindFromName = name => name.includes('zombie') ? 'zombie' : (name.includes('superviviente') ? 'superviviente' : 'basic');
+        const newCard = (name, kind) => ({ id: `card-${++cardSeq}`, name, kind: kind || kindFromName(name) });
+        const cardDataOf = el => ({ id: el.id, name: el.dataset.name, kind: el.dataset.kind, curedFrom: el.dataset.curedFrom });
+
         function triggerActionEffect(card, color) {
-            if(!card) return;
+            if(!card || !card.isConnected) return;
             const rect = card.getBoundingClientRect();
             createParticles(rect.left + rect.width/2, rect.top + rect.height/2, color);
         }
-        
-        function discardOrDestroyMed(card, name) {
-            const table = Array.from(document.getElementById('table-zone').children).filter(c => !c.classList.contains('exhausted'));
-            if (table.some(c => c.dataset.name.includes('hospital'))) {
-                logAction(`Hospital activo: Equipo médico [${name}] desviado a descartes en lugar de ser destruido.`, 'info');
-                moveCardToZone(card, 'discard-zone', false);
-            } else {
-                card.remove(); 
-            }
-        }
-        
+
         function createParticles(x, y, color) {
-            let amount = (color === '#8a0303' || color === '#ff453a') ? 35 : 15; 
+            let amount = (color === '#8a0303' || color === '#ff453a') ? 35 : 15;
             for(let i=0; i<amount; i++) {
                 let p = document.createElement('div'); p.className = 'particle'; p.style.color = color; p.style.backgroundColor = color;
-                p.style.width = (Math.random() * 8 + 3) + 'px'; 
+                p.style.width = (Math.random() * 8 + 3) + 'px';
                 p.style.height = p.style.width;
                 p.style.left = (x - 5) + 'px'; p.style.top = (y - 5) + 'px';
                 p.style.setProperty('--tx', (Math.random() * 200 - 100) + 'px');
@@ -516,737 +539,903 @@
             banner.style.backgroundColor = bgColor; banner.innerText = text; document.body.appendChild(banner);
             setTimeout(() => banner.remove(), 2500);
         }
-        
+
         function triggerBloodFlash() {
             let flash = document.createElement('div'); flash.className = 'blood-flash';
             document.body.appendChild(flash); setTimeout(() => flash.remove(), 500);
         }
 
-        function toggleWound(part) {
-            if (isGameOver()) { document.getElementById('w-' + part).checked = wounds[part]; return; }
-            wounds[part] = document.getElementById('w-' + part).checked;
-            logAction(`Estado de salud actualizado: Zona [${part}] marcada como herida.`, 'warn');
-            if (part === 'brazo' && wounds.brazo) {
-                let tableWeapons = Array.from(document.getElementById('table-zone').children).filter(c => !c.classList.contains('exhausted') && cardDictionary[c.dataset.name.replace(/_\d+$/, '')]?.type.includes('ARMA'));
-                if (tableWeapons.length > 1) {
-                    logAndAlert('Límite de armas excedido por herida en el brazo. Destruyendo exceso.', '¡LÍMITE EXCEDIDO! Al herirte el brazo, tu límite de armas baja a 1. Pierdes un arma.');
-                    tableWeapons[0].remove();
-                }
-            }
+        function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
+
+        // ==========================================
+        // HERIDAS
+        // ==========================================
+        function setWound(part, value) {
+            wounds[part] = value;
+            $('w-' + part).checked = value;
+            if (value) logAction(`Herida en ${part}.`, 'error');
+            else logAction(`Herida en ${part} curada.`, 'info');
+            if (part === 'brazo' && value) enforceLimits();
             checkDeath();
             updateCounters();
         }
 
-        function healDamage(amount) {
-            for(let i=0; i<amount; i++) {
-                if(wounds.cerebro) { wounds.cerebro = false; document.getElementById('w-cerebro').checked = false; logAction('Herida en Cerebro curada.', 'info');}
-                else if(wounds.brazo) { wounds.brazo = false; document.getElementById('w-brazo').checked = false; logAction('Herida en Brazo curada.', 'info');}
-                else if(wounds.pierna) { wounds.pierna = false; document.getElementById('w-pierna').checked = false; logAction('Herida en Pierna curada.', 'info');}
+        function heal(amount) {
+            for (let i = 0; i < amount; i++) {
+                if (wounds.pierna && wounds.brazo) setWound(confirm("¿Qué herida curas?\n\n[ACEPTAR] Pierna\n[CANCELAR] Brazo") ? 'pierna' : 'brazo', false);
+                else if (wounds.pierna) setWound('pierna', false);
+                else if (wounds.brazo) setWound('brazo', false);
             }
         }
 
         function checkDeath() {
             if(wounds.cerebro && !gameWon) {
-                setTimeout(() => { 
+                setTimeout(() => {
                     triggerBloodFlash(); triggerShake();
-                    showScreenBanner("💀 HAS MUERTO", "rgba(100, 0, 0, 0.95)"); 
+                    showScreenBanner("💀 HAS MUERTO", "rgba(100, 0, 0, 0.95)");
                     logAndAlert('Infección letal alcanzada (Cerebro). Fin de partida.', 'El virus ha alcanzado el cerebro. Fin de la partida.', 'error');
                     desactivarBotones();
                 }, 100);
             }
         }
 
+        function loseMission(msg) {
+            gameLost = true;
+            showScreenBanner("❌ MISIÓN FALLIDA", "rgba(100, 0, 0, 0.95)");
+            logAndAlert(msg, msg, 'error');
+            desactivarBotones();
+        }
+
+        // Ataque zombie (acción G): un zombie de la carta te hiere y muere en la lucha
+        function zombieAttack(z) {
+            closeActionMenu();
+            if (preventWounds > 0) {
+                preventWounds--;
+                logAndAlert(`Herida prevenida. Prevenciones restantes este turno: ${preventWounds}.`, "🛡️ ¡Herida EVITADA por tu equipamiento defensivo!\n\nPrevenciones restantes este turno: " + preventWounds, 'info');
+                hitZombie(z, 'kill');
+                updateCounters();
+                return;
+            }
+            window.zombieToWound = z;
+            $('btn-w-pierna').disabled = wounds.pierna;
+            $('btn-w-brazo').disabled = wounds.brazo;
+            $('wound-modal').style.display = 'flex';
+        }
+
+        function confirmWound(part) {
+            $('wound-modal').style.display = 'none';
+            triggerShake(); triggerBloodFlash();
+            showScreenBanner("¡IMPACTO CRÍTICO!", "rgba(180, 0, 0, 0.9)");
+            const z = window.zombieToWound;
+            if (z && z.isConnected) hitZombie(z, 'kill');
+            setWound(part, true);
+        }
+
+        // ==========================================
+        // ZOMBIES: cada carta lleva la cuenta de sus zombies muertos y descartados
+        // ==========================================
+        const zSize = el => parseInt(el.dataset.name.charAt(0));
+        const zLeft = el => zSize(el) - (+el.dataset.killed || 0) - (+el.dataset.gone || 0);
+        const zombiesInPlay = () => zoneCards('zombie-zone');
+        const zombiesInDiscard = () => zoneCards('discard-zone').filter(c => c.dataset.kind === 'zombie');
+        const zombiesLeft = (pool = zombiesInPlay) => pool().reduce((s, z) => s + zLeft(z), 0);
+        const zombieLabel = z => zLeft(z) < zSize(z) ? `Carta de ${zSize(z)} zombies (quedan ${zLeft(z)})` : `Carta de ${zSize(z)} zombie${zSize(z) > 1 ? 's' : ''}`;
+
+        function sortReserve() { zombieReserve.sort((a, b) => parseInt(b.charAt(0)) - parseInt(a.charAt(0))); }
+        function resetZombie(el) { el.dataset.killed = 0; el.dataset.gone = 0; refreshBadge(el); }
+
+        // mode: 'kill' (matar, cuenta para la 4D), 'eliminate' (como matar, pero no cuenta) o 'discard'
+        function hitZombie(el, mode) {
+            if (mode === 'discard') el.dataset.gone = (+el.dataset.gone || 0) + 1;
+            else el.dataset.killed = (+el.dataset.killed || 0) + 1;
+            if (mode === 'kill') zombiesKilledGlobal++;
+            triggerActionEffect(el, mode === 'discard' ? '#888888' : '#ff0000');
+            if (zLeft(el) <= 0) settleZombie(el); else refreshBadge(el);
+        }
+
+        // Todos muertos: vuelve a la pila de zombies. Alguno descartado: va a la pila de descartes.
+        function settleZombie(el) {
+            if (+el.dataset.gone > 0) {
+                if (el.parentElement.id !== 'discard-zone') $('discard-zone').appendChild(el);
+                resetZombie(el);
+                logAction(`Carta de zombie [${el.dataset.name}] a descartes.`);
+            } else {
+                zombieReserve.push(el.dataset.name); sortReserve(); el.remove();
+                logAction(`Carta de zombie [${el.dataset.name}] vuelve a la pila de zombies.`);
+            }
+            updateCounters();
+        }
+
+        function discardZombieCard(el) { el.dataset.gone = (+el.dataset.gone || 0) + zLeft(el); settleZombie(el); }
+        function killZombieCard(el, mode = 'kill') { const n = zLeft(el); for (let i = 0; i < n; i++) hitZombie(el, mode); }
+
+        // Reparte n impactos, terminando primero las cartas a las que les quedan menos zombies
+        function hitZombies(n, mode, pool = zombiesInPlay) {
+            let done = 0;
+            while (done < n) {
+                const zs = pool().filter(z => zLeft(z) > 0).sort((a, b) => zLeft(a) - zLeft(b));
+                if (!zs.length) break;
+                hitZombie(zs[0], mode); done++;
+            }
+            updateCounters();
+            return done;
+        }
+
+        // Ataque con un arma: Apuntar añade 1 zombie muerto a cada uso de un arma de fuego
+        function attack(card, n, pool = zombiesInPlay) {
+            if (isFirearm(card) && hasPrepared('apuntar')) n++;
+            const done = hitZombies(n, 'kill', pool);
+            logAction(`[${titleOf(card)}] mata ${done} zombie(s).`);
+        }
+
+        function pickZombieCard(title, list, onPick, cancellable = false) {
+            if (list.length === 1) { closeActionMenu(); onPick(list[0]); return; }
+            chooseFrom(title, list, zombieLabel, onPick, cancellable);
+        }
+
+        // ==========================================
+        // CARTAS EN PANTALLA
+        // ==========================================
         function getImagePath(name) {
             if(name.includes('zombie')) return `zombies/${name}.png`;
             if(["adam","ruth","chen","angela","bill","carrie","jennie","mac","robert"].includes(name)) return `personajes/${name}.png`;
-            return `basicas/${name}.png`; 
-        }
-
-        function startGame() {
-            document.getElementById('setup-screen').style.display = 'none';
-            currentMission = document.getElementById('mission-select').value;
-            let charConfig = characters[document.getElementById('char-select').value];
-            
-            zombieReserve = [...strictZombieStack];
-            let missionArea = [...baseAreaCards];
-            if (currentMission === "2B" || currentMission === "4A" || currentMission === "4D") {
-                missionArea.push("1_zombie_1", "1_zombie_2", "2_zombies_1"); 
-            }
-            areaDeck = missionArea.map((name, i) => ({ id: `card-a-${Date.now()}-${i}`, name: name, type: name.includes('zombie') ? 'zombie' : 'basic' }));
-            deck = charConfig.deck.map((name, i) => ({ id: `card-d-${Date.now()}-${i}`, name: name, type: name.includes('superviviente') ? 'superviviente' : 'basic' }));
-            
-            wave = 1; rescued = 0; zombiesKilledGlobal = 0; medicsUsed = 0; zombiesCured = 0; gameWon = false;
-            vipRescued = false; furgonetaUsed = false; preventWounds = 0; turnUsedWeapons.clear();
-            wounds = { pierna: false, brazo: false, cerebro: false };
-            document.getElementById('w-pierna').checked = false; document.getElementById('w-brazo').checked = false; document.getElementById('w-cerebro').checked = false;
-            document.getElementById('table-zone').innerHTML = ''; document.getElementById('zombie-zone').innerHTML = ''; document.getElementById('hand-zone').innerHTML = ''; document.getElementById('discard-zone').innerHTML = ''; document.getElementById('explored-zone').innerHTML = '';
-
-            let startZombies = 1; 
-            if (currentMission === "1B") startZombies = 5;
-            if (currentMission === "3A") { wave = 5; }
-            if (currentMission === "4B") { wave = 2; }
-            if (currentMission === "4D") { wave = 3; }
-            if (currentMission === "4C") { startZombies++; }
-            if (currentMission === "3B" || currentMission.startsWith("5")) { wave = 2; }
-            
-            if (currentMission === "3B") { document.getElementById('explored-zone').appendChild(createCardElement({ id: `card-furgoneta`, name: "2_furgoneta", type: 'basic' })); }
-            if (currentMission === "5D") { deck.forEach(c => { if(c.type === 'superviviente') c.type = 'zombie'; }); }
-
-            for(let i=0; i<startZombies; i++) { if(zombieReserve.length > 0) deck.push({ id: `card-z-${Date.now()}-${i}`, name: zombieReserve.pop(), type: 'zombie' }); }
-
-            document.getElementById('table-zone').appendChild(createCardElement({ id: `card-char-${Date.now()}`, name: charConfig.inPlay, type: 'personaje' }));
-            if(charConfig.inPlayExtra) {
-                let el = createCardElement({ id: `card-init-${Date.now()}`, name: charConfig.inPlayExtra, type: 'basic' });
-                el.classList.add('exhausted'); document.getElementById('table-zone').appendChild(el);
-            }
-            
-            shuffleArray(deck); shuffleArray(areaDeck);
-            updateCounters(); initSortableZones(); drawCards(5, true);
-            
-            logAction(`Sistema iniciado. Misión: ${currentMission}. Personaje: ${charConfig.inPlay.toUpperCase()}`);
-        }
-
-        function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
-
-        function desactivarBotones() {
-            document.getElementById('explore-btn').disabled = true;
-            document.getElementById('shuffle-btn').disabled = true;
-            document.getElementById('end-turn-btn').disabled = true;
-        }
-
-        function endTurn() {
-            if(isGameOver()) return;
-
-            const zZone = document.getElementById('zombie-zone');
-            
-            if(zZone.children.length > 0) {
-                logAndAlert('Bloqueo de Cambio de Turno: Zona de Infección no está despejada.', "⚠️ ¡Infección inminente! Aún tienes zombies en tu zona de ataque.\n\nHaz clic en cada zombie y selecciona '🩸 Recibir Herida' para sufrir daño, descartar carta y matar al zombie antes de avanzar.", 'error');
-                return;
-            }
-
-            const hZone = document.getElementById('hand-zone');
-            const dZone = document.getElementById('discard-zone');
-            
-            preventWounds = 0; turnUsedWeapons.clear();
-            logAction(`Cambio de Turno ejecutado correctamente. Prevenciones y uso de armas reiniciados.`);
-
-            while(hZone.firstElementChild) { 
-                hZone.firstElementChild.classList.remove('exhausted'); 
-                dZone.appendChild(hZone.firstElementChild); 
-            }
-            
-            showScreenBanner("CAMBIO DE TURNO", "rgba(30, 30, 30, 0.9)");
-            setTimeout(() => drawCards(5, true), 800);
-        }
-
-        function drawCards(num, isSystemAction) {
-            if(isGameOver()) return;
-
-            const handZone = document.getElementById('hand-zone');
-            const zZone = document.getElementById('zombie-zone');
-            let safetyCounter = 0; let cardsDrawn = 0;
-            
-            while(handZone.children.length < 5 && safetyCounter < 50 && num > 0) {
-                safetyCounter++;
-                if(deck.length === 0) { shuffleDiscardToDeck(true); if(deck.length === 0) break; }
-                
-                let cardData = deck.pop();
-                let cardEl = createCardElement(cardData); cardEl.classList.add('anim-draw');
-                
-                if(cardData.type === 'zombie') { zZone.appendChild(cardEl); logAction(`Zombie robado y movido a Zona de Infección: ${cardData.name}`, 'warn'); } 
-                else { handZone.appendChild(cardEl); num--; cardsDrawn++; }
-            }
-            if(cardsDrawn > 0) logAction(`${cardsDrawn} carta(s) añadidas a tu mano.`);
-            updateCounters();
-        }
-
-        function checkMissionObjectives() {
-            if (gameWon) return; 
-            let win = false; 
-            const tableCards = Array.from(document.getElementById('table-zone').children);
-            const preparedCardsCount = tableCards.filter(c => !c.classList.contains('exhausted') && !c.id.includes('card-char')).length;
-            
-            switch(currentMission) {
-                case "1A": if(preparedCardsCount >= 6) win = true; break;
-                case "1B": if(rescued >= 4) win = true; break;
-                case "1C": if(rescued >= 6 && tableCards.some(c => cardDictionary[c.dataset.name.replace(/_\d+$/, '')]?.type === 'INSTALACIÓN' && !c.classList.contains('exhausted'))) win = true; break;
-                case "2A": if(rescued >= 5) win = true; break;
-                case "2B": if(rescued >= 5 && tableCards.some(c => c.dataset.name.includes('trampa'))) win = true; break;
-                case "2C": if(wave >= 6) win = true; break;
-                case "3A": if(wave >= 6) win = true; break;
-                case "3B": if(rescued >= 4 && furgonetaUsed) win = true; break;
-                case "4A": if(areaDeck.length === 0) win = true; break;
-                case "4B": if(rescued >= 10) win = true; break;
-                case "4C": if(wave >= 6) win = true; break;
-                case "4D": if(zombiesKilledGlobal >= 100) win = true; break;
-                case "5A": if(vipRescued && tableCards.some(c => c.dataset.name.includes('hospital') && !c.classList.contains('exhausted'))) win = true; break;
-                case "5B": if(medicsUsed >= 5 && wave <= 6) win = true; break;
-                case "5C": if(zombiesCured >= 6) win = true; break;
-                case "5D": if(wave >= 6) win = true; break;
-            }
-            if(win) { 
-                gameWon = true; 
-                logAction('¡OBJETIVOS DE LA MISIÓN CUMPLIDOS!', 'info');
-                showScreenBanner("🏆 ¡SUPERVIVIENTE!", "rgba(10, 80, 10, 0.9)"); 
-                setTimeout(() => alert("🎉 ¡OBJETIVO CUMPLIDO! La partida ha finalizado con éxito. Recarga la página para continuar la pesadilla."), 500);
-                desactivarBotones();
-            }
-        }
-
-        function initSortableZones() {
-            const commonOpts = { animation: 200, delay: 150, delayOnTouchOnly: true, touchStartThreshold: 3, ghostClass: 'sortable-ghost',
-                onEnd: function (evt) {
-                    if (isGameOver()) return; 
-                    evt.item.style.transform = ''; 
-                    if (evt.to.id === 'table-zone' && evt.from.id !== 'table-zone') {
-                        evt.item.classList.add('exhausted');
-                        logAction(`Carta bajada a Búnker: [${evt.item.dataset.name}] (Entra agotada).`);
-                    }
-                    if (evt.to.id !== 'table-zone') evt.item.classList.remove('exhausted');
-                    updateCounters();
-                }
-            };
-            new Sortable(document.getElementById('hand-zone'), { ...commonOpts, group: { name: 'shared', put: (to) => to.el.children.length < 5 } });
-            new Sortable(document.getElementById('table-zone'), { ...commonOpts, group: { name: 'shared', put: (to, from, el) => {
-                const n = el.dataset.name; const isEvent = n.includes('corre') || n.includes('refugio') || n.includes('saquear'); return !n.includes('zombie') && !isEvent;
-            } } });
-            new Sortable(document.getElementById('zombie-zone'), { ...commonOpts, group: { name: 'shared', put: (to, from, el) => el.dataset.name.includes('zombie') || el.dataset.name.includes('superviviente') } });
-            new Sortable(document.getElementById('discard-zone'), { ...commonOpts, group: { name: 'shared', put: true } });
-            new Sortable(document.getElementById('explored-zone'), { ...commonOpts, group: { name: 'shared', put: false, pull: false } });
-        }
-
-        function exploreCard() {
-            if (isGameOver()) return;
-            if(areaDeck.length === 0) { 
-                logAndAlert('Fallo de exploración: Mazo de Área agotado.', "El Sector de Área está agotado (Mazo Vacío).", 'warn'); 
-                return; 
-            }
-            let cardData = areaDeck.pop();
-            let cardEl = createCardElement(cardData); cardEl.classList.add('anim-draw');
-            
-            if(cardData.type === 'zombie') {
-                document.getElementById('zombie-zone').appendChild(cardEl); 
-                logAction(`¡Trampa/Peligro en exploración! Zombie [${cardData.name}] directo a zona de infección.`, 'warn');
-                exploreCard(); 
-            } else { 
-                document.getElementById('explored-zone').appendChild(cardEl); 
-                logAction(`Área explorada: Objeto [${cardData.name}] disponible en Mercado.`);
-            }
-            updateCounters();
-        }
-
-        function shuffleDiscardToDeck(isAuto = false) {
-            if (!isAuto && isGameOver()) return;
-
-            wave++;
-            logAction(`==== NIVEL DE AMENAZA AUMENTADO: OLEADA ${wave} ====`, 'warn');
-            
-            const discardZone = document.getElementById('discard-zone');
-            
-            if (currentMission === "2C" && wave === 5) {
-                while(zombieReserve.length > 0) { discardZone.appendChild(createCardElement({id:`card-z-${Date.now()}-${zombieReserve.length}`, name: zombieReserve.pop(), type: 'zombie'})); }
-            }
-
-            if (zombieReserve.length < wave) {
-                let nonZ = Array.from(discardZone.children).filter(c => !c.dataset.name.includes('zombie'));
-                let dest = 0;
-                while(dest < 2 && nonZ.length > 0) { nonZ.pop().remove(); dest++; }
-                if(dest > 0) logAndAlert(`Penalización de Infección aplicada: Destruidas ${dest} cartas.`, `¡PENALIZACIÓN DE INFECCIÓN!\nNo hay zombies suficientes en reserva. Destruidas ${dest} carta(s) de tus descartes.`);
-                while(zombieReserve.length > 0) { deck.push({ id: `card-z-${Date.now()}-${zombieReserve.length}`, name: zombieReserve.pop(), type: 'zombie' }); }
-            } else {
-                for(let i=0; i<wave; i++){ deck.push({ id: `card-z-${Date.now()}-${i}`, name: zombieReserve.pop(), type: 'zombie' }); }
-            }
-
-            Array.from(discardZone.children).forEach(el => {
-                let type = el.dataset.name.includes('zombie') ? 'zombie' : (el.dataset.name.includes('superviviente') ? 'superviviente' : 'basic');
-                deck.push({ id: el.id, name: el.dataset.name, type: type });
-            });
-            discardZone.innerHTML = '';
-            
-            shuffleArray(deck); 
-            if(isAuto && deck.length > 0) { showScreenBanner(`¡OLEADA ${wave}!`, "rgba(150, 0, 0, 0.95)"); triggerBloodFlash(); }
-            updateCounters();
+            return `basicas/${name}.png`;
         }
 
         function applyCardImage(div, cardName) {
             let imgPath = getImagePath(cardName);
             div.style.backgroundImage = `url('${imgPath}')`;
-            div.classList.remove('no-image'); div.innerHTML = ''; 
-
-            let imgTest = new Image(); imgTest.onload = function() {};
+            let imgTest = new Image();
             imgTest.onerror = function() {
-                div.classList.add('no-image'); let cleanName = cardName.replace(/^\d+_/, '').replace(/_/g, ' ').toUpperCase();
-                div.innerHTML = `<span class="fallback-text">${cleanName}</span>`;
+                div.classList.add('no-image');
+                let span = document.createElement('span'); span.className = 'fallback-text';
+                span.textContent = cardName.replace(/^\d+_/, '').replace(/_/g, ' ').toUpperCase();
+                div.prepend(span);
             };
             imgTest.src = imgPath;
         }
 
         function createCardElement(cardData) {
-            let div = document.createElement('div'); div.className = `card ${cardData.type === 'zombie' ? 'zombie' : ''}`;
-            div.id = cardData.id; div.dataset.name = cardData.name;
+            let div = document.createElement('div'); div.className = `card ${cardData.kind === 'zombie' ? 'zombie' : ''}`;
+            div.id = cardData.id; div.dataset.name = cardData.name; div.dataset.kind = cardData.kind;
+            if (cardData.curedFrom) div.dataset.curedFrom = cardData.curedFrom;
             applyCardImage(div, cardData.name);
-            
+            if (cardData.kind === 'zombie') resetZombie(div);
+
             div.addEventListener('click', () => openActionMenu(div));
-            div.addEventListener('mouseenter', () => showInfo(cardData.name));
+            div.addEventListener('mouseenter', () => showInfo(div));
             div.addEventListener('mouseleave', hideInfo);
-            div.addEventListener('touchstart', () => showInfo(cardData.name), {passive: true});
+            div.addEventListener('touchstart', () => showInfo(div), {passive: true});
             div.addEventListener('touchend', hideInfo);
             return div;
         }
 
-        function showInfo(cardName) {
-            let base = cardName.replace(/_\d+$/, ''); if(cardName.includes('zombie')) base = 'zombie'; 
-            let info = cardDictionary[base] || { t: cardName.toUpperCase(), type: "CARTA", d: "Sin descripción." };
-            document.getElementById('info-title').innerHTML = `${info.t} <span>${info.type}</span>`;
-            document.getElementById('info-desc').innerText = info.d; document.getElementById('info-panel').style.display = 'block';
-        }
-        function hideInfo() { document.getElementById('info-panel').style.display = 'none'; }
-
-        function openPaymentMenu(targetCardEl, mode) {
-            if (isGameOver()) return;
-
-            closeActionMenu(); cardToPrepare = targetCardEl; paymentMode = mode; cardsSelectedForPayment = [];
-            let requiredCost = 0;
-            
-            if (targetCardEl) {
-                let match = targetCardEl.dataset.name.match(/^(\d+)_/); requiredCost = match ? parseInt(match[1]) : 0;
-                let base = targetCardEl.dataset.name.replace(/_\d+$/, ''); let info = cardDictionary[base] || {};
-                
-                if (mode === 'prepare' && info.type === 'PERSONA') {
-                    if(Array.from(document.getElementById('table-zone').children).some(c => c.dataset.name.includes('tunel') && !c.classList.contains('exhausted'))) requiredCost = 0;
-                }
-                
-                let tableWps = Array.from(document.getElementById('table-zone').children).filter(c => !c.classList.contains('exhausted') && cardDictionary[c.dataset.name.replace(/_\d+$/, '')]?.type.includes('ARMA'));
-                let tableVehs = Array.from(document.getElementById('table-zone').children).filter(c => !c.classList.contains('exhausted') && cardDictionary[c.dataset.name.replace(/_\d+$/, '')]?.type === 'VEHÍCULO');
-                
-                if (mode === 'prepare') {
-                    if (info.type === 'VEHÍCULO' && tableVehs.length >= 1) { 
-                        logAndAlert('Preparación bloqueada: Límite de Vehículos alcanzado.', "⚠️ LÍMITE ALCANZADO: Solo puedes tener 1 vehículo preparado. Agota o destruye el actual[cite: 3]."); 
-                        return; 
-                    }
-                    let maxW = wounds.brazo ? 1 : 2;
-                    if (info.type.includes('ARMA') && tableWps.length >= maxW) { 
-                        logAndAlert(`Preparación bloqueada: Límite de Armas (${maxW}) alcanzado.`, `⚠️ LÍMITE ALCANZADO: Tu capacidad es ${maxW} armas. Debes destruir una para preparar otra[cite: 3].`); 
-                        return; 
-                    }
-                }
-            }
-
-            window.currentRequiredCost = requiredCost;
-            const handCards = Array.from(document.getElementById('hand-zone').children);
-            const paymentContainer = document.getElementById('payment-cards'); paymentContainer.innerHTML = '';
-            
-            if (mode === 'prepare') { document.getElementById('payment-title').innerText = `PAGAR COSTE DE PREPARACIÓN`; document.getElementById('payment-desc').innerText = `Selecciona exactamente ${requiredCost} carta(s).`; } 
-            else if (mode === 'buy') { document.getElementById('payment-title').innerText = `COMPRAR CARTA DE ÁREA`; document.getElementById('payment-desc').innerText = `Selecciona exactamente ${requiredCost} carta(s).`; } 
-            else if (mode === 'explore') { document.getElementById('payment-title').innerText = "EXPLORAR EL ÁREA"; document.getElementById('payment-desc').innerText = "Selecciona las cartas que vas a usar (1 por exploración)."; }
-
-            if(handCards.length === 0) { paymentContainer.innerHTML = `<p style='color:#f39c12; font-size:12px; font-family:sans-serif;'>Tu mano está vacía. Solo es válido si el coste requerido es 0.</p>`; } 
-            else {
-                handCards.forEach(c => {
-                    let wrapper = document.createElement('div'); wrapper.className = "payment-card-wrap";
-                    let clone = c.cloneNode(true); clone.removeAttribute('id'); clone.style.pointerEvents = "none"; wrapper.appendChild(clone);
-                    wrapper.onclick = function() {
-                        if(wrapper.classList.contains('selected')) { wrapper.classList.remove('selected'); cardsSelectedForPayment = cardsSelectedForPayment.filter(id => id !== c.id); } 
-                        else { wrapper.classList.add('selected'); cardsSelectedForPayment.push(c.id); }
-                    };
-                    paymentContainer.appendChild(wrapper);
-                });
-            }
-            document.getElementById('payment-modal').style.display = 'flex';
+        // Contador sobre la carta: munición de un arma o zombies que quedan en una carta
+        function refreshBadge(el) {
+            let text = '';
+            if (el.dataset.kind === 'zombie') { if (zLeft(el) < zSize(el)) text = `${zLeft(el)}/${zSize(el)}`; }
+            else if (ammo[el.id]) text = `🔫 ${ammo[el.id].length}`;
+            let b = el.querySelector('.badge');
+            if (!text) { if (b) b.remove(); return; }
+            if (!b) { b = document.createElement('span'); b.className = 'badge'; el.appendChild(b); }
+            b.textContent = text;
         }
 
-        function confirmPayment() {
-            if (isGameOver()) return;
+        function showInfo(el) {
+            let info = el.dataset.kind === 'zombie' ? cardDictionary.zombie : infoOf(el.dataset.name);
+            let extra = el.dataset.kind === 'zombie' ? ` Zombies en la carta: ${zLeft(el)} de ${zSize(el)}.` : (ammo[el.id] ? ` Munición: ${ammo[el.id].length}.` : '');
+            $('info-title').innerHTML = `${info.t} <span>${info.type}</span>`;
+            $('info-desc').innerText = info.d + extra; $('info-panel').style.display = 'block';
+        }
+        function hideInfo() { $('info-panel').style.display = 'none'; }
 
-            const discardZone = document.getElementById('discard-zone');
-            let cardsDiscarded = cardsSelectedForPayment.length;
+        function createBtn(c, txt, act, cls = '', disabled = false) { let b = document.createElement('button'); b.className = `action-btn ${cls}`; b.innerText = txt; b.onclick = act; b.disabled = disabled; c.appendChild(b); }
+        function moveCardToZone(c, zId, exh) { if(exh) c.classList.add('exhausted'); else c.classList.remove('exhausted'); $(zId).appendChild(c); closeActionMenu(); updateCounters(); }
+        function closeActionMenu() { $('action-modal').style.display = 'none'; }
 
-            if (paymentMode === 'explore') { if (cardsDiscarded === 0) { document.getElementById('payment-modal').style.display = 'none'; return; } } 
-            else if (cardToPrepare) {
-                if (cardsDiscarded !== window.currentRequiredCost) { 
-                    logAndAlert(`Transacción bloqueada: Pago requerido ${window.currentRequiredCost}, insertadas ${cardsDiscarded}.`, `⚠️ DISCREPANCIA: El coste es ${window.currentRequiredCost}, has seleccionado ${cardsDiscarded}.`); 
-                    return; 
-                }
-            }
-            
-            cardsSelectedForPayment.forEach(id => { let originalCard = document.getElementById(id); if(originalCard) { originalCard.classList.remove('exhausted'); discardZone.appendChild(originalCard); } });
-
-            if (paymentMode === 'explore') { 
-                logAction(`Explorando Área ${cardsDiscarded} vez(veces).`);
-                for(let i=0; i<cardsDiscarded; i++) exploreCard(); 
-            } 
-            else if (cardToPrepare) {
-                cardToPrepare.classList.remove('exhausted');
-                
-                let baseN = cardToPrepare.dataset.name.replace(/_\d+$/, ''); let info = cardDictionary[baseN];
-                let tableCards = Array.from(document.getElementById('table-zone').children).filter(c=>!c.classList.contains('exhausted'));
-                
-                logAction(`Carta PREPARADA en Mesa: [${baseN}].`);
-
-                if (baseN.includes('llave_inglesa') || baseN.includes('motocicleta')) applyWeaponDamage(1);
-                if (info && info.type.includes('ARMA') && tableCards.some(c=>c.dataset.name.includes('habilidad_armas'))) applyWeaponDamage(1);
-                if (info && info.type === 'TRAMPA' && tableCards.some(c=>c.dataset.name.includes('habiliadades_caza'))) applyWeaponDamage(1);
-
-                if (paymentMode === 'buy') { 
-                    discardZone.appendChild(cardToPrepare); 
-                    logAction(`Objeto [${baseN}] comprado del Mercado y enviado a Descartes.`);
-                }
-            }
-            document.getElementById('payment-modal').style.display = 'none'; updateCounters();
+        // Menú de elección reutilizable (sobre el modal de acciones)
+        function chooseFrom(title, items, labelOf, onPick, cancellable = true) {
+            const btnC = $('action-buttons'); btnC.innerHTML = '';
+            $('action-title').innerText = title;
+            items.forEach(it => createBtn(btnC, labelOf(it), () => { closeActionMenu(); onPick(it); updateCounters(); }));
+            $('action-cancel').style.display = cancellable ? '' : 'none';
+            $('action-modal').style.display = 'flex';
         }
 
-        function openWoundModal(cardEl) {
-            closeActionMenu();
-            window.zombieToWound = cardEl;
-
-            if (preventWounds > 0) {
-                preventWounds--;
-                triggerActionEffect(cardEl, '#0a6bcf');
-                logAndAlert(`Escudo/Antídoto activado: Daño bloqueado. Te quedan ${preventWounds} cargas.`, "🛡️ ¡Herida EVITADA por tu equipamiento defensivo!\n\nPrevenciones restantes este turno: " + preventWounds, 'info');
-                resolveWoundEffect(false); 
-                return;
-            }
-
-            document.getElementById('btn-w-pierna').disabled = wounds.pierna;
-            document.getElementById('btn-w-brazo').disabled = wounds.brazo;
-            document.getElementById('wound-modal').style.display = 'flex';
-        }
-
-        function confirmWound(part) {
-            document.getElementById('wound-modal').style.display = 'none';
-            document.getElementById('w-' + part).checked = true;
-            toggleWound(part); 
-
-            triggerShake();
-            triggerBloodFlash();
-            showScreenBanner("¡IMPACTO CRÍTICO!", "rgba(180, 0, 0, 0.9)");
-            resolveWoundEffect(true);
-        }
-
-        function resolveWoundEffect(tookWound) {
-            let hand = document.getElementById('hand-zone');
-            if(hand.firstElementChild && tookWound) {
-                logAction(`Carta descartada de la mano debido al daño recibido.`);
-                moveCardToZone(hand.firstElementChild, 'discard-zone', false);
-            }
-
-            let zCard = window.zombieToWound;
-            let zName = zCard.dataset.name;
-            let zSize = parseInt(zName.charAt(0));
-
-            if (zSize === 1) {
-                zombiesKilledGlobal += 1;
-                zombieReserve.push(zName);
-                triggerActionEffect(zCard, '#8a0303');
-                zCard.remove();
-            } else {
-                zombiesKilledGlobal += 1;
-                zombieReserve.push(zName);
-                let newSize = zSize - 1;
-                let replacementIdx = zombieReserve.findIndex(z => parseInt(z.charAt(0)) === newSize);
-                let replacementName = (replacementIdx !== -1) ? zombieReserve.splice(replacementIdx, 1)[0] : (newSize === 1 ? "1_zombie_1" : `${newSize}_zombies_1`);
-                zCard.dataset.name = replacementName;
-                applyCardImage(zCard, replacementName);
-                triggerActionEffect(zCard, '#8a0303');
-            }
-            zombieReserve.sort((a,b) => parseInt(b.charAt(0)) - parseInt(a.charAt(0)));
+        // Una carta deja la mesa: su munición va a descartes. El equipo médico destruido va a descartes si hay Hospital.
+        function leavePlay(el, dest) {
+            if (ammo[el.id]) { ammo[el.id].forEach(d => $('discard-zone').appendChild(createCardElement(d))); delete ammo[el.id]; }
+            const b = el.querySelector('.badge'); if (b) b.remove();
+            el.classList.remove('exhausted');
+            if (dest === 'destroy') {
+                if (MEDICAL.includes(baseOf(el.dataset.name)) && hasPrepared('hospital') && !el.dataset.name.includes('hospital')) {
+                    logAction(`Hospital: [${titleOf(el)}] va a descartes en vez de destruirse.`);
+                    $('discard-zone').appendChild(el);
+                } else { logAction(`[${titleOf(el)}] destruida.`); el.remove(); }
+            } else $('discard-zone').appendChild(el);
             updateCounters();
         }
 
+        // ==========================================
+        // INICIO DE PARTIDA
+        // ==========================================
+        function startGame() {
+            $('setup-screen').style.display = 'none';
+            currentMission = $('mission-select').value;
+            const charConfig = characters[$('char-select').value];
+
+            wave = 1; rescued = 0; zombiesKilledGlobal = 0; medicsUsed = 0; zombiesCured = 0;
+            gameWon = false; gameLost = false; vipRescued = false; preventWounds = 0; lootingActive = false;
+            turnUsedWeapons.clear(); ammo = {};
+            wounds = { pierna: false, brazo: false, cerebro: false };
+            ['pierna', 'brazo', 'cerebro'].forEach(p => $('w-' + p).checked = false);
+            ['table-zone', 'zombie-zone', 'hand-zone', 'discard-zone', 'explored-zone'].forEach(z => $(z).innerHTML = '');
+
+            zombieReserve = [...strictZombieStack];
+            areaDeck = baseAreaCards.map(n => newCard(n));
+            // 5D: los supervivientes del mazo inicial cuentan como cartas de 1 zombie
+            deck = charConfig.deck.map(n => newCard(n, currentMission === '5D' && n.includes('superviviente') ? 'zombie' : undefined));
+
+            // Oleada inicial y cartas de zombie en el mazo inicial (1 en solitario, salvo que la misión diga otra cosa)
+            const setup = { '1B': { zombies: 5 }, '3A': { wave: 5, zombies: 1 }, '3B': { wave: 2 }, '4B': { wave: 2 }, '4C': { zombies: 2 },
+                            '4D': { wave: 3, zombies: 3 }, '5A': { wave: 2 }, '5B': { wave: 2 }, '5C': { wave: 2, zombies: 3 } }[currentMission] || {};
+            wave = setup.wave || 1;
+            for (let i = 0; i < (setup.zombies || 1) && zombieReserve.length; i++) deck.push(newCard(zombieReserve.pop(), 'zombie'));
+
+            // Zombies barajados en el mazo de área
+            const areaZombies = { '2B': ['2_zombies_1', '2_zombies_2', '2_zombies_3'],
+                                  '4A': ['1_zombie_1', '1_zombie_2', '1_zombie_3', '2_zombies_1', '2_zombies_2'],
+                                  '4D': ['2_zombies_1', '2_zombies_2', '2_zombies_3'] }[currentMission];
+            if (areaZombies) areaZombies.forEach(n => areaDeck.push(newCard(n, 'zombie')));
+            shuffleArray(areaDeck);
+
+            $('table-zone').appendChild(createCardElement({ id: `card-${++cardSeq}`, name: charConfig.inPlay, kind: 'personaje' }));
+            if (charConfig.inPlayExtra) {
+                let el = createCardElement(newCard(charConfig.inPlayExtra));
+                el.classList.add('exhausted'); $('table-zone').appendChild(el);
+            }
+
+            const takeFromArea = base => { const i = areaDeck.findIndex(c => baseOf(c.name) === base); return i >= 0 ? areaDeck.splice(i, 1)[0] : null; };
+            const explore = data => { if (data) $('explored-zone').appendChild(createCardElement(data)); };
+            const preparedInPlay = data => { if (data) $('table-zone').appendChild(createCardElement(data)); };
+
+            if (currentMission === '2B') {
+                // Todas las instalaciones empiezan exploradas
+                let i; while ((i = areaDeck.findIndex(c => infoOf(c.name).type === 'INSTALACIÓN')) >= 0) explore(areaDeck.splice(i, 1)[0]);
+            }
+            if (currentMission === '3B') explore(takeFromArea('2_furgoneta'));
+            if (currentMission === '5B') explore(takeFromArea('2_hospital'));
+            if (currentMission === '5C') { preparedInPlay(takeFromArea('2_hospital')); preparedInPlay(takeFromArea('2_cura')); }
+            if (currentMission === '5A') {
+                // Laboratorio (Hospital) como carta 17 y VIP como carta 18 del mazo de área
+                const lab = takeFromArea('2_hospital'), vip = takeFromArea('3_vip');
+                if (lab) areaDeck.splice(Math.max(0, areaDeck.length - 16), 0, lab);
+                if (vip) areaDeck.splice(Math.max(0, areaDeck.length - 17), 0, vip);
+            }
+
+            shuffleArray(deck);
+            updateCounters(); initSortableZones();
+            logAction(`Sistema iniciado. Misión: ${currentMission}. Personaje: ${charConfig.inPlay.toUpperCase()}. Oleada inicial: ${wave}.`);
+
+            const begin = () => drawCards(5);
+            if (currentMission === '4B') chooseAreaCards(2, begin);
+            else if (currentMission === '4D') chooseAreaWeapon(begin);
+            else begin();
+        }
+
+        // 4B: elige y explora 2 cartas cualesquiera del mazo de área
+        function chooseAreaCards(n, done) {
+            const names = [...new Set(areaDeck.filter(c => c.kind !== 'zombie').map(c => c.name))];
+            if (n <= 0 || !names.length) { shuffleArray(areaDeck); done(); return; }
+            chooseFrom(`MISIÓN 4B: ELIGE UNA CARTA PARA EXPLORAR (${n})`, names, nm => infoOf(nm).t, nm => {
+                const i = areaDeck.findIndex(c => c.name === nm);
+                $('explored-zone').appendChild(createCardElement(areaDeck.splice(i, 1)[0]));
+                chooseAreaCards(n - 1, done);
+            }, false);
+        }
+
+        // 4D: empiezas con cualquier arma del mazo de área agotada en juego
+        function chooseAreaWeapon(done) {
+            const names = [...new Set(areaDeck.filter(c => (infoOf(c.name).type || '').includes('ARMA')).map(c => c.name))];
+            if (!names.length) { done(); return; }
+            chooseFrom('MISIÓN 4D: ELIGE UN ARMA DEL ÁREA (entra agotada)', names, nm => infoOf(nm).t, nm => {
+                const i = areaDeck.findIndex(c => c.name === nm);
+                const el = createCardElement(areaDeck.splice(i, 1)[0]); el.classList.add('exhausted');
+                $('table-zone').appendChild(el);
+                done();
+            }, false);
+        }
+
+        function desactivarBotones() {
+            $('explore-btn').disabled = true;
+            $('end-turn-btn').disabled = true;
+        }
+
+        // ==========================================
+        // ROBO, BARAJADO Y TURNOS
+        // ==========================================
+        // Robas 5 cartas; los zombies cuentan entre ellas y van a la Zona de Infección
+        function drawCards(num, done) {
+            if (isGameOver()) return;
+            if (num <= 0) { updateCounters(); if (done) done(); return; }
+            if (!deck.length) {
+                if (!$('discard-zone').children.length) { logAction('No quedan cartas que robar.', 'warn'); updateCounters(); if (done) done(); return; }
+                reshuffle(() => drawCards(num, done));
+                return;
+            }
+            const data = deck.pop();
+            const el = createCardElement(data); el.classList.add('anim-draw');
+            if (data.kind === 'zombie') { $('zombie-zone').appendChild(el); logAction(`Zombie robado: [${data.name}] a la Zona de Infección.`, 'warn'); }
+            else $('hand-zone').appendChild(el);
+            drawCards(num - 1, done);
+        }
+
+        // Mazo agotado: sube la oleada, añade zombies a los descartes y baraja
+        function reshuffle(done) {
+            wave++;
+            logAction(`==== NIVEL DE AMENAZA AUMENTADO: OLEADA ${wave} ====`, 'warn');
+            const dz = $('discard-zone');
+            let added = 0, needed = wave;
+            if (currentMission === '2C' && wave === 5) {
+                while (zombieReserve.length) { dz.appendChild(createCardElement(newCard(zombieReserve.pop(), 'zombie'))); added++; }
+                needed = 0;
+                logAction('Misión 2C: toda la pila de zombies va a los descartes.', 'warn');
+            } else {
+                while (added < needed && zombieReserve.length) { dz.appendChild(createCardElement(newCard(zombieReserve.pop(), 'zombie'))); added++; }
+            }
+            const finish = () => {
+                Array.from(dz.children).forEach(el => deck.push(cardDataOf(el)));
+                dz.innerHTML = '';
+                shuffleArray(deck);
+                showScreenBanner(`¡OLEADA ${wave}!`, "rgba(150, 0, 0, 0.95)"); triggerBloodFlash();
+                updateCounters();
+                done();
+            };
+            if (added < needed) {
+                logAndAlert('Pila de zombies agotada: destruye 2 cartas que no sean zombie de tus descartes.', '¡PENALIZACIÓN DE INFECCIÓN!\nLa pila de zombies se ha agotado. Elige 2 cartas (que no sean zombie) de tus descartes para destruirlas.', 'warn');
+                destroyFromDiscard(2, finish);
+            } else finish();
+        }
+
+        function destroyFromDiscard(n, done) {
+            const opts = zoneCards('discard-zone').filter(c => c.dataset.kind !== 'zombie');
+            if (n <= 0 || !opts.length) { done(); return; }
+            chooseFrom(`DESTRUYE ${n} CARTA(S) DE TUS DESCARTES`, opts, titleOf, c => { logAction(`[${titleOf(c)}] destruida por la penalización.`, 'warn'); c.remove(); destroyFromDiscard(n - 1, done); }, false);
+        }
+
+        function endTurn() {
+            if (isGameOver()) return;
+            if (zombiesInPlay().length) {
+                logAndAlert('No puedes terminar el turno con zombies atacantes.', "⚠️ ¡Aún tienes zombies atacando!\n\nElimínalos con tus cartas o toca cada zombie y elige 'Dejar que te ataque'.", 'error');
+                return;
+            }
+            if (lootingActive) { lootingActive = false; $('explored-zone').classList.remove('looting-glow'); }
+            handCards().forEach(c => $('discard-zone').appendChild(c));
+            zombiesInDiscard().forEach(resetZombie);
+            preventWounds = 0; turnUsedWeapons.clear();
+            logAction('Fin del turno.');
+
+            checkMissionObjectives();
+            if (isGameOver()) { updateCounters(); return; }
+            if (currentMission === '5B' && wave > 6) { loseMission('Misión 5B fallida: has pasado de la oleada 6 sin usar 5 equipos médicos.'); return; }
+
+            showScreenBanner("CAMBIO DE TURNO", "rgba(30, 30, 30, 0.9)");
+            updateCounters();
+            setTimeout(() => drawCards(5), 800);
+        }
+
+        // ==========================================
+        // OBJETIVOS (se comprueban al terminar el turno)
+        // ==========================================
+        function missionStats() {
+            const prep = preparedCards();
+            const countType = t => prep.filter(c => typeOf(c) === t).length;
+            return { prep: prep.length, traps: countType('TRAMPA'), facilities: countType('INSTALACIÓN'), persons: countType('PERSONA'),
+                     equipment: prep.filter(c => typeOf(c).startsWith('EQUIPO')).length,
+                     van: prep.some(c => c.dataset.name.includes('furgoneta')), lab: prep.some(c => c.dataset.name.includes('hospital')) };
+        }
+
+        function checkMissionObjectives() {
+            if (isGameOver()) return;
+            const s = missionStats();
+            const win = {
+                "1A": s.prep >= 6,
+                "1B": rescued >= 4,
+                "1C": rescued >= 6 && s.facilities >= 1,
+                "2A": rescued >= 5,
+                "2B": rescued >= 5 && s.traps >= 3 && s.equipment >= 3 && s.facilities >= 3,
+                "2C": wave >= 6,
+                "3A": wave >= 8,
+                "3B": s.persons >= 4 && s.equipment >= 3 && s.van,
+                "4A": areaDeck.length === 0,
+                "4B": rescued >= 10,
+                "4C": rescued >= 5,
+                "4D": zombiesKilledGlobal >= 100,
+                "5A": vipRescued && s.lab,
+                "5B": medicsUsed >= 5 && wave <= 6,
+                "5C": zombiesCured >= 6,
+                "5D": wave >= 6
+            }[currentMission];
+            if (win) {
+                gameWon = true;
+                logAction('¡OBJETIVOS DE LA MISIÓN CUMPLIDOS!', 'info');
+                showScreenBanner("🏆 ¡SUPERVIVIENTE!", "rgba(10, 80, 10, 0.9)");
+                setTimeout(() => alert("🎉 ¡OBJETIVO CUMPLIDO! La partida ha finalizado con éxito. Recarga la página para jugar otra misión."), 500);
+                desactivarBotones();
+            }
+        }
+
+        // ==========================================
+        // ARRASTRAR CARTAS: de la mano a la mesa (agotada) o a descartes
+        // ==========================================
+        function initSortableZones() {
+            if (sortableReady) return;
+            sortableReady = true;
+            const commonOpts = { animation: 200, delay: 150, delayOnTouchOnly: true, touchStartThreshold: 3, ghostClass: 'sortable-ghost',
+                onEnd: function (evt) {
+                    if (isGameOver()) return;
+                    evt.item.style.transform = '';
+                    if (evt.to.id === 'table-zone' && evt.from.id !== 'table-zone') {
+                        evt.item.classList.add('exhausted');
+                        logAction(`Carta jugada a la mesa: [${evt.item.dataset.name}] (entra agotada).`);
+                    }
+                    if (evt.to.id === 'discard-zone' && evt.from.id !== 'discard-zone') logAction(`Carta descartada sin efecto: [${evt.item.dataset.name}].`);
+                    updateCounters();
+                }
+            };
+            new Sortable($('hand-zone'), { ...commonOpts, group: { name: 'shared', pull: true, put: false } });
+            new Sortable($('table-zone'), { ...commonOpts, group: { name: 'shared', pull: false, put: (to, from, el) => from.el.id === 'hand-zone' && !HAND_ONLY.includes(baseOf(el.dataset.name)) } });
+            new Sortable($('discard-zone'), { ...commonOpts, sort: false, group: { name: 'shared', pull: false, put: (to, from) => from.el.id === 'hand-zone' } });
+            new Sortable($('zombie-zone'), { ...commonOpts, group: { name: 'shared', pull: false, put: false } });
+            new Sortable($('explored-zone'), { ...commonOpts, group: { name: 'shared', pull: false, put: false } });
+        }
+
+        // ==========================================
+        // PAGOS: descartar cartas de la mano
+        // ==========================================
+        // opts: { title, desc, exact (número exacto) o min (mínimo), onConfirm(cartas elegidas) }
+        function openPayment(opts) {
+            if (isGameOver()) return;
+            closeActionMenu();
+            payment = { ...opts, selected: [] };
+            $('payment-title').innerText = opts.title;
+            $('payment-desc').innerText = opts.desc;
+            const box = $('payment-cards'); box.innerHTML = '';
+            const hand = handCards();
+            if (!hand.length) box.innerHTML = `<p style='color:#f39c12; font-size:12px; font-family:sans-serif;'>Tu mano está vacía.</p>`;
+            hand.forEach(c => {
+                let wrapper = document.createElement('div'); wrapper.className = "payment-card-wrap";
+                let clone = c.cloneNode(true); clone.removeAttribute('id'); clone.style.pointerEvents = "none"; wrapper.appendChild(clone);
+                wrapper.onclick = function() {
+                    if (wrapper.classList.toggle('selected')) payment.selected.push(c.id);
+                    else payment.selected = payment.selected.filter(id => id !== c.id);
+                };
+                box.appendChild(wrapper);
+            });
+            $('payment-modal').style.display = 'flex';
+        }
+
+        function cancelPayment() { payment = null; $('payment-modal').style.display = 'none'; }
+
+        function confirmPayment() {
+            if (!payment || isGameOver()) return;
+            const n = payment.selected.length;
+            if (payment.exact !== undefined && n !== payment.exact) {
+                logAndAlert(`Pago incorrecto: se requieren ${payment.exact}, has elegido ${n}.`, `⚠️ El coste es ${payment.exact} carta(s) y has elegido ${n}.`);
+                return;
+            }
+            if (payment.min !== undefined && n < payment.min) {
+                logAndAlert(`Pago incorrecto: mínimo ${payment.min}.`, `⚠️ Elige al menos ${payment.min} carta(s).`);
+                return;
+            }
+            const els = payment.selected.map(id => $(id)).filter(Boolean);
+            const onConfirm = payment.onConfirm;
+            payment = null;
+            $('payment-modal').style.display = 'none';
+            onConfirm(els);
+            updateCounters();
+        }
+
+        const discardEls = els => els.forEach(c => { c.classList.remove('exhausted'); $('discard-zone').appendChild(c); });
+
+        // ==========================================
+        // EXPLORAR Y RECUPERAR
+        // ==========================================
+        function openExplore() {
+            if (isGameOver()) return;
+            if (!areaDeck.length) { logAndAlert('Mazo de área agotado.', "El mazo de área está vacío.", 'warn'); return; }
+            openPayment({ title: 'EXPLORAR EL ÁREA', desc: 'Descarta 1 carta de tu mano por cada carta que quieras explorar.', min: 1,
+                onConfirm: els => {
+                    const used = els.slice(0, areaDeck.length);
+                    discardEls(used);
+                    logAction(`Explorando el área ${used.length} vez (veces).`);
+                    used.forEach(() => exploreCard());
+                } });
+        }
+
+        // Si sale una carta de zombie, entra en juego y se explora la siguiente
+        function exploreCard() {
+            if (!areaDeck.length) return;
+            const data = areaDeck.pop();
+            const el = createCardElement(data); el.classList.add('anim-draw');
+            if (data.kind === 'zombie') {
+                $('zombie-zone').appendChild(el);
+                logAction(`¡Zombies en el área! [${data.name}] entra en juego; exploras la siguiente carta.`, 'warn');
+                exploreCard();
+            } else {
+                $('explored-zone').appendChild(el);
+                logAction(`Área explorada: [${data.name}].`);
+            }
+            updateCounters();
+        }
+
+        // Una carta recuperada entra agotada en tu zona de juego; los eventos van directos a descartes
+        function putRetrieved(el) {
+            if (HAND_ONLY.includes(baseOf(el.dataset.name))) { $('discard-zone').appendChild(el); logAction(`[${titleOf(el)}] recuperada a descartes.`); }
+            else { el.classList.add('exhausted'); $('table-zone').appendChild(el); logAction(`[${titleOf(el)}] recuperada: entra agotada en la mesa.`); }
+            updateCounters();
+        }
+
+        function retrieveTopArea() {
+            while (areaDeck.length) {
+                const data = areaDeck.pop(); const el = createCardElement(data);
+                if (data.kind === 'zombie') { $('zombie-zone').appendChild(el); logAction(`¡Zombies en el área! [${data.name}] entra en juego.`, 'warn'); continue; }
+                putRetrieved(el);
+                return;
+            }
+            logAction('El mazo de área está vacío: no hay carta que recuperar.', 'warn');
+        }
+
+        function openBuy(el) {
+            const cost = costOf(el.dataset.name);
+            openPayment({ title: 'RECUPERAR CARTA EXPLORADA', desc: `Descarta exactamente ${cost} carta(s) de tu mano.`, exact: cost,
+                onConfirm: els => { discardEls(els); putRetrieved(el); } });
+        }
+
+        function startLootingMode(saquearCard) {
+            closeActionMenu();
+            lootingActive = true;
+            $('explored-zone').classList.add('looting-glow');
+            showScreenBanner("SELECCIONA BOTÍN", "rgba(20, 80, 20, 0.95)");
+            logAction("Saquear: toca una carta explorada para recuperarla gratis.", "warn");
+            moveCardToZone(saquearCard, 'discard-zone', false);
+        }
+
+        // ==========================================
+        // PREPARAR
+        // ==========================================
+        function openPrepare(el) {
+            const name = el.dataset.name;
+            if (AMMO_WEAPONS.includes(baseOf(name))) {
+                openPayment({ title: 'PREPARAR CON MUNICIÓN', desc: 'Elige las cartas que colocas debajo del arma como munición (puede ser ninguna).', min: 0,
+                    onConfirm: els => { addAmmo(el, els); finishPrepare(el); } });
+                return;
+            }
+            let cost = costOf(name);
+            if (typeOf(el) === 'PERSONA' && hasPrepared('tunel')) cost = 0;
+            openPayment({ title: 'PAGAR COSTE DE PREPARACIÓN', desc: `Descarta exactamente ${cost} carta(s).`, exact: cost,
+                onConfirm: els => { discardEls(els); finishPrepare(el); } });
+        }
+
+        function addAmmo(weapon, els) {
+            ammo[weapon.id] = ammo[weapon.id] || [];
+            els.forEach(c => { ammo[weapon.id].push(cardDataOf(c)); c.remove(); });
+            refreshBadge(weapon);
+            if (els.length) logAction(`[${titleOf(weapon)}] recibe ${els.length} carta(s) de munición (total ${ammo[weapon.id].length}).`);
+        }
+
+        function spendAmmo(weapon) {
+            const d = ammo[weapon.id].pop();
+            $('discard-zone').appendChild(createCardElement(d));
+            refreshBadge(weapon);
+        }
+
+        // Efectos "al preparar" (no cuentan como usar la carta) y límites de armas y vehículos
+        function finishPrepare(el, next = () => enforceLimits()) {
+            el.classList.remove('exhausted');
+            const base = baseOf(el.dataset.name);
+            if (AMMO_WEAPONS.includes(base) && !ammo[el.id]) ammo[el.id] = [];
+            refreshBadge(el);
+            logAction(`Carta PREPARADA en mesa: [${titleOf(el)}].`);
+            if (base === '1_llave_inglesa') hitZombies(1, 'discard');
+            if (isWeapon(el) && hasPrepared('habilidad_armas')) hitZombies(1, 'kill');
+            if (typeOf(el) === 'TRAMPA' && hasPrepared('habiliadades_caza')) hitZombies(1, 'kill');
+            if (base === '1_motocicleta' && zombiesInPlay().length) {
+                pickZombieCard('MOTOCICLETA: DESCARTA 1 CARTA DE ZOMBIE', zombiesInPlay(), z => { discardZombieCard(z); next(); });
+                return;
+            }
+            next();
+        }
+
+        // Más de 2 armas (1 con el brazo herido) o más de 1 vehículo preparados: hay que destruir uno
+        function enforceLimits(next) {
+            const maxW = wounds.brazo ? 1 : 2;
+            const ws = preparedCards().filter(isWeapon);
+            if (ws.length > maxW) {
+                logAction(`Límite de armas superado (${ws.length}/${maxW}): destruye una.`, 'warn');
+                chooseFrom(`LÍMITE DE ${maxW} ARMA(S): DESTRUYE UNA`, ws, titleOf, w => { leavePlay(w, 'destroy'); enforceLimits(next); }, false);
+                return;
+            }
+            const vs = preparedCards().filter(isVehicle);
+            if (vs.length > 1) {
+                logAction('Límite de 1 vehículo superado: destruye uno.', 'warn');
+                chooseFrom('LÍMITE DE 1 VEHÍCULO: DESTRUYE UNO', vs, titleOf, v => { leavePlay(v, 'destroy'); enforceLimits(next); }, false);
+                return;
+            }
+            updateCounters();
+            if (next) next();
+        }
+
+        // ==========================================
+        // EVENTOS DE LA MANO
+        // ==========================================
+        function playCorre(card) {
+            pickZombieCard('¡CORRE!: ELIGE LA CARTA DE ZOMBIE A DESCARTAR', zombiesInPlay(), z => {
+                moveCardToZone(card, 'discard-zone', false);
+                discardZombieCard(z);
+                logAction('¡Corre!: carta de zombie descartada.');
+            }, true);
+        }
+
+        function playRefugio(card) {
+            closeActionMenu();
+            const survivors = preparedCards().filter(c => c.dataset.name.includes('superviviente'));
+            const vips = preparedCards().filter(c => c.dataset.name.includes('vip'));
+
+            if (currentMission === '2A') {
+                // Un solo superviviente por Refugio, destruyendo un arma preparada; sin VIP ni recuperar cartas
+                const ws = preparedCards().filter(isWeapon);
+                if (!survivors.length || !ws.length) { logAndAlert('Misión 2A: necesitas un superviviente y un arma preparados.', 'Misión 2A: para rescatar necesitas un superviviente preparado y un arma preparada que destruir.', 'warn'); return; }
+                moveCardToZone(card, 'discard-zone', false);
+                chooseFrom('MISIÓN 2A: DESTRUYE UN ARMA PREPARADA', ws, titleOf, w => { leavePlay(w, 'destroy'); rescueSurvivor(survivors[0], true); afterRefugio(); }, false);
+                return;
+            }
+            if (!survivors.length && !vips.length) { logAndAlert('Refugio: nadie preparado para rescatar.', 'No tienes supervivientes preparados.', 'warn'); return; }
+
+            moveCardToZone(card, 'discard-zone', false);
+            survivors.forEach((s, i) => {
+                const count = !areaDeck.length || confirm(`REFUGIO · Superviviente ${i + 1} de ${survivors.length}\n\n[ACEPTAR] Contarlo como rescatado.\n[CANCELAR] Recuperar gratis la carta superior del mazo de área.`);
+                rescueSurvivor(s, count);
+            });
+            vips.forEach(v => { rescued += 3; vipRescued = true; v.remove(); logAction('VIP rescatado: cuenta como 3 supervivientes y se destruye.', 'info'); });
+            afterRefugio();
+        }
+
+        // Un superviviente curado (era un zombie) vuelve a la pila de zombies al ser rescatado
+        function rescueSurvivor(s, count) {
+            if (s.dataset.curedFrom) { zombieReserve.push(s.dataset.curedFrom); sortReserve(); s.remove(); }
+            else moveCardToZone(s, 'discard-zone', false);
+            if (count) { rescued++; logAction('Superviviente rescatado.', 'info'); }
+            else retrieveTopArea();
+        }
+
+        function afterRefugio() {
+            if (hasPrepared('comisaria') && hasWound()) { heal(1); logAction('Comisaría: curas 1 herida.', 'info'); }
+            triggerActionEffect($('table-zone'), '#25a145');
+            updateCounters();
+        }
+
+        // ==========================================
+        // USAR CARTAS PREPARADAS
+        // ==========================================
+        function prepareAllWithGasoline() {
+            const targets = tableCards().filter(c => c.classList.contains('exhausted') && (isWeapon(c) || isVehicle(c) || typeOf(c) === 'TRAMPA'));
+            const step = i => { if (i >= targets.length) { enforceLimits(); return; } finishPrepare(targets[i], () => step(i + 1)); };
+            step(0);
+        }
+
+        function cureZombie(z) {
+            const el = createCardElement({ id: `card-${++cardSeq}`, name: '1_superviviente', kind: 'superviviente', curedFrom: z.dataset.name });
+            z.remove();
+            $('table-zone').appendChild(el);
+            zombiesCured++;
+            logAction('Cura: el zombie se convierte en un superviviente preparado.', 'info');
+        }
+
+        // Acciones de cada carta preparada: { label, can (hay efecto posible), fn }
+        function cardActions(card) {
+            const base = baseOf(card.dataset.name); const acts = [];
+            const zIn = zombiesInPlay().length > 0, zDis = zombiesInDiscard().length > 0;
+            const once = turnUsedWeapons.has(card.id);
+            const ammoN = (ammo[card.id] || []).length;
+            const add = (label, can, fn) => acts.push({ label, can, fn });
+            const markOnce = () => turnUsedWeapons.add(card.id);
+            switch (base) {
+                case '1_machete':
+                    add(`💥 Descarta 1 carta para matar 1 zombie${once ? ' (ya usado este turno)' : ''}`, zIn && !once && handCards().length > 0,
+                        () => openPayment({ title: 'MACHETE', desc: 'Descarta 1 carta de tu mano.', exact: 1, onConfirm: els => { discardEls(els); markOnce(); attack(card, 1); } }));
+                    break;
+                case '1_escopeta':
+                    add(`💥 Gasta 1 munición: mata 1 zombie (munición: ${ammoN})`, zIn && ammoN > 0, () => { spendAmmo(card); attack(card, 1); });
+                    add('💥 Destruye la escopeta: mata 1 zombie', zIn, () => { leavePlay(card, 'destroy'); attack(card, 1); });
+                    break;
+                case '2_pistola':
+                    add(`💥 Gasta 1 munición: mata 1 zombie (munición: ${ammoN})${once ? ' (ya usada este turno)' : ''}`, zIn && !once && ammoN > 0, () => { markOnce(); spendAmmo(card); attack(card, 1); });
+                    add(`💥 Descarta la pistola: mata 1 zombie${once ? ' (ya usada este turno)' : ''}`, zIn && !once, () => { leavePlay(card, 'discard'); attack(card, 1); });
+                    break;
+                case '2_ametralladora':
+                    add(`💥 Gasta 1 munición: mata 2 zombies (munición: ${ammoN})`, zIn && ammoN > 0, () => { spendAmmo(card); attack(card, 2); });
+                    break;
+                case '2_rifle':
+                    add(`💥 Gasta 1 munición: mata 1 zombie en juego o en descartes (munición: ${ammoN})${once ? ' (ya usado este turno)' : ''}`, (zIn || zDis) && !once && ammoN > 0, () => {
+                        markOnce(); spendAmmo(card);
+                        if (zIn && zDis) chooseFrom('RIFLE: ¿DÓNDE DISPARAS?', ['juego', 'descartes'], z => z === 'juego' ? 'Zombies en juego' : 'Zombies de tu pila de descartes',
+                            z => attack(card, 1, z === 'juego' ? zombiesInPlay : zombiesInDiscard), false);
+                        else attack(card, 1, zIn ? zombiesInPlay : zombiesInDiscard);
+                    });
+                    add('➕ Añadir munición desde tu mano', handCards().length > 0, () => openPayment({ title: 'MUNICIÓN DEL RIFLE', desc: 'Elige las cartas que colocas debajo del rifle.', min: 1, onConfirm: els => addAmmo(card, els) }));
+                    break;
+                case '3_lanzallamas':
+                    add('💥 Descártalo: mata 3 zombies', zIn, () => { leavePlay(card, 'discard'); attack(card, 3); });
+                    break;
+                case '2_motosierra':
+                    add('💥 Descártala: mata 6 zombies', zIn, () => { leavePlay(card, 'discard'); triggerShake(); attack(card, 6); });
+                    break;
+                case '2_perro':
+                    add('💥 Descártalo: mata 1 zombie', zIn, () => { leavePlay(card, 'discard'); attack(card, 1); });
+                    break;
+                case '2_creamatorio':
+                    add('💥 Descártalo: mata 2 zombies', zIn, () => { leavePlay(card, 'discard'); attack(card, 2); });
+                    break;
+                case '2_fuego_cruzado': {
+                    const persons = preparedCards().filter(c => typeOf(c) === 'PERSONA').length;
+                    add(`💥 Descártala: mata ${persons} zombie(s) (1 por persona preparada)`, zIn && persons > 0, () => { leavePlay(card, 'discard'); attack(card, persons); });
+                    break;
+                }
+                case '1_llave_inglesa':
+                    add('💥 Descártala: descarta 1 zombie', zIn, () => { leavePlay(card, 'discard'); hitZombies(1, 'discard'); });
+                    break;
+                case '1_motocicleta':
+                    add('💥 Descártala: descarta 1 carta de zombie', zIn, () => { leavePlay(card, 'discard'); pickZombieCard('MOTOCICLETA: ELIGE LA CARTA A DESCARTAR', zombiesInPlay(), discardZombieCard); });
+                    break;
+                case '2_furgoneta':
+                    add('💥 Descártala: mata 1 carta de zombie y descarta el resto', zIn, () => {
+                        leavePlay(card, 'discard');
+                        pickZombieCard('FURGONETA: ELIGE LA CARTA DE ZOMBIE A MATAR', zombiesInPlay(), z => { killZombieCard(z); zombiesInPlay().forEach(discardZombieCard); });
+                    });
+                    break;
+                case '2_granada_explosiva':
+                    add('💥 Descártala: descarta 5 zombies', zIn, () => { leavePlay(card, 'discard'); triggerShake(); triggerBloodFlash(); hitZombies(5, 'discard'); });
+                    break;
+                case '2_gran_explosion':
+                    add('💥 Destrúyela: mata todos los zombies en juego y en tus descartes', zIn || zDis, () => {
+                        leavePlay(card, 'destroy'); triggerShake(); triggerBloodFlash();
+                        hitZombies(zombiesLeft(), 'kill');
+                        hitZombies(zombiesLeft(zombiesInDiscard), 'kill', zombiesInDiscard);
+                        logAction('Gran Explosión: área limpia.', 'warn');
+                    });
+                    break;
+                case '2_trampa_perimetral':
+                    add('💥 Descártala: mata 6 zombies de tu pila de descartes', zDis, () => { leavePlay(card, 'discard'); hitZombies(6, 'kill', zombiesInDiscard); });
+                    break;
+                case '2_guia':
+                    add('💥 Descártala: elimina 2 zombies de tu pila de descartes', zDis, () => { leavePlay(card, 'discard'); hitZombies(2, 'eliminate', zombiesInDiscard); });
+                    break;
+                case '2_explorador':
+                    add('💥 Descártalo: explora 2 cartas', areaDeck.length > 0, () => { leavePlay(card, 'discard'); exploreCard(); exploreCard(); });
+                    break;
+                case '2_gasolina': {
+                    const targets = tableCards().some(c => c.classList.contains('exhausted') && (isWeapon(c) || isVehicle(c) || typeOf(c) === 'TRAMPA'));
+                    add('💥 Destrúyela: prepara todas tus trampas, vehículos y armas agotadas', targets, () => { leavePlay(card, 'destroy'); prepareAllWithGasoline(); });
+                    break;
+                }
+                case '2_cura': {
+                    const ones = zombiesInPlay().filter(z => zSize(z) === 1);
+                    add('💥 Destrúyela: convierte 1 carta de 1 zombie en superviviente preparado', ones.length > 0, () => {
+                        medicsUsed++; leavePlay(card, 'destroy');
+                        pickZombieCard('CURA: ELIGE LA CARTA DE 1 ZOMBIE', ones, cureZombie);
+                    });
+                    break;
+                }
+                case '1_antidoto':
+                    add('💥 Destrúyelo: previene tu siguiente herida este turno', zIn, () => { medicsUsed++; preventWounds += 1; leavePlay(card, 'destroy'); logAction('Antídoto: +1 prevención de herida.', 'info'); });
+                    break;
+                case '2_chaleco_antibalas':
+                    add('💥 Destrúyelo: previene tus 2 siguientes heridas este turno', zIn, () => { preventWounds += 2; leavePlay(card, 'destroy'); logAction('Chaleco antibalas: +2 prevenciones de herida.', 'info'); });
+                    break;
+                case '1_kit_medico':
+                    add('💥 Destrúyelo: cura 2 heridas (sin zombies en juego)', !zIn && hasWound(), () => { medicsUsed++; leavePlay(card, 'destroy'); heal(2); });
+                    break;
+                case '1_comida':
+                    add('💥 Devuélvela al mazo de área: cura 1 herida (sin zombies en juego)', !zIn && hasWound(), () => {
+                        const top = confirm("COMIDA: ¿dónde la colocas?\n\n[ACEPTAR] Encima del mazo de área\n[CANCELAR] Debajo del mazo de área");
+                        const data = { id: card.id, name: card.dataset.name, kind: 'basic' };
+                        if (top) areaDeck.push(data); else areaDeck.unshift(data);
+                        card.remove(); heal(1);
+                    });
+                    break;
+            }
+            return acts;
+        }
+
+        // ==========================================
+        // MENÚ DE ACCIONES DE CADA CARTA
+        // ==========================================
         function openActionMenu(cardEl) {
             if (isGameOver()) return;
 
-            // INTERCEPTOR DE ESTADO: MODO SAQUEO
+            // MODO SAQUEO: recupera gratis una carta explorada
             if (lootingActive) {
                 if (cardEl.parentElement.id === 'explored-zone') {
                     lootingActive = false;
-                    document.getElementById('explored-zone').classList.remove('looting-glow');
-                    moveCardToZone(cardEl, 'table-zone', true); // Recuperar pone la carta agotada en juego
-                    logAction(`Objeto recuperado gratis mediante Saquear: [${cardEl.dataset.name}]`, "info");
+                    $('explored-zone').classList.remove('looting-glow');
+                    putRetrieved(cardEl);
                     showScreenBanner("¡OBJETO ASEGURADO!", "rgba(40, 150, 40, 0.9)");
-                    return;
-                } else {
-                    logAndAlert("Acción bloqueada", "Modo Saqueo activo: Debes hacer clic en una carta del MERCADO (Área Explorada) para recuperarla.", "warn");
-                    return;
-                }
-            }
-
-            const name = cardEl.dataset.name; const zone = cardEl.parentElement.id; const isExhausted = cardEl.classList.contains('exhausted');
-            const isEvent = name.includes('corre') || name.includes('refugio') || name.includes('saquear');
-            
-            let base = name.replace(/_\d+$/, ''); if(name.includes('zombie')) base = 'zombie';
-            let info = cardDictionary[base] || { t: name.toUpperCase() }; document.getElementById('action-title').innerText = info.t;
-            const btnC = document.getElementById('action-buttons'); btnC.innerHTML = '';
-
-            if (zone === 'explored-zone') {
-                createBtn(btnC, "🛒 COMPRAR DEL ÁREA", () => openPaymentMenu(cardEl, 'buy'), 'prepare');
-            }
-            else if (zone === 'hand-zone') {
-                if (!isEvent) { createBtn(btnC, "👇 Bajar a Mesa (Inactiva)", () => moveCardToZone(cardEl, 'table-zone', true)); }
-                createBtn(btnC, "🗑️ Tirar a Descartes", () => moveCardToZone(cardEl, 'discard-zone', false));
-                
-                if(name.includes('explorador')) createBtn(btnC, "💥 USAR EXPLORADOR (Revela 2)", () => { exploreCard(); exploreCard(); moveCardToZone(cardEl, 'discard-zone', false); }, 'execute');
-                else if(name.includes('saquear')) createBtn(btnC, "💥 USAR SAQUEAR", () => { 
-                    const exploredCards = document.getElementById('explored-zone').children;
-                    if(exploredCards.length === 0) {
-                        logAndAlert("Mercado vacío", "Operación fallida: No hay cartas en el Mercado para recuperar.", "error");
-                        return;
-                    }
-                    startLootingMode(cardEl); 
-                }, 'execute');
-                else if(name.includes('corre')) createBtn(btnC, "💥 USAR ¡CORRE! (Huir de Zombie)", () => executeAutomatedCard(cardEl, name), 'execute');
-                else if(name.includes('refugio')) createBtn(btnC, "💥 USAR REFUGIO", () => executeAutomatedCard(cardEl, name), 'execute');
-            } 
-            else if (zone === 'table-zone') {
-                if(name.includes('personaje')) { createBtn(btnC, "Cerrar", closeActionMenu); }
-                else if (isExhausted) { createBtn(btnC, "🔄 PREPARAR ACTIVO", () => openPaymentMenu(cardEl, 'prepare'), 'prepare'); } 
-                else {
-                    let execText = "💥 EJECUTAR ACCIÓN";
-                    
-                    if (info.type === 'ENTRENAMIENTO') {
-                        createBtn(btnC, "⭐ Habilidad Activa (Pasiva)", () => closeActionMenu(), 'prepare');
-                    } else {
-                        if (name.includes('perro') || name.includes('motosierra') || name.includes('lanzallamas') || name.includes('creamatorio') || name.includes('gran_explosion') || name.includes('granada_explosiva') || name.includes('cura') || name.includes('antidoto') || name.includes('kit_medico') || name.includes('chaleco_antibalas') || name.includes('guia') || name.includes('fuego_cruzado') || name.includes('trampa_perimetral') || name.includes('furgoneta')) {
-                            execText = "💥 USAR (Se Consume)";
-                        } else if (name.includes('llave_inglesa') || name.includes('motocicleta')) {
-                            execText = "💥 DESCARTAR PARA MATAR 1";
-                        } else if (name.includes('machete') || name.includes('pistola') || name.includes('escopeta') || name.includes('rifle')) {
-                            execText = "💥 ATACAR Y AGOTAR";
-                        } else if (name.includes('ametralladora')) {
-                            execText = "💥 RÁFAGA (2 Daños y agota)";
-                        } else if (name.includes('gasolina')) { 
-                            execText = "💥 PRENDER GASOLINA"; 
-                        }
-                        
-                        createBtn(btnC, execText, () => executeAutomatedCard(cardEl, name), 'execute');
-                        createBtn(btnC, "🔄 Agotar (Sin efecto)", () => { cardEl.classList.add('exhausted'); closeActionMenu(); });
-                    }
-                }
-                if(!name.includes('personaje')) createBtn(btnC, "🗑️ Tirar a Descartes", () => moveCardToZone(cardEl, 'discard-zone', false));
-                if(!name.includes('personaje')) createBtn(btnC, "🔥 DESTRUIR DEL JUEGO", () => { cardEl.remove(); updateCounters(); closeActionMenu(); });
-            } 
-            else if (zone === 'zombie-zone') {
-                createBtn(btnC, "🗡️ Daño Manual (-1 HP)", () => { applyWeaponDamage(1, cardEl); });
-                createBtn(btnC, "🩸 Recibir Herida Crítica", () => openWoundModal(cardEl), 'execute');
-                createBtn(btnC, "💀 Forzar Ejecución Global", () => killZombieCard(cardEl));
-                createBtn(btnC, "🗑️ Forzar Descarte Directo", () => moveCardToZone(cardEl, 'discard-zone', false));
-            }
-            document.getElementById('action-modal').style.display = 'flex';
-        }
-		
-        function applyWeaponDamage(amount, targetCard = null) {
-            const zZone = document.getElementById('zombie-zone');
-            
-            while (amount > 0 && zZone.children.length > 0) {
-                let zCard = (targetCard && targetCard.parentElement === zZone) ? targetCard : zZone.firstElementChild;
-                if (!zCard) break;
-
-                let zName = zCard.dataset.name; 
-                let zSize = parseInt(zName.charAt(0));
-                
-                if (amount >= zSize) {
-                    amount -= zSize; 
-                    zombiesKilledGlobal += zSize; 
-                    zombieReserve.push(zName);
-                    triggerActionEffect(zCard, '#ff0000'); 
-                    zCard.remove();
-                    targetCard = null; 
-                } else {
-                    let newSize = zSize - amount; 
-                    zombiesKilledGlobal += amount; 
-                    amount = 0; 
-                    
-                    zombieReserve.push(zName); 
-                    let replacementIdx = zombieReserve.findIndex(z => parseInt(z.charAt(0)) === newSize);
-                    let replacementName = (replacementIdx !== -1) ? zombieReserve.splice(replacementIdx, 1)[0] : (newSize === 1 ? "1_zombie_1" : `${newSize}_zombies_1`);
-                    
-                    zCard.dataset.name = replacementName; 
-                    applyCardImage(zCard, replacementName);
-                    triggerActionEffect(zCard, '#ff0000');
-                }
-            }
-            zombieReserve.sort((a,b) => parseInt(b.charAt(0)) - parseInt(a.charAt(0))); updateCounters();
-        }
-
-        function executeAutomatedCard(card, name) {
-            closeActionMenu();
-            const zZone = document.getElementById('zombie-zone'); const dZone = document.getElementById('discard-zone');
-            const table = Array.from(document.getElementById('table-zone').children).filter(c=>!c.classList.contains('exhausted'));
-            
-            if (currentMission === "4C" && (name.includes('motosierra') || name.includes('motocicleta') || name.includes('furgoneta') || name.includes('gran_explosion') || name.includes('granada_explosiva') || name.includes('lanzallamas') || name.includes('ametralladora'))) {
-                logAndAlert('Acción denegada: Motores/Explosivos vetados en Noche Silenciosa.', "Restricción Misión 4C: ¡No puedes hacer ruido (Motores/Explosivos) en Noche Silenciosa!");
+                } else logAndAlert("Saquear: toca una carta del Mercado.", "Modo Saqueo activo: toca una carta del MERCADO (área explorada) para recuperarla.", "warn");
                 return;
             }
-            if (name.includes('machete') || name.includes('pistola') || name.includes('rifle') || name.includes('escopeta') || name.includes('ametralladora')) {
-                if (turnUsedWeapons.has(card.id)) { 
-                    logAndAlert(`Bloqueo de seguridad: El arma [${name}] ya ha sido disparada en este turno.`, "Esta arma ya ha disparado/atacado en este turno.");
-                    return; 
-                }
-                turnUsedWeapons.add(card.id);
-                logAction(`Arma disparada con éxito: [${name}]. Registrada como usada en el turno actual.`);
-            }
-            if (name.includes('comida') || name.includes('kit_medico')) {
-                if (zZone.children.length > 0) { 
-                    logAndAlert('Acción denegada: Intervención médica imposible bajo ataque de zombies.', "¡Peligro! No puedes curarte mientras estás bajo ataque directo.");
-                    return; 
-                }
-            }
 
-            if (name.includes('gran_explosion')) {
-                triggerShake(); triggerBloodFlash();
-                while(zZone.firstElementChild) killZombieCard(zZone.firstElementChild, false); 
-                triggerActionEffect(card, '#ffa502'); card.remove(); 
-                logAction('Gran Explosión ejecutada. Área limpia.', 'warn');
+            const name = cardEl.dataset.name; const base = baseOf(name); const zone = cardEl.parentElement.id;
+            const info = cardEl.dataset.kind === 'zombie' ? cardDictionary.zombie : infoOf(name);
+            $('action-title').innerText = info.t;
+            $('action-cancel').style.display = '';
+            const btnC = $('action-buttons'); btnC.innerHTML = '';
+            const zIn = zombiesInPlay().length > 0;
+
+            if (zone === 'explored-zone') {
+                const cost = costOf(name);
+                createBtn(btnC, `🛒 RECUPERAR (descarta ${cost} carta${cost === 1 ? '' : 's'})`, () => openBuy(cardEl), 'prepare', handCards().length < cost);
             }
-            else if (name.includes('granada_explosiva')) {
-                triggerShake(); triggerBloodFlash();
-                for(let i=0; i<5; i++) { if(zZone.firstElementChild) moveCardToZone(zZone.firstElementChild, 'discard-zone', false); }
-                triggerActionEffect(card, '#ffa502'); moveCardToZone(card, 'discard-zone', false);
-                logAction('Granada Explosiva usada. Descartes forzados.', 'warn');
-            }
-            else if (name.includes('gasolina')) {
-                Array.from(document.getElementById('table-zone').children).forEach(c => {
-                    let b = c.dataset.name.replace(/_\d+$/, ''); let i = cardDictionary[b];
-                    if (i && (i.type.includes('ARMA') || i.type === 'VEHÍCULO' || i.type === 'TRAMPA')) c.classList.remove('exhausted');
-                });
-                triggerActionEffect(card, '#ffa502'); card.remove();
-                logAction('Gasolina consumida: Equipos reactivados.', 'info');
-            }
-            else if (name.includes('motosierra')) { triggerShake(); applyWeaponDamage(6); triggerActionEffect(card, '#ff453a'); moveCardToZone(card, 'discard-zone', false); logAction('Motosierra usada (6 Daños).', 'warn');}
-            else if (name.includes('lanzallamas')) { applyWeaponDamage(3); triggerActionEffect(card, '#ffa502'); moveCardToZone(card, 'discard-zone', false); }
-            else if (name.includes('creamatorio')) { applyWeaponDamage(2); triggerActionEffect(card, '#ffa502'); moveCardToZone(card, 'discard-zone', false); }
-            else if (name.includes('llave_inglesa') || name.includes('motocicleta')) { applyWeaponDamage(1); triggerActionEffect(card, '#ff453a'); moveCardToZone(card, 'discard-zone', false); }
-            else if (name.includes('fuego_cruzado')) {
-                let p = table.filter(c => cardDictionary[c.dataset.name.replace(/_\d+$/, '')]?.type === 'PERSONA').length;
-                applyWeaponDamage(p); triggerActionEffect(card, '#ffa502'); moveCardToZone(card, 'discard-zone', false);
-            }
-            else if (name.includes('trampa_perimetral')) {
-                let zs = Array.from(dZone.children).filter(c => c.dataset.name.includes('zombie'));
-                for(let i=0; i<6 && i<zs.length; i++) { zombieReserve.push(zs[i].dataset.name); zs[i].remove(); }
-                triggerActionEffect(card, '#ffa502'); moveCardToZone(card, 'discard-zone', false);
-            }
-            else if (name.includes('guia')) {
-                let zs = Array.from(dZone.children).filter(c => c.dataset.name.includes('zombie'));
-                for(let i=0; i<2 && i<zs.length; i++) { zombieReserve.push(zs[i].dataset.name); zs[i].remove(); }
-                triggerActionEffect(card, '#25a145'); moveCardToZone(card, 'discard-zone', false);
-            }
-            else if (name.includes('furgoneta')) {
-                if(zZone.firstElementChild) killZombieCard(zZone.firstElementChild, false);
-                while(zZone.firstElementChild) moveCardToZone(zZone.firstElementChild, 'discard-zone', false);
-                triggerActionEffect(card, '#ffa502'); moveCardToZone(card, 'discard-zone', false);
-                furgonetaUsed = true;
-                logAction('Furgoneta usada. Área de infección evadida.', 'warn');
-            }
-            else if (name.includes('cura')) {
-                if (zZone.children.length > 0) {
-                    killZombieCard(zZone.children[0], false);
-                    document.getElementById('table-zone').appendChild(createCardElement({ id: `card-s-${Date.now()}`, name: '1_superviviente', type: 'superviviente' }));
-                    zombiesCured++; medicsUsed++; triggerActionEffect(card, '#25a145');
-                    logAction('Zombie curado y transformado en Superviviente.', 'info');
+            else if (zone === 'hand-zone') {
+                if (!HAND_ONLY.includes(base)) createBtn(btnC, "👇 Jugar a la mesa (entra agotada)", () => moveCardToZone(cardEl, 'table-zone', true));
+                if (base === '1_corre') createBtn(btnC, wounds.pierna ? "¡CORRE! (bloqueado: pierna herida)" : "💥 ¡CORRE!: descarta 1 carta de zombie", () => playCorre(cardEl), 'execute', wounds.pierna || !zIn);
+                if (base === '2_refugio') {
+                    const ok = preparedCards().some(c => c.dataset.name.includes('superviviente') || (c.dataset.name.includes('vip') && currentMission !== '2A'));
+                    createBtn(btnC, "💥 REFUGIO: rescata a tus supervivientes preparados", () => playRefugio(cardEl), 'execute', !ok);
                 }
-                discardOrDestroyMed(card, name);
+                if (base === '2_saquear') createBtn(btnC, "💥 SAQUEAR: recupera gratis 1 carta explorada", () => startLootingMode(cardEl), 'execute', !$('explored-zone').children.length);
+                if (base === '2_cargadores') {
+                    const ws = preparedCards().filter(c => AMMO_WEAPONS.includes(baseOf(c.dataset.name)));
+                    createBtn(btnC, "💥 Colocar como munición en un arma preparada", () => chooseFrom('ELIGE EL ARMA', ws, titleOf, w => addAmmo(w, [cardEl])), 'execute', !ws.length);
+                }
+                createBtn(btnC, "🗑️ Descartar sin efecto", () => moveCardToZone(cardEl, 'discard-zone', false));
             }
-            else if (name.includes('corre')) {
-                if (wounds.pierna) { logAndAlert('Huída fallida: Pierna herida.', "¡Tienes la pierna herida, no puedes escapar![cite: 3]"); } 
-                else if(zZone.children.length > 0) { moveCardToZone(zZone.children[0], 'discard-zone', false); logAction('Evadido: 1 Zombie mandado a descartes.', 'info');}
-                moveCardToZone(card, 'discard-zone', false);
-            }
-            else if (name.includes('perro')) { applyWeaponDamage(1); triggerActionEffect(card, '#ff453a'); moveCardToZone(card, 'discard-zone', false); }
-            else if (name.includes('refugio')) {
-                if (confirm("ELIGE TÁCTICA PARA EL REFUGIO:\n\n[ACEPTAR] Extraer Supervivientes Preparados.\n[CANCELAR] Explorar gratis del Área.")) {
-                    let rC = 0; let sToDis = []; let vToDest = [];
-                    table.forEach(c => {
-                        if (c.dataset.name.includes('superviviente')) { rC += 1; sToDis.push(c); } 
-                        else if (c.dataset.name.includes('vip') && currentMission !== "2A") { rC += 3; vToDest.push(c); vipRescued = true; }
-                    });
-                    if (rC > 0) {
-                        if(currentMission === "2A") {
-                            if (!confirm("Restricción Misión 2A: Tienes que DESTRUIR un Arma para asegurar el rescate[cite: 1]. ¿Proceder?")) return;
-                            let wps = table.filter(c => cardDictionary[c.dataset.name.replace(/_\d+$/, '')]?.type.includes('ARMA'));
-                            if(wps.length === 0) { logAndAlert('Fallo de rescate 2A: No hay armas para destruir.', "Falta artillería pesada. No tienes armas para destruir."); return; }
-                            wps[0].remove(); rC = 1; sToDis = [sToDis[0]];
-                            logAction('Arma destruida como peaje de rescate en Misión 2A.', 'warn');
-                        }
-                        rescued += rC;
-                        sToDis.forEach(c => moveCardToZone(c, 'discard-zone', false)); vToDest.forEach(c => c.remove());
-                        if(table.some(c=>c.dataset.name.includes('comisaria'))) healDamage(1);
-                        triggerActionEffect(card, '#25a145'); moveCardToZone(card, 'discard-zone', false);
-                        logAction(`¡Extracción exitosa! Rescatadas ${rC} persona(s).`, 'info');
-                    } else { logAndAlert('Intento de rescate fallido: Nadie preparado en Búnker.', "Nadie disponible para rescatar.", 'warn'); }
-                } else {
-                    if(areaDeck.length > 0) {
-                        let nC = createCardElement(areaDeck.pop()); nC.classList.add('exhausted'); document.getElementById('table-zone').appendChild(nC);
-                        logAction('Refugio usado para explorar Área gratis.', 'info');
-                    } else { logAndAlert('Fallo al explorar con Refugio: Mazo vacío.', "Zona despejada. El Mazo de Área está vacío.", 'warn'); }
-                    moveCardToZone(card, 'discard-zone', false);
+            else if (zone === 'table-zone') {
+                if (cardEl.dataset.kind === 'personaje') createBtn(btnC, "Cerrar", closeActionMenu);
+                else if (cardEl.classList.contains('exhausted')) createBtn(btnC, "🔄 PREPARAR", () => openPrepare(cardEl), 'prepare');
+                else {
+                    const acts = cardActions(cardEl);
+                    const banned = currentMission === '4C' && SILENT_NIGHT_BANNED.some(k => name.includes(k));
+                    if (banned) createBtn(btnC, "🔇 Noche Silenciosa: no puedes usar esta carta", closeActionMenu, '', true);
+                    else if (!acts.length) createBtn(btnC, "⭐ Sin acción: su efecto es pasivo o depende de otra carta", closeActionMenu, 'prepare');
+                    else acts.forEach(a => createBtn(btnC, a.label, () => { closeActionMenu(); a.fn(); updateCounters(); }, 'execute', !a.can));
                 }
             }
-            else if (name.includes('comida')) { healDamage(1); triggerActionEffect(card, '#25a145'); areaDeck.unshift({id: card.id, name: '1_comida', type: 'basic'}); card.remove(); logAction('Comida consumida (+1 Salud).', 'info');}
-            else if (name.includes('kit_medico')) { healDamage(2); medicsUsed++; triggerActionEffect(card, '#25a145'); discardOrDestroyMed(card, name); logAction('Kit Médico usado (+2 Salud).', 'info');}
-            else if (name.includes('chaleco_antibalas')) { preventWounds += 2; triggerActionEffect(card, '#0a6bcf'); card.remove(); logAction('Chaleco Antibalas desplegado (+2 Prevenciones).', 'info');}
-            else if (name.includes('antidoto')) { preventWounds += 1; triggerActionEffect(card, '#0a6bcf'); card.remove(); logAction('Antídoto consumido (+1 Prevención).', 'info');}
-            else if (name.includes('ametralladora') || name.includes('pistola') || name.includes('escopeta') || name.includes('machete') || name.includes('rifle')) {
-                let d = parseInt(cardDictionary[name.replace(/_\d+$/, '')].d.match(/\d+/)[0]); 
-                if (table.some(c=>c.dataset.name.includes('apuntar') && !c.classList.contains('exhausted')) && !name.includes('machete')) d += 1;
-                applyWeaponDamage(d); triggerActionEffect(card, '#ff453a'); card.classList.add('exhausted');
+            else if (zone === 'zombie-zone') {
+                createBtn(btnC, "🩸 Dejar que te ataque (1 herida; ese zombie muere)", () => zombieAttack(cardEl), 'execute');
             }
-            else { card.classList.add('exhausted'); }
-            
-            updateCounters();
+            else createBtn(btnC, "Cerrar", closeActionMenu);
+            $('action-modal').style.display = 'flex';
         }
 
-        function createBtn(c, txt, act, cls='') { let b=document.createElement('button'); b.className=`action-btn ${cls}`; b.innerText=txt; b.onclick=act; c.appendChild(b); }
-        function moveCardToZone(c, zId, exh) { if(exh) c.classList.add('exhausted'); else c.classList.remove('exhausted'); document.getElementById(zId).appendChild(c); closeActionMenu(); updateCounters(); }
-
-        function killZombieCard(zCard, closeMenu=true) {
-            let zSize = parseInt(zCard.dataset.name.charAt(0));
-            zombiesKilledGlobal += zSize;
-            zombieReserve.push(zCard.dataset.name);
-            zombieReserve.sort((a,b) => parseInt(b.charAt(0)) - parseInt(a.charAt(0)));
-            triggerActionEffect(zCard, '#ff0000');
-            zCard.remove(); if(closeMenu) closeActionMenu(); updateCounters();
-        }
-
-        function closeActionMenu() { document.getElementById('action-modal').style.display = 'none'; }
-        
-		function startLootingMode(saquearCard) {
-            closeActionMenu();
-            lootingActive = true;
-            document.getElementById('explored-zone').classList.add('looting-glow');
-            showScreenBanner("SELECCIONA BOTÍN", "rgba(20, 80, 20, 0.95)");
-            logAction("Modo Saqueo activado. Haz clic en una carta del Mercado.", "warn");
-            moveCardToZone(saquearCard, 'discard-zone', false); // Descartamos el evento Saquear
-        }
-		
+        // ==========================================
+        // CONTADORES Y PROGRESO
+        // ==========================================
         function updateCounters() {
-            document.getElementById('area-count').innerText = areaDeck.length; document.getElementById('wave-count').innerText = wave; document.getElementById('rescued-count').innerText = rescued;
-            document.getElementById('deck-count').innerText = deck.length; document.getElementById('discard-count').innerText = document.getElementById('discard-zone').childElementCount;
-            document.getElementById('deck-visual').style.display = (deck.length > 0) ? 'block' : 'none';
-            
-            let progressText = "OPERACIÓN LIBRE";
-            const tableCards = Array.from(document.getElementById('table-zone').children);
-            const preparedCardsCount = tableCards.filter(c => !c.classList.contains('exhausted') && !c.id.includes('card-char')).length;
+            $('area-count').innerText = areaDeck.length; $('wave-count').innerText = wave; $('rescued-count').innerText = rescued;
+            $('deck-count').innerText = deck.length; $('discard-count').innerText = $('discard-zone').childElementCount;
+            $('deck-visual').style.display = (deck.length > 0) ? 'block' : 'none';
 
-            switch(currentMission) {
-                case "1A": progressText = `🎯 1A: CAOS | Objetivo: 6 Defensas | En mesa: ${preparedCardsCount}/6`; break;
-                case "1B": progressText = `🎯 1B: LA MULTITUD | Obj: 4 Rescates | Progreso: ${rescued}/4`; break;
-                case "1C": progressText = `🎯 1C: A SALVO | Obj: 6 Rescates + Búnker | Progreso: ${rescued}/6`; break;
-                case "2A": progressText = `🎯 2A: GUERREROS | Obj: 5 Rescates | Progreso: ${rescued}/5`; break;
-                case "2B": progressText = `🎯 2B: BASE SEGURA | Obj: 5 Rescates + Trampas | Progreso: ${rescued}/5`; break;
-                case "2C": progressText = `🎯 2C: EL ASALTO | Sobrevive hasta Ol. 6 | Actual: ${wave}/6`; break;
-                case "3A": progressText = `🎯 3A: LA LLAMADA | Sobrevive hasta Ol. 8 | Actual: ${wave}/8`; break;
-                case "3B": progressText = `🎯 3B: FAMILIA | Obj: 4 Resc. + Escape Motorizado`; break;
-                case "4A": progressText = `🎯 4A: EXPLORACIÓN | Obj: Vaciar Mercado | Quedan: ${areaDeck.length}`; break;
-                case "4B": progressText = `🎯 4B: LA EXTRACCIÓN | Obj: 10 Rescates | Progreso: ${rescued}/10`; break;
-                case "4C": progressText = `🎯 4C: SILENCIO | Sobrevive hasta Ol. 6 | Actual: ${wave}/6`; break;
-                case "4D": progressText = `🎯 4D: PURGA | Matar 100 Zombies | Bajas: ${zombiesKilledGlobal}/100`; break;
-                case "5A": progressText = `🎯 5A: LA DOCTORA | Obj: VIP + Hospital Operativo`; break;
-                case "5B": progressText = `🎯 5B: INVESTIGACIÓN | Curar (Usar 5 Med) | Prog: ${medicsUsed}/5`; break;
-                case "5C": progressText = `🎯 5C: PRUEBAS | Obj: Curar 6 Zombies | Progreso: ${zombiesCured}/6`; break;
-                case "5D": progressText = `🎯 5D: LA BATALLA FINAL | Sobrevive hasta Ol. 6 | Actual: ${wave}/6`; break;
-            }
-            document.getElementById('mission-banner').innerText = progressText;
-            checkMissionObjectives();
+            const s = missionStats();
+            const progressText = {
+                "1A": `🎯 1A: CAOS | 6 cartas preparadas | En mesa: ${s.prep}/6`,
+                "1B": `🎯 1B: LA MULTITUD | 4 rescates | Progreso: ${rescued}/4`,
+                "1C": `🎯 1C: A SALVO | 6 rescates + instalación preparada | ${rescued}/6 · Inst. ${s.facilities ? '✓' : '✗'}`,
+                "2A": `🎯 2A: GUERREROS | 5 rescates | Progreso: ${rescued}/5`,
+                "2B": `🎯 2B: BASE SEGURA | Resc. ${rescued}/5 · Trampas ${s.traps}/3 · Equipos ${s.equipment}/3 · Inst. ${s.facilities}/3`,
+                "2C": `🎯 2C: EL ASALTO | Llega a la oleada 6 | Actual: ${wave}/6`,
+                "3A": `🎯 3A: LA AYUDA | Llega a la oleada 8 | Actual: ${wave}/8`,
+                "3B": `🎯 3B: FAMILIA | Personas ${s.persons}/4 · Equipos ${s.equipment}/3 · Furgoneta ${s.van ? '✓' : '✗'}`,
+                "4A": `🎯 4A: EXPLORACIÓN | Explora todo el mazo de área | Quedan: ${areaDeck.length}`,
+                "4B": `🎯 4B: RESCATE | 10 rescates | Progreso: ${rescued}/10`,
+                "4C": `🎯 4C: SILENCIO | 5 rescates sin motores ni explosivos | ${rescued}/5`,
+                "4D": `🎯 4D: LIMPIEZA | Mata 100 zombies | Bajas: ${zombiesKilledGlobal}/100`,
+                "5A": `🎯 5A: LA PROFESORA | VIP ${vipRescued ? '✓' : '✗'} · Laboratorio (Hospital) ${s.lab ? '✓' : '✗'}`,
+                "5B": `🎯 5B: INVESTIGACIÓN | Equipos médicos usados ${medicsUsed}/5 · Oleada ${wave}/6 máx.`,
+                "5C": `🎯 5C: PRUEBAS | Cura 6 zombies | Progreso: ${zombiesCured}/6`,
+                "5D": `🎯 5D: LA BATALLA FINAL | Llega a la oleada 6 | Actual: ${wave}/6`
+            }[currentMission] || "OPERACIÓN LIBRE";
+            $('mission-banner').innerText = progressText + ' · se comprueba al terminar el turno';
         }
     </script>
 </body>
